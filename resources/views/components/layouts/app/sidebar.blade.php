@@ -1,3 +1,82 @@
+@php
+    $groups = [
+        "Inicio" => [
+            [
+                "name" => "Inicio",
+                "icon" => "home",
+                "route" => route("dashboard"),
+                "current" => request()->routeIs("dashboard")
+            ]
+        ],
+        "Ventas" => [
+            [
+                "name" => "Venta",
+                "icon" => "shopping-cart",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Descuentos",
+                "icon" => "home",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Canje de puntos",
+                "icon" => "home",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Productos",
+                "icon" => "shopping-bag",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ]
+        ],
+        "Configuraciones" => [
+            [
+                "name" => "Usuarios",
+                "icon" => "user",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Roles",
+                "icon" => "users",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Privilegios",
+                "icon" => "adjustments-horizontal",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ]
+        ],
+         "Marketing" => [
+            [
+                "name" => "Canje de puntos",
+                "icon" => "user",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Descuento",
+                "icon" => "users",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Festividad",
+                "icon" => "adjustments-horizontal",
+                "route" => route("login"),
+                "current" => request()->routeIs("login")
+            ]
+        ]
+    ];
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
@@ -12,9 +91,13 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                </flux:navlist.group>
+                @foreach($groups as $group => $links)
+                    <flux:navlist.group :heading="$group" class="grid">
+                        @foreach($links as $link)
+                            <flux:navlist.item :icon="$link['icon']" :href="$link['route']" :current="$link['current']" wire:navigate>{{$link['name'] }}</flux:navlist.item>
+                        @endforeach
+                    </flux:navlist.group>
+                @endforeach
             </flux:navlist>
 
             <flux:spacer />
