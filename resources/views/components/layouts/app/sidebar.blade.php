@@ -12,7 +12,7 @@
             [
                 "name" => "Venta",
                 "icon" => "shopping-cart",
-                "route" => route("login"),
+                "route" => route("ventas.index"),
                 "current" => request()->routeIs("login")
             ],
             [
