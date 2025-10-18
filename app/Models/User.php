@@ -61,4 +61,20 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class, 'usuario_rol', 'usuario_id', 'rol_id');
+    }
+
+    public function hasPrivilege(string $privilegioNombre): bool
+    {
+        foreach ($this->roles as $rol) {
+            if ($rol->privilegios->contains('nombre', $privilegioNombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

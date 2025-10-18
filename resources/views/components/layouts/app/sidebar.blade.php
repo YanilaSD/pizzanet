@@ -44,14 +44,14 @@
             [
                 "name" => "Roles",
                 "icon" => "users",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
+                "route" => route("roles.index"),
+                "current" => request()->routeIs("roles.index")
             ],
             [
                 "name" => "Privilegios",
                 "icon" => "adjustments-horizontal",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
+                "route" => route("privilegios.index"),
+                "current" => request()->routeIs("privilegios.index")
             ]
         ],
          "Marketing" => [
