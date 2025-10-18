@@ -21,7 +21,7 @@ class PrivilegioController extends Controller
 
         $privilegios = $query->orderBy('estado', 'desc')
                             ->orderBy('id', 'desc')
-                            ->paginate(2)
+                            ->paginate(10)
                             ->withQueryString(); // mantiene ?search=... al cambiar de página
 
         return view('modules.privilegios.index', compact('privilegios'));
@@ -63,6 +63,7 @@ class PrivilegioController extends Controller
 
     public function edit(Privilegio $privilegio)
     {
+        dd($privilegio);
         return view('modules.privilegios.edit', compact('privilegio'));
     }
 

@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\PrivilegioController;
+use App\Http\Controllers\RolController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->name('privilegios.edit');
     Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->name('privilegios.update');
     Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->name('privilegios.toggle');
+
+    Route::get('/roles', [RolController::class, 'index'])->name('roles.index');
+    Route::get('/roles/create', [RolController::class, 'create'])->name('roles.create');
+    Route::post('/roles', [RolController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{rol}/edit', [RolController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{rol}', [RolController::class, 'update'])->name('roles.update');
+    Route::get('/roles/{rol}', [RolController::class, 'show'])->name('roles.show');
+    Route::get('/roles/{id}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
+    Route::get('roles/{rol}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
 
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
