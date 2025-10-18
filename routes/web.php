@@ -19,15 +19,15 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
-    Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+    Route::get('/ventas', [VentaController::class, 'index'])->middleware('privilege:listado-ventas')->name('ventas.index');
 
     //Privilegio
-    Route::get('/privilegios', [PrivilegioController::class, 'index'])->name('privilegios.index');
-    Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->name('privilegios.create');
-    Route::post('/privilegios', [PrivilegioController::class, 'store'])->name('privilegios.store');
-    Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->name('privilegios.edit');
-    Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->name('privilegios.update');
-    Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->name('privilegios.toggle');
+    Route::get('/privilegios', [PrivilegioController::class, 'index'])->middleware('privilege:listar-privilegio')->name('privilegios.index');
+    Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:privilegio-create')->name('privilegios.create');
+    Route::post('/privilegios', [PrivilegioController::class, 'store'])->middleware('privilege:privilegio-store')->name('privilegios.store');
+    Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->middleware('privilege:editar-privilegio')->name('privilegios.edit');
+    Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:privilegio-update')->name('privilegios.update');
+    Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->middleware('privilege:privilegio-toggle')->name('privilegios.toggle');
 
     Route::get('/roles', [RolController::class, 'index'])->name('roles.index');
     Route::get('/roles/create', [RolController::class, 'create'])->name('roles.create');

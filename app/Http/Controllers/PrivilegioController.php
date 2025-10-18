@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Privilegio;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class PrivilegioController extends Controller
@@ -51,8 +52,10 @@ class PrivilegioController extends Controller
             'descripcion.max' => 'La Descripción no debe exceder los 255 caracteres.',
         ]);
 
+        $slug = Str::slug($request->nombre);
         Privilegio::create([
             'nombre' => $request->nombre,
+            'slug' => $slug,
             'descripcion' => $request->descripcion,
             'estado' => '1',
         ]);
@@ -63,7 +66,6 @@ class PrivilegioController extends Controller
 
     public function edit(Privilegio $privilegio)
     {
-        dd($privilegio);
         return view('modules.privilegios.edit', compact('privilegio'));
     }
 
@@ -84,8 +86,11 @@ class PrivilegioController extends Controller
             'descripcion.max' => 'La Descripción no debe exceder los 255 caracteres.',
         ]);
 
+
+        $slug = Str::slug($request->nombre);
         $privilegio->update([
             'nombre' => $request->nombre,
+            'slug' => $slug,
             'descripcion' => $request->descripcion,
         ]);
 
