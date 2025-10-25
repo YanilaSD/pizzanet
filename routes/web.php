@@ -7,6 +7,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\PrivilegioController;
 use App\Http\Controllers\TipoPagoController;
+use App\Http\Controllers\FestividadController;
 use App\Http\Controllers\RolController;
 
 Route::view('dashboard', 'dashboard')
@@ -45,7 +46,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tipo_pagos', [TipoPagoController::class, 'store'])->name('tipo_pagos.store');
     Route::get('/tipo_pagos/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->name('tipo_pagos.edit');
     Route::put('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'update'])->name('tipo_pagos.update');
-    Route::get('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'destroy'])->name('tipo_pagos.destroy');
+    Route::get('/tipo_pagos/{tipo_pago}/destroy', [TipoPagoController::class, 'destroy'])->name('tipo_pagos.destroy');
+
+
+    Route::get('/festividades', [FestividadController::class, 'index'])->name('festividades.index');
+    Route::get('/festividades/create', [FestividadController::class, 'create'])->name('festividades.create');
+    Route::post('/festividades', [FestividadController::class, 'store'])->name('festividades.store');
+    Route::get('/festividades/{festividad}/edit', [FestividadController::class, 'edit'])->name('festividades.edit');
+    Route::put('/festividades/{festividad}', [FestividadController::class, 'update'])->name('festividades.update');
+    Route::get('/festividades/{festividad}/destroy', [FestividadController::class, 'destroy'])->name('festividades.destroy');
 
 
 
