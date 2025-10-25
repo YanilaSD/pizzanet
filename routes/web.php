@@ -9,6 +9,7 @@ use App\Http\Controllers\PrivilegioController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\FestividadController;
 use App\Http\Controllers\PromocionController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\RolController;
 
 Route::view('dashboard', 'dashboard')
@@ -65,7 +66,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/promociones/{promocion}', [PromocionController::class, 'update'])->name('promociones.update');
     Route::get('/promociones/{promocion}/destroy', [PromocionController::class, 'destroy'])->name('promociones.destroy');
 
-
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
+    Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/{cliente}/show', [ClienteController::class, 'show'])->name('clientes.show');
+    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
+    Route::get('/clientes/{cliente}/destroy', [ClienteController::class, 'destroy'])->name('clientes.destroy');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
