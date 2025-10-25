@@ -32,6 +32,12 @@
                 "icon" => "shopping-bag",
                 "route" => route("login"),
                 "current" => request()->routeIs("login")
+            ],
+            [
+                "name" => "Tipo de pagos",
+                "icon" => "shopping-bag",
+                "route" => route("tipo_pagos.index"),
+                "current" => request()->routeIs("tipo_pagos")
             ]
         ],
         "Configuraciones" => [

@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\PrivilegioController;
+use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\RolController;
 
 Route::view('dashboard', 'dashboard')
@@ -38,6 +39,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/roles/{rol}', [RolController::class, 'show'])->name('roles.show');
     Route::get('/roles/{id}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
     Route::get('roles/{rol}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
+
+    Route::get('/tipo_pagos', [TipoPagoController::class, 'index'])->name('tipo_pagos.index');
+    Route::get('/tipo_pagos/create', [TipoPagoController::class, 'create'])->name('tipo_pagos.create');
+    Route::post('/tipo_pagos', [TipoPagoController::class, 'store'])->name('tipo_pagos.store');
+    Route::get('/tipo_pagos/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->name('tipo_pagos.edit');
+    Route::put('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'update'])->name('tipo_pagos.update');
+    Route::get('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'destroy'])->name('tipo_pagos.destroy');
+
 
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
