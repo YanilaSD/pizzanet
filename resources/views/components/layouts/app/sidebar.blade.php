@@ -22,6 +22,12 @@
                 "current" => request()->routeIs("login")
             ],
             [
+                "name" => "Festividades",
+                "icon" => "home",
+                "route" => route("festividades.index"),
+                "current" => request()->routeIs("festividades.index")
+            ],
+            [
                 "name" => "Canje de puntos",
                 "icon" => "home",
                 "route" => route("login"),
