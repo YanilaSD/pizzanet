@@ -8,15 +8,16 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\PrivilegioController;
 use App\Http\Controllers\RolController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// Todas las vistas se mostraran cuando se inicie sesion
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('home');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('/ventas', [VentaController::class, 'index'])->middleware('privilege:listado-ventas')->name('ventas.index');
