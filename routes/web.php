@@ -8,6 +8,7 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\PrivilegioController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\FestividadController;
+use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\RolController;
 
 Route::view('dashboard', 'dashboard')
@@ -55,6 +56,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/festividades/{festividad}/edit', [FestividadController::class, 'edit'])->name('festividades.edit');
     Route::put('/festividades/{festividad}', [FestividadController::class, 'update'])->name('festividades.update');
     Route::get('/festividades/{festividad}/destroy', [FestividadController::class, 'destroy'])->name('festividades.destroy');
+
+    Route::get('/promociones', [PromocionController::class, 'index'])->name('promociones.index');
+    Route::get('/promociones/create', [PromocionController::class, 'create'])->name('promociones.create');
+    Route::post('/promociones', [PromocionController::class, 'store'])->name('promociones.store');
+    Route::get('/promociones/{promocion}/show', [PromocionController::class, 'show'])->name('promociones.show');
+    Route::get('/promociones/{promocion}/edit', [PromocionController::class, 'edit'])->name('promociones.edit');
+    Route::put('/promociones/{promocion}', [PromocionController::class, 'update'])->name('promociones.update');
+    Route::get('/promociones/{promocion}/destroy', [PromocionController::class, 'destroy'])->name('promociones.destroy');
 
 
 

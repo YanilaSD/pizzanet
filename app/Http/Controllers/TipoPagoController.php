@@ -68,7 +68,7 @@ class TipoPagoController extends Controller
      */
     public function destroy(TipoPago $tipo_pago)
     {
-        $tipo_pago->update(['status' => 0]);
+        $tipo_pago->update(['estado' => 0]);
         return redirect()->route('tipo_pagos.index')->with('success', 'Tipo de pago desactivado');
     }
 }
