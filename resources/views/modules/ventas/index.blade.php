@@ -4,7 +4,9 @@
             <h1 class=" text-2xl">Gestión de Ventas</h1>
             <p>Registra y gestiona todas las ventas de la pizzería con promociones</p>
         </div>
-        <flux:button>+ Nueva Venta</flux:button>
+        <flux:button href="{{ route('ventas.create') }}">
+            + Nueva venta
+        </flux:button>
     </div>
     <div class="flex justify-between mt-8 gap-10">
 
@@ -14,8 +16,8 @@
             <a href="#">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Total Ventas</h5>
             </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here €68.30</p>
-            <small>2 ventas registradas</small>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Bs {{ $ventasTotal }}</p>
+            <small>{{ $ventasCompletadas }} ventas registradas</small>
         </div>
 
 
@@ -24,7 +26,7 @@
             <a href="#">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Descuentos Aplicados</h5>
             </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here €9.98</p>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Bs {{ $descuentoTotal }}</p>
             <small>En promociones</small>
         </div>
    <div
@@ -32,7 +34,7 @@
             <a href="#">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ventas Completadas</h5>
             </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here 2</p>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Bs {{ $ventasCompletadas }}</p>
             <small>Entregadas</small>
         </div>
 
@@ -41,7 +43,7 @@
             <a href="#">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Venta Promedio</h5>
             </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here €34.15</p>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Bs {{ $ventasPromedio }}</p>
             <small>Por transacción</small>
         </div>
 
@@ -90,96 +92,54 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    #1000
-                </th>
-                <td class="px-6 py-4">
-                    Juan Perez
-                </td>
-                <td class="px-6 py-4">
-                    15/12/2024
-                </td>
-                <td class="px-6 py-4">
-                    49.88
-                </td>
-                <td class="px-6 py-4 text-red-500">
-                   -9.98
-                </td>
-                <td class="px-6 py-4">
-                    39.90
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="lime">QR</flux:badge>
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="green">Completada</flux:badge>
-                </td>
-                <td class="px-6 py-4 text-right flex ga">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="eye" /></a>
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="trash" /></a>
-                </td>
-            </tr>
-             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    #1000
-                </th>
-                <td class="px-6 py-4">
-                    Juan Perez
-                </td>
-                <td class="px-6 py-4">
-                    15/12/2024
-                </td>
-                <td class="px-6 py-4">
-                    49.88
-                </td>
-                <td class="px-6 py-4 text-red-500">
-                   -9.98
-                </td>
-                <td class="px-6 py-4">
-                    39.90
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="lime">QR</flux:badge>
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="green">Completada</flux:badge>
-                </td>
-                <td class="px-6 py-4 text-right flex ga">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="eye" /></a>
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="trash" /></a>
-                </td>
-            </tr>
-             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    #1000
-                </th>
-                <td class="px-6 py-4">
-                    Juan Perez
-                </td>
-                <td class="px-6 py-4">
-                    15/12/2024
-                </td>
-                <td class="px-6 py-4">
-                    49.88
-                </td>
-                <td class="px-6 py-4 text-red-500">
-                   -9.98
-                </td>
-                <td class="px-6 py-4">
-                    39.90
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="lime">QR</flux:badge>
-                </td>
-                <td class="px-6 py-4">
-                    <flux:badge color="green">Completada</flux:badge>
-                </td>
-                <td class="px-6 py-4 text-right flex ga">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="eye" /></a>
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"><flux:icon name="trash" /></a>
-                </td>
-            </tr>
+            @forelse ($ventas as $venta)
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        #{{ $venta->id }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ $venta->cliente->nombre }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ number_format($venta->subtotal, 2) }}
+                    </td>
+                    <td class="px-6 py-4 text-red-500">
+                        -{{ number_format($venta->descuento, 2) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ number_format($venta->total, 2) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <flux:badge color="lime">{{ $venta->tipoPago->nombre }}</flux:badge>
+                    </td>
+                    <td class="px-6 py-4">
+                        <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
+                            {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
+                        </flux:badge>
+                    </td>
+                    <td class="px-6 py-4 text-right flex gap-2">
+                        <a href="{{ route('ventas.show', $venta) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            <flux:icon name="eye" />
+                        </a>
+                        <form action="{{ route('ventas.destroy', $venta) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <flux:icon name="trash" />
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                        No se han registrado ventas aún.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

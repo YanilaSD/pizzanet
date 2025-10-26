@@ -26,8 +26,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::redirect('settings', 'settings/profile');
 
-    Route::get('/ventas', [VentaController::class, 'index'])->middleware('privilege:listado-ventas')->name('ventas.index');
-
     //Privilegio
     Route::get('/privilegios', [PrivilegioController::class, 'index'])->middleware('privilege:listar-privilegio')->name('privilegios.index');
     Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:privilegio-create')->name('privilegios.create');
@@ -91,6 +89,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
     Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
     Route::get('/productos/{producto}/destroy', [ProductoController::class, 'destroy'])->name('productos.destroy');
+
+    Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+    Route::get('/ventas/create', [VentaController::class, 'create'])->name('ventas.create');
+    Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
+    Route::get('/ventas/{venta}/show', [VentaController::class, 'show'])->name('ventas.show');
+    Route::put('/ventas/{venta}', [VentaController::class, 'update'])->name('ventas.update');
+    Route::get('/ventas/{venta}/destroy', [VentaController::class, 'destroy'])->name('ventas.destroy');
+    Route::post('/ventas/add-producto', [VentaController::class, 'addProducto'])->name('ventas.addProducto');
+    Route::delete('/ventas/remove-producto', [VentaController::class, 'removeProducto'])->name('ventas.removeProducto');
+    Route::get('/ventas/getTotalCompra', [VentaController::class, 'getTotalCompra'])->name('ventas.getTotalCompra');
+    Route::post('/ventas/setPromocion', [VentaController::class, 'setPromocion'])->name('ventas.setPromocion');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
