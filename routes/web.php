@@ -11,6 +11,7 @@ use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\FestividadController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 
 Route::view('dashboard', 'dashboard')
@@ -82,6 +83,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
     Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
     Route::get('/categorias/{categoria}/destroy', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
+
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+    Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
+    Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+    Route::get('/productos/{producto}/show', [ProductoController::class, 'show'])->name('productos.show');
+    Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
+    Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
+    Route::get('/productos/{producto}/destroy', [ProductoController::class, 'destroy'])->name('productos.destroy');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
