@@ -63,7 +63,6 @@
         </div>
 
 
-
         <!-- Gráficos -->
         <div class="grid grid-cols-2 gap-6">
             <!-- Ventas Semanales -->
@@ -78,5 +77,49 @@
                 <canvas id="productosChart" height="200"></canvas>
             </div>
         </div>
+
     </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Ventas Semanales
+        const ctxVentas = document.getElementById('ventasSemanalesChart').getContext('2d');
+        new Chart(ctxVentas, {
+            type: 'line',
+            data: {
+                labels: @json($semanas),
+                datasets: [{
+                    label: 'Total Ventas (Bs)',
+                    data: @json($ventasSemanales),
+                    borderColor: 'rgba(34,197,94,1)',
+                    backgroundColor: 'rgba(34,197,94,0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Productos Más Vendidos
+        const ctxProductos = document.getElementById('productosChart').getContext('2d');
+        new Chart(ctxProductos, {
+            type: 'doughnut',
+            data: {
+                labels: @json($nombresProductos),
+                datasets: [{
+                    data: @json($cantidadVendida),
+                    backgroundColor: ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    </script>
 </x-layouts.app>

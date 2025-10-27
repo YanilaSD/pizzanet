@@ -27,4 +27,10 @@ class Producto extends Model
     {
         return $this->imagen ? asset('storage/' . $this->imagen) : null;
     }
+
+    // Relación con la tabla DetalleVentas
+    public function detalleVentas()
+    {
+        return $this->hasMany(DetalleVenta::class);
+    }
 }
