@@ -54,10 +54,10 @@
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
 
-                            <a href="{{ route('festividades.edit', $festividad) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('festividades.edit', $festividad) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
-                            <a href="{{ route('festividades.destroy', $festividad->id) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('festividades.destroy', $festividad->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="trash" />
                             </a>
                         </td>

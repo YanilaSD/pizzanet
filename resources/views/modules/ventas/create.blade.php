@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-span-1">
                     <label for="fecha" class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
-                    <flux:input id="fecha" name="fecha" type="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" disabled />
+                    <flux:input id="fecha" name="fecha" type="date" value="{{ \Carbon\Carbon::now()->setTimezone('America/La_Paz')->format('Y-m-d') }}" disabled />
                 </div>
                 <div class="col-span-2">
                     <label for="cliente_id" class="block text-sm font-medium text-gray-700">Cliente</label>
@@ -192,7 +192,6 @@
             toggleAddProductButton();
             toggleRegisterButton();
             updateTotalCompra();
-            
             document.getElementById('producto_id').addEventListener('change', toggleAddProductButton);
             document.getElementById('cantidad').addEventListener('input', toggleAddProductButton);
 
