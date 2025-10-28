@@ -33,11 +33,17 @@
                 "route" => route("login"),
                 "current" => request()->routeIs("login")
             ],
+             [
+                "name" => "Promocion",
+                "icon" => "home",
+                "route" => route("promociones.index"),
+                "current" => request()->routeIs("promociones.index")
+            ],
             [
                 "name" => "Productos",
                 "icon" => "shopping-bag",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
+                "route" => route("productos.index"),
+                "current" => request()->routeIs("productos.index")
             ],
             [
                 "name" => "Tipo de pagos",
