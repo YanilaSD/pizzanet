@@ -64,24 +64,24 @@
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('promociones.show', $promocion->id) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('promociones.show', $promocion->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="eye" />
                             </a>
 
                             <a href="{{ route('promociones.edit', $promocion->id) }}"
-                                class="text-white dark:text-gray-500 hover:underline mr-4">
+                                class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
 
                             <a href="{{ route('promociones.destroy', $promocion) }}"
-                                class="text-white dark:text-gray-500 hover:underline mr-4">
+                                class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="trash" />
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center py-6 text-gray-500 dark:text-gray-400">
+                        <td colspan="9" class="text-center py-6 dark:text-gray-500 text-gray-400">
                             No se encontraron promociones registradas.
                         </td>
                     </tr>
