@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <div class="flex justify-between">
+    <div class="flex justify-between mb-6">
         <div>
             <h1 class="text-2xl font-semibold">Gestión de Ventas</h1>
             <p>Registra y gestiona todas las ventas de la pizzería con promociones</p>
@@ -7,14 +7,14 @@
     </div>
 
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            <ul class="list-disc list-inside">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="my-4 gap-4 space-y-2">
+            @foreach ($errors->all() as $error)
+                <flux:callout variant="danger" icon="x-circle" heading="{{ $error }}" />
+            @endforeach
         </div>
     @endif
+
+    <flux:callout variant="secondary" icon="information-circle" heading="Por cada 20 Bs acumulados, el cliente obtiene 1 punto." />
 
 
     <div class="mt-8">

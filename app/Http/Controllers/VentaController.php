@@ -22,7 +22,7 @@ class VentaController extends Controller
         $ventasTotal = Venta::where('estado', 1)->sum('total');
         $descuentoTotal = Venta::where('estado', 1)->sum('descuento');
         $ventasPromedio = Venta::where('estado', 1)->avg('total');
-        $ventas = Venta::where('estado', 1)->get();
+        $ventas = Venta::where('estado', 1)->orderBy('created_at', 'desc')->paginate(10);
         return view('modules.ventas.index', compact('ventas', 'ventasCompletadas', 'ventasTotal', 'descuentoTotal', 'ventasPromedio'));
     }
 
@@ -104,9 +104,15 @@ class VentaController extends Controller
             'fecha' => Carbon::now(),
             'subtotal' => $subtotal,
             'descuento' => $descuento,
-            'total' => $subtotal - $descuento,
+            'total' => $total,
             'estado' => 1,
         ]);
+
+        $cliente = Cliente::find($request->cliente_id);
+        if ($cliente) {
+            $cliente->puntos += $puntos;
+            $cliente->save();
+        }
 
         foreach ($productos as $producto) {
             DetalleVenta::create([
@@ -319,6 +325,26 @@ class VentaController extends Controller
             'descuento' => $descuento,
             'total' => $totalCompra - $descuento
         ];
+    }
+
+    public function getPuntosCliente(Request $request)
+    {
+        $cliente = Cliente::find($request->cliente_id);
+
+        if (!$cliente) {
+            return response()->json(['success' => false, 'message' => 'Cliente no encontrado']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'puntos' => $cliente->puntos,
+            'equivalente' => ($cliente->puntos / 10) * 20, // ejemplo: 10 pts = 20 Bs
+        ]);
+    }
+    public function setUsoPuntos(Request $request)
+    {
+        session(['usar_puntos' => $request->usar_puntos]);
+        return response()->json(['success' => true]);
     }
 
 }
