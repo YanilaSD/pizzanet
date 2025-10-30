@@ -19,9 +19,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::get('/', [DashboardController::class, 'predashboard'])->name('pre-dashboard');
+Route::get('/cliente', [DashboardController::class, 'client'])->name('clientes.search');
 // Todas las vistas se mostraran cuando se inicie sesion
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::redirect('settings', 'settings/profile');
@@ -102,6 +103,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/ventas/remove-producto', [VentaController::class, 'removeProducto'])->name('ventas.removeProducto');
     Route::get('/ventas/getTotalCompra', [VentaController::class, 'getTotalCompra'])->name('ventas.getTotalCompra');
     Route::post('/ventas/setPromocion', [VentaController::class, 'setPromocion'])->name('ventas.setPromocion');
+    Route::post('/ventas/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->name('ventas.getPuntosCliente');
+    Route::post('/ventas/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->name('ventas.setUsoPuntos');
+
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');

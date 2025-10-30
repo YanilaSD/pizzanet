@@ -142,6 +142,9 @@
             @endforelse
         </tbody>
     </table>
+    <div class="p-4">
+        {{ $ventas->links() }}
+    </div>
 </div>
 
 </x-layouts.app>

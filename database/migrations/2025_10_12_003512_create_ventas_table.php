@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
-            $table->foreignId('promocion_id')->constrained('promociones')->onDelete('cascade');
+            $table->foreignId('promocion_id')->constrained('promociones')->nullable()->onDelete('cascade');
             $table->foreignId('tipo_pago_id')->constrained('tipo_pagos')->onDelete('cascade');
             $table->integer('puntos');
             $table->date('fecha');
