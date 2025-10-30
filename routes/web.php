@@ -20,9 +20,9 @@ Route::view('dashboard', 'dashboard')
 
 // Todas las vistas se mostraran cuando se inicie sesion
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('home');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 
     Route::redirect('settings', 'settings/profile');
 
