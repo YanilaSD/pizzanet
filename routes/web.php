@@ -29,12 +29,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     //Privilegio
-    Route::get('/privilegios', [PrivilegioController::class, 'index'])->middleware('privilege:listar-privilegio')->name('privilegios.index');
+    Route::get('/privilegios', [PrivilegioController::class, 'index'])->name('privilegios.index');
     Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:privilegio-create')->name('privilegios.create');
     Route::post('/privilegios', [PrivilegioController::class, 'store'])->middleware('privilege:privilegio-store')->name('privilegios.store');
     Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->middleware('privilege:editar-privilegio')->name('privilegios.edit');
     Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:privilegio-update')->name('privilegios.update');
-    Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->middleware('privilege:privilegio-toggle')->name('privilegios.toggle');
+    Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->name('privilegios.toggle');
 
     Route::get('/roles', [RolController::class, 'index'])->name('roles.index');
     Route::get('/roles/create', [RolController::class, 'create'])->name('roles.create');
@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tipo_pagos/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->name('tipo_pagos.edit');
     Route::put('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'update'])->name('tipo_pagos.update');
     Route::get('/tipo_pagos/{tipo_pago}/destroy', [TipoPagoController::class, 'destroy'])->name('tipo_pagos.destroy');
-
+    Route::get('/tipo_pagos/{tipo_pago}/toggle', [TipoPagoController::class, 'toggle'])->name('tipo_pagos.toggle');
 
     Route::get('/festividades', [FestividadController::class, 'index'])->name('festividades.index');
     Route::get('/festividades/create', [FestividadController::class, 'create'])->name('festividades.create');

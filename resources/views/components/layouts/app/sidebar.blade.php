@@ -15,6 +15,12 @@
                 "route" => route("ventas.index"),
                 "current" => request()->routeIs("login")
             ],
+             [
+                "name" => "Cliente",
+                "icon" => "users",
+                "route" => route("clientes.index"),
+                "current" => request()->routeIs("login")
+            ],
             [
                 "name" => "Descuentos",
                 "icon" => "home",
@@ -45,6 +51,12 @@
                 "route" => route("productos.index"),
                 "current" => request()->routeIs("productos.index")
             ],
+               [
+                "name" => "Categorias",
+                "icon" => "shopping-bag",
+                "route" => route("categorias.index"),
+                "current" => request()->routeIs("categorias.index")
+            ],
             [
                 "name" => "Tipo de pagos",
                 "icon" => "shopping-bag",
@@ -71,26 +83,6 @@
                 "route" => route("privilegios.index"),
                 "current" => request()->routeIs("privilegios.index")
             ]
-        ],
-         "Marketing" => [
-            [
-                "name" => "Canje de puntos",
-                "icon" => "user",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
-            ],
-            [
-                "name" => "Descuento",
-                "icon" => "users",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
-            ],
-            [
-                "name" => "Festividad",
-                "icon" => "adjustments-horizontal",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
-            ]
         ]
     ];
 @endphp
@@ -100,7 +92,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-[#fff8f0] dark:bg-[#3b1f1f]">
+    <body class="min-h-screen bg-[#dfdbdb] dark:bg-[#3b1f1f]">
         <flux:sidebar sticky stashable class="border-e border-[#d4a373] bg-[#fff3e0] dark:border-[#a0522d] dark:bg-[#4e342e]">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
@@ -120,7 +112,7 @@
 
             <flux:spacer />
 
-            <flux:navlist variant="outline">
+           <!--   <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
                 </flux:navlist.item>
@@ -129,7 +121,7 @@
                 {{ __('Documentation') }}
                 </flux:navlist.item>
             </flux:navlist>
-
+                -->
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
                 <flux:profile

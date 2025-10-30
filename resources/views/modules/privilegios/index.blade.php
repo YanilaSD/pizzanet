@@ -78,11 +78,11 @@
 
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('privilegios.edit', $privilegio) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('privilegios.edit', $privilegio) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
                             <a href="{{ route('privilegios.toggle', $privilegio->id) }}"
-                                class="font-medium text-white dark:text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
+                                class="font-medium  dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
                                 <flux:icon name="{{ $privilegio->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
                         </td>
