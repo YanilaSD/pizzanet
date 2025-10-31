@@ -61,17 +61,17 @@
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('categorias.edit', $categoria) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('categorias.edit', $categoria) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
-                            <a href="{{ route('categorias.destroy', $categoria) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('categorias.destroy', $categoria) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="trash" />
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="4" class="px-6 py-4 text-center dark:text-gray-500 text-gray-400">
                             No hay tipos de pago registrados en el sistema.
                         </td>
                     </tr>
