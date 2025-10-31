@@ -96,7 +96,7 @@
                     <flux:select name="producto_id" id="producto_id">
                         <option value="">Selecciona un producto</option>
                         @foreach ($productos as $producto)
-                            <option value="{{ $producto->id }}" data-precio="{{ $producto->precio }}">{{ $producto->nombre }}</option>
+                            <option value="{{ $producto->id }}" data-precio="{{ $producto->precio }}">{{ $producto->nombre }} / {{ $producto->categoria->nombre }} / Bs {{ $producto->precio }}</option>
                         @endforeach
                     </flux:select>
                 </div>

@@ -95,6 +95,11 @@ class VentaController extends Controller
             $descuento = 0;
         }
 
+        $total = $subtotal - $descuento;
+
+        // Calcula los puntos (1 punto por cada 20 Bs)
+        $puntos = floor($total / 20); // floor redondea hacia abajo
+
         $venta = Venta::create([
             'usuario_id' => auth()->user()->id,
             'promocion_id' => $request->promocion_id,

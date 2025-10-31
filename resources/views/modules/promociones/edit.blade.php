@@ -123,7 +123,7 @@
 
             {{-- Festividad --}}
             <div class="mb-6">
-                <label for="festividad_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Festividad</label>
+                <label for="festividad_id" class="block text-sm font-medium dark:text-gray-700 text-white mb-1">Festividad</label>
                 <select id="festividad_id" name="festividad_id" class="block w-full mt-1 border h-10 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                      required>
                     @foreach ($festividades as $festividad)

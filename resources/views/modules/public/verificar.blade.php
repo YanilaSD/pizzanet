@@ -50,7 +50,7 @@
                     <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
                         <div class="flex items-center space-x-2">
                             <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                            <p>Por cada Bs. 10 de compra = 1 punto</p>
+                            <p>Por cada Bs. 20 de compra = 1 punto</p>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="w-3 h-3 bg-orange-500 rounded-full"></span>

@@ -56,7 +56,7 @@
                         </td>
                         <td class="px-6 py-4">{{ $producto->nombre }}</td>
                         <td class="px-6 py-4">{{ $producto->categoria->nombre }}</td>
-                        <td class="px-6 py-4">${{ number_format($producto->precio, 2) }}</td>
+                        <td class="px-6 py-4">Bs {{ number_format($producto->precio, 2) }}</td>
                         <td class="px-6 py-4">
                             <flux:badge color="{{ $producto->estado == 1 ? 'green' : 'red' }}">
                                 {{ $producto->estado == 1 ? 'Activo' : 'Inactivo' }}
