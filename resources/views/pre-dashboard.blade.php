@@ -20,6 +20,16 @@
                 </div>
             </div>
 
+            <div class="mt-6 w-full max-w-3xl px-6">
+                @if ($errors->any())
+                    <flux:heading size="md" class="text-red-600 mb-2">Datos del cliente:</flux:heading>
+                    <div class="my-4 gap-4 space-y-2">
+                        <flux:callout variant="danger" icon="x-circle" heading="Error en los datos del cliente" />
+                    </div>
+                @endif
+            </div>
+            
+
             <!-- Cards -->
             <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl w-full px-6">
 
@@ -52,7 +62,8 @@
             
     
             <flux:modal name="searchClientModal" class="w-full" class="md:w-96">
-                <form method="GET" action="{{ route('clientes.search') }}">
+                <form method="POST" action="{{ route('clientes.search') }}">
+                    @csrf
                     <h2 class="text-xl font-semibold mb-4">Buscar Cliente</h2>
                     <div class="mb-4">
                         <div class="space-y-6">
@@ -61,9 +72,9 @@
                                 <flux:text class="mt-2">Ingresa tus datos.</flux:text>
                             </div>
 
-                            <flux:input label="Nombre" placeholder="Ingresa tu nombre" />
-                            <flux:input label="Correo" placeholder="Ingresa tu correo" />
-                            <flux:input label="Codigo de Cliente" type="password" />
+                            <flux:input label="Nombre" name="nombre" placeholder="Ingresa tu nombre" />
+                            <flux:input label="Correo" name="correo" placeholder="Ingresa tu correo" />
+                            <flux:input label="Codigo de Cliente" name="codigo_cliente" type="password" />
 
                             <div class="flex">
                                 <flux:spacer />
