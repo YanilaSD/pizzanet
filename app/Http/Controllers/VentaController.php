@@ -10,6 +10,7 @@ use App\Models\DetalleVenta;
 use App\Models\TipoPago;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class VentaController extends Controller
 {
@@ -45,80 +46,97 @@ class VentaController extends Controller
     {
         $productos = session('productos', []);
         session()->put('productos', $productos);
+
         $request->validate([
             'tipo_pago_id' => 'required|exists:tipo_pagos,id',
-            'promocion_id' => 'nullable|exists:promociones,id',
             'cliente_id' => 'required|exists:clientes,id',
+            // 'promocion_id' => 'nullable|exists:promociones,id',
         ], [
             'tipo_pago_id.required' => 'El tipo de pago es obligatorio.',
             'tipo_pago_id.exists' => 'El tipo de pago seleccionado no es válido.',
-            'promocion_id.exists' => 'La promoción seleccionada no es válida.',
             'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no es válido.',
+            // 'promocion_id.exists' => 'La promoción seleccionada no es válida.',
         ]);
 
         $productos = session()->get('productos', []);
-        $promocion_id = session()->get('promocion_id', null);
         if (empty($productos)) {
-            return redirect()->back()->withErrors(['productos' => 'Debe agregar al menos un producto a la venta.'])->withInput();
-        }
-        $subtotal = 0;
-        foreach ($productos as $producto) {
-            $subtotal += $producto['subtotal'];
+            return redirect()->back()
+                ->withErrors(['productos' => 'Debe agregar al menos un producto a la venta.'])
+                ->withInput();
         }
 
-        $descuento = 0;
+        // 🧮 Calcular subtotal
+        $subtotal = array_sum(array_column($productos, 'subtotal'));
 
+        // 🧾 Obtener porcentaje de descuento general (promoción o cliente)
+        $porcentaje = session('porcentaje_descuento', 0);
+
+        // ⚙️ Si hay promoción activa en sesión, validar que siga siendo válida
+        $promocion_id = session('promocion_id', null);
         if (!is_null($promocion_id)) {
             $promocion = Promocion::find($promocion_id);
 
             if (!$promocion || $promocion->estado != 1) {
-                return redirect()->back()->withErrors(['productos' => 'La promoción no existe o está inactiva.'])->withInput();
+                return redirect()->back()
+                    ->withErrors(['productos' => 'La promoción no existe o está inactiva.'])
+                    ->withInput();
             }
 
             if (!now()->between($promocion->fecha_inicio, $promocion->fecha_fin)) {
-                return redirect()->back()->withErrors(['productos' => 'La promoción no está vigente.'])->withInput();
+                return redirect()->back()
+                    ->withErrors(['productos' => 'La promoción no está vigente.'])
+                    ->withInput();
             }
 
             if ($subtotal < $promocion->compra_minima) {
-                return redirect()->back()->withErrors(['productos' => 'No se alcanza el monto mínimo de compra para esta promoción.'])->withInput();
+                return redirect()->back()
+                    ->withErrors(['productos' => 'No se alcanza el monto mínimo de compra para esta promoción.'])
+                    ->withInput();
             }
 
             if ($promocion->limite_uso <= 0) {
-                return redirect()->back()->withErrors(['productos' => 'La promoción ha alcanzado su límite de uso.'])->withInput();
+                return redirect()->back()
+                    ->withErrors(['productos' => 'La promoción ha alcanzado su límite de uso.'])
+                    ->withInput();
             }
 
-            $descuento = ($subtotal * $promocion->descuento) / 100;
-            $promocion->limite_uso -= 1;
-            $promocion->save();
-        } else {
-            $descuento = 0;
+            // 🔄 Reducir límite de uso
+            $promocion->decrement('limite_uso');
         }
 
+        // 💰 Calcular descuento y total
+        $descuento = ($subtotal * $porcentaje) / 100;
         $total = $subtotal - $descuento;
 
-        // Calcula los puntos (1 punto por cada 20 Bs)
-        $puntos = floor($total / 20); // floor redondea hacia abajo
+        // 🪙 Calcular puntos (1 punto por cada 20 Bs)
+        $puntos = floor($total / 20);
 
+        // 💾 Crear la venta
         $venta = Venta::create([
             'usuario_id' => auth()->user()->id,
-            'promocion_id' => $request->promocion_id,
             'cliente_id' => $request->cliente_id,
             'tipo_pago_id' => $request->tipo_pago_id,
+            'promocion_id' => $promocion_id,
             'puntos' => 0,
-            'fecha' => Carbon::now(),
+            'fecha' => now(),
             'subtotal' => $subtotal,
             'descuento' => $descuento,
             'total' => $total,
             'estado' => 1,
         ]);
 
+        // 👥 Actualizar puntos del cliente
         $cliente = Cliente::find($request->cliente_id);
         if ($cliente) {
+            $descuento = Str::afterLast($request->promocion_id, '-');
+
             $cliente->puntos += $puntos;
+            $cliente->descuento -= $descuento;
             $cliente->save();
         }
 
+        // 🧾 Guardar detalles de venta
         foreach ($productos as $producto) {
             DetalleVenta::create([
                 'venta_id' => $venta->id,
@@ -129,10 +147,14 @@ class VentaController extends Controller
             ]);
         }
 
-        session()->forget('productos');
-        session()->forget('promocion_id');
-        return redirect()->route('ventas.index')->with('success', 'Detalle de venta creado correctamente');
+        // 🧹 Limpiar sesión
+        session()->forget(['productos', 'promocion_id', 'descuento_cliente', 'porcentaje_descuento']);
+
+        return redirect()
+            ->route('ventas.index')
+            ->with('success', 'Detalle de venta creado correctamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -213,26 +235,20 @@ class VentaController extends Controller
     public function getTotalCompra()
     {
         $productos = session()->get('productos', []);
-        $total = 0;
-        foreach ($productos as $producto) {
-            $total += $producto['subtotal'];
-        }
+        $total = array_sum(array_column($productos, 'subtotal'));
+        $porcentaje = session('porcentaje_descuento', 0);
 
-        $descuento = 0;
-        if (session()->has('promocion_id')) {
-            $promocion = Promocion::find(session('promocion_id'));
-            if ($promocion) {
-                $descuento = ($total * $promocion->descuento) / 100;
-            }
-        }
-
+        $descuento = ($total * $porcentaje) / 100;
         $totalPagar = $total - $descuento;
+
         return response()->json([
-            'total' => $total,              // suma de todos los subtotales
-            'descuento' => $descuento,      // descuento (si hay)
-            'total_pagar' => $totalPagar,   // total final
+            'total' => $total,
+            'descuento' => $descuento,
+            'total_pagar' => $totalPagar,
+            'porcentaje' => $porcentaje,
         ]);
     }
+
 
 
     // Método para eliminar un producto de la sesión
@@ -251,51 +267,48 @@ class VentaController extends Controller
     }
 
     public function setPromocion(Request $request)
-    {
-        $promocionId = $request->input('promocion_id');
-            if (!$promocionId) {
-            session()->forget('promocion_id');
-            return response()->json(['success' => true]);
-        }
-        $productos = session()->get('productos', []);
-        $totalCompra = 0;
+{
+    $promocionId = $request->input('promocion_id');
+    $descuentoCliente = $request->input('descuento_cliente');
+    $productos = session()->get('productos', []);
+    $totalCompra = array_sum(array_column($productos, 'subtotal'));
 
-        foreach ($productos as $producto) {
-            $totalCompra += $producto['subtotal'];
-        }
+    // Limpia cualquier descuento previo
+    session()->forget(['promocion_id', 'descuento_cliente', 'porcentaje_descuento']);
 
+    // Caso 1: Descuento del cliente
+    if ($descuentoCliente) {
+        session()->put('porcentaje_descuento', floatval($descuentoCliente));
+        return response()->json(['success' => true, 'message' => 'Descuento del cliente aplicado']);
+    }
+
+    // Caso 2: Promoción
+    if ($promocionId) {
         $promocion = Promocion::find($promocionId);
 
-        if (!$promocion) {
-            return response()->json(['success' => false, 'message' => 'La promoción no existe.']);
+        if (!$promocion || $promocion->estado != 1) {
+            return response()->json(['success' => false, 'message' => 'La promoción no es válida.']);
         }
 
-        if ($promocion->estado != 1) {
-            return response()->json(['success' => false, 'message' => 'La promoción está inactiva.']);
-        }
-
-        $hoy = Carbon::today();
-
-        if ($hoy->lt(Carbon::parse($promocion->fecha_inicio)) || $hoy->gt(Carbon::parse($promocion->fecha_fin))) {
+        $hoy = now();
+        if ($hoy->lt($promocion->fecha_inicio) || $hoy->gt($promocion->fecha_fin)) {
             return response()->json(['success' => false, 'message' => 'La promoción no está vigente.']);
         }
 
-        if ($promocion->limite_uso <= 0) {
-            return response()->json(['success' => false, 'message' => 'La promoción ha alcanzado su límite de uso.']);
-        }
-
         if ($totalCompra < $promocion->compra_minima) {
-            return response()->json(['success' => false, 'message' => 'No alcanza el monto mínimo de compra para aplicar esta promoción.']);
+            return response()->json(['success' => false, 'message' => 'Monto insuficiente para promoción.']);
         }
 
+        session()->put('porcentaje_descuento', $promocion->descuento);
         session()->put('promocion_id', $promocion->id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Promoción aplicada correctamente.',
-            'promocion' => $promocion,
-        ]);
+        return response()->json(['success' => true, 'message' => 'Promoción aplicada correctamente']);
     }
+
+    // Caso 3: Ninguno seleccionado
+    return response()->json(['success' => true, 'message' => 'Descuento eliminado']);
+}
+
 
     protected function validarPromocion($promocionId, $productos)
     {
