@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
     Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
     Route::get('/clientes/{cliente}/destroy', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+    Route::post('/clientes/{cliente}/canjear', [ClienteController::class, 'canjear'])->name('clientes.canjear');
 
     Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
     Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('categorias.create');

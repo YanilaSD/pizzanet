@@ -127,4 +127,29 @@ class ClienteController extends Controller
         // Redirige de nuevo con un mensaje de éxito
         return redirect()->route('clientes.index')->with('success', 'Cliente eliminado correctamente.');
     }
+
+    public function canjear(Request $request, Cliente $cliente)
+{
+    $request->validate([
+        'puntos' => ['required', 'integer', 'min:20'],
+    ]);
+
+    $puntos = (int) $request->input('puntos');
+
+    if ($puntos > $cliente->puntos) {
+        return back()->withErrors(['puntos' => 'El cliente no tiene suficientes puntos.'])->withInput();
+    }
+
+    $bloques = floor($puntos / 40);
+    $descuento = $bloques * 10;
+
+    $cliente->puntos -= $puntos;
+    $cliente->descuento += $descuento;
+    $cliente->save();
+
+    return back()->with('success', "Se canjearon {$puntos} puntos y se añadieron {$descuento}% de descuento.");
+}
+
+
+
 }
