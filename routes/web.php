@@ -20,7 +20,7 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::get('/', [DashboardController::class, 'predashboard'])->name('pre-dashboard');
-Route::get('/cliente', [DashboardController::class, 'client'])->name('clientes.search');
+Route::post('/cliente', [DashboardController::class, 'client'])->name('clientes.search');
 // Todas las vistas se mostraran cuando se inicie sesion
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

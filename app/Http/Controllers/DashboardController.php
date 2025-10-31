@@ -57,8 +57,19 @@ class DashboardController extends Controller
         return view('pre-dashboard');
     }
 
-    public function client()
+    public function client(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'correo' => 'required|email|max:255',
+            'codigo_cliente' => 'required|string|max:50',
+        ], [
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'correo.required' => 'El campo correo es obligatorio.',
+            'codigo_cliente.required' => 'El campo código de cliente es obligatorio.',
+            'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
+        ]);
+
         $mesActual = Carbon::now()->month;
         $anioActual = Carbon::now()->year;
         $totalVentas = Cliente::find(1)

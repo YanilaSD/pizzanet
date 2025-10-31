@@ -6,16 +6,21 @@
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
             <div class="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 py-10 px-6">
-                <h1 class="text-3xl font-bold text-center mb-4">Bienvenido: {{ $cliente->nombre ?? 'Invitado' }}</h1>
                 <!-- Nivel y puntos -->
                 <div class="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                    <div class="col-span-2">
+                        <h1 class="text-3xl font-bold text-center mb-4">Bienvenido: {{ $cliente->nombre ?? 'Invitado' }}</h1>
+                    </div>
+                    <div class="col-span-1">
+                        <flux:button href="{{ route('pre-dashboard') }}" color="red" type="button" variant="outline" class="w-full">Cerrar Sesión</flux:button>
+                    </div>
                     <div class="md:col-span-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-md">
                         <div class="flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-semibold">Nivel Bronce</h3>
                                 <p class="text-4xl font-bold mt-1">{{ $cliente->puntos ?? 0 }}</p>
                                 <p class="text-sm opacity-90">Puntos disponibles</p>
-                                <p class="text-xs mt-2">Te faltan 150 puntos para el siguiente nivel</p>
+                                <p class="text-xs mt-2">Te faltan {{ 500 - ($cliente->puntos ?? 0) }} puntos para canjear una pizza</p>
                             </div>
                             <x-flux::icon name="star" class="w-12 h-12 text-white opacity-90" />
                         </div>
@@ -58,7 +63,7 @@
                             <p>🍕 500 puntos = 1 Pizza gratis</p>
                             <p>🥤 100 puntos = 1 Bebida gratis</p>
                         </div>
-                        <flux:button color="primary">Canjear Puntos</flux:button>
+                        <!-- <flux:button color="primary">Canjear Puntos</flux:button> -->
                     </div>
                 </div>
 
