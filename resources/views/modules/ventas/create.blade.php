@@ -38,8 +38,7 @@
                     <flux:select name="cliente_id" id="cliente_id">
                         <option value="">Selecciona un cliente</option>
                         @foreach ($clientes as $cliente)
-                            <option value="{{ $cliente->id }}"
-                                {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                            <option data-descuento="{{ $cliente->descuento }}" value="{{ $cliente->id }}">
                                 {{ $cliente->nombre }}
                             </option>
                         @endforeach
@@ -219,6 +218,7 @@
         // Manejo de cambio de promoción
         function handlePromoChange(event) {
             const promoId = event.target.value;
+            console.log('Promoción seleccionada:', typeof promoId);
             if (!promoId) {
                 fetch("{{ route('ventas.setPromocion') }}", {
                     method: "POST",
@@ -357,6 +357,64 @@
                 }
             });
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            const clienteSelect = document.getElementById('cliente_id');
+            const promoSelect = document.getElementById('promocion_id');
+
+            clienteSelect.addEventListener('change', function () {
+                const clienteId = this.options[this.selectedIndex];
+
+                if (!clienteId.value) {
+                    console.log('No hay cliente seleccionado');
+                    return;
+                }
+
+                // ✅ Así accedes correctamente a los data-attributes
+                const cliente = {
+                    id: clienteId.value,
+                    nombre: clienteId.dataset.nombre,
+                    puntos: parseInt(clienteId.dataset.puntos || 0, 10),
+                    descuento: parseFloat(clienteId.dataset.descuento || 0)
+                };
+
+                console.log('Cliente seleccionado:', cliente);
+
+                // Eliminar cualquier opción previa de "Descuento del Cliente"
+                const clientePromo = document.getElementById('promo-descuento-cliente');
+                if (clientePromo) clientePromo.remove();
+
+
+                if (!clienteId) return;
+
+                if (cliente.descuento > 0) {
+                    // Crear nueva opción para descuento del cliente
+                    const option = document.createElement('option');
+                    option.value = `cliente-${cliente.descuento}`;
+                    option.id = 'promo-descuento-cliente';
+                    option.textContent = `Descuento Cliente (-${cliente.descuento}%)`;
+                    promoSelect.appendChild(option);
+
+                    // Seleccionar automáticamente la promo del cliente
+                    promoSelect.value = `cliente-${cliente.descuento}`;
+
+                    // Enviar al backend para actualizar total
+                    // handleClientePromo(cliente.descuento);
+                    fetch("{{ route('ventas.setPromocion') }}", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            promocion_id: null,
+                            descuento_cliente: cliente.descuento
+                        })
+                    }).then(() => updateTotalCompra());
+                } else {
+                    updateTotalCompra();
+                }
+            });
+        });
     </script>
 
 </x-layouts.app>
