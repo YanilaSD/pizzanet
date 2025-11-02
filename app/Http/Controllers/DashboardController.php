@@ -76,7 +76,7 @@ class DashboardController extends Controller
         ->ventas()
         ->whereYear('created_at', $anioActual)
         ->whereMonth('created_at', $mesActual)
-        ->sum('total'); 
+        ->sum('total');
         $comprasRealizadas = Cliente::find(1)
         ->ventas()
         ->whereYear('created_at', $anioActual)
@@ -85,7 +85,7 @@ class DashboardController extends Controller
         $promociones = Promocion::where('estado', 1)->orderBy('created_at', 'desc')->paginate(10);
         $productos = Producto::where('estado', 1)->orderBy('created_at', 'desc')->paginate(10);
 
-        $cliente = Cliente::findOrFail(1);
+        $cliente = Cliente::findOrFail($request->codigo_cliente);
         return view('modules.public.verificar', compact('productos', 'promociones', 'cliente', 'totalVentas', 'comprasRealizadas'));
     }
 }

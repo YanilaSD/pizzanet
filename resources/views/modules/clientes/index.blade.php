@@ -104,7 +104,7 @@
                             Cliente: <span x-text="selectedCliente?.nombre"></span>
                         </flux:text>
                         <div class="mt-4">
-                            <flux:callout color="amber" icon="information-circle" heading="Cada 40 puntos equivalen a 10% de descuento." />
+                            <flux:callout color="amber" icon="information-circle" heading="Cada 20 puntos equivalen a 10% de descuento." />
                         </div>
                     </div>
 
@@ -113,8 +113,8 @@
                         type="number"
                         label="Puntos a canjear"
                         placeholder="Cantidad de puntos"
-                        min="40"
-                        step="40"
+                        min="20"
+                        step="20"
                         required
                     />
 
