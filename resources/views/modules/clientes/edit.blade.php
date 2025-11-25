@@ -41,6 +41,30 @@
                     />
                 </div>
 
+                {{-- CI --}}
+                <div class="md:w-1/2">
+                    <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">CI</label>
+                    <flux:input
+                        id="ci"
+                        name="ci"
+                        placeholder="CI del cliente"
+                        value="{{ old('ci', $cliente->ci) }}"
+                        required
+                    />
+                </div>
+
+                {{-- Celular --}}
+                <div class="md:w-1/2">
+                    <label for="celular" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Celular</label>
+                    <flux:input
+                        id="celular"
+                        name="celular"
+                        placeholder="Celular del cliente"
+                        value="{{ old('celular', $cliente->celular) }}"
+                        required
+                    />
+                </div>
+
                 {{-- Correo --}}
                 <div class="md:w-1/2">
                     <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Correo</label>

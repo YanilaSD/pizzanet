@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ClienteController extends Controller
 {
@@ -46,6 +47,8 @@ class ClienteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'ci' => 'required|integer|unique:clientes,ci',
+            'celular' => 'required|string|max:20',
             'correo' => 'required|email|unique:clientes,correo',
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
@@ -54,12 +57,20 @@ class ClienteController extends Controller
             'correo.required' => 'El correo es obligatorio.',
             'correo.email' => 'El correo debe ser una dirección de correo electrónico válida.',
             'correo.unique' => 'Este correo ya está registrado en nuestra base de datos.',
+            'ci.required' => 'El CI es obligatorio.',
+            'ci.integer' => 'El CI debe ser un número entero.',
+            'ci.unique' => 'Este CI ya está registrado en nuestra base de datos.',
+            'celular.required' => 'El celular es obligatorio.',
+            'celular.string' => 'El celular debe ser una cadena de texto.',
+            'celular.max' => 'El celular no debe tener más de 20 caracteres.',
         ]);
 
         // Crear el cliente
         Cliente::create([
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
+            'nombre' => Str::upper($request->nombre),
+            'correo' => Str::lower($request->correo),
+            'ci' => $request->ci,
+            'celular' => $request->celular,
             'puntos' => 0,
             'descuento' => 0,
             'estado' => 1
@@ -92,6 +103,8 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'correo' => 'required|email|unique:clientes,correo,' . $id,
+            'ci' => 'required|integer|unique:clientes,ci,' . $id,
+            'celular' => 'required|string|max:20|unique:clientes,celular,' . $id,
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de texto.',
@@ -99,6 +112,13 @@ class ClienteController extends Controller
             'correo.required' => 'El correo es obligatorio.',
             'correo.email' => 'El correo debe ser una dirección de correo electrónico válida.',
             'correo.unique' => 'Este correo ya está registrado en nuestra base de datos.',
+            'ci.required' => 'El CI es obligatorio.',
+            'ci.integer' => 'El CI debe ser un número entero.',
+            'ci.unique' => 'Este CI ya está registrado en nuestra base de datos.',
+            'celular.required' => 'El celular es obligatorio.',
+            'celular.string' => 'El celular debe ser una cadena de texto.',
+            'celular.max' => 'El celular no debe tener más de 20 caracteres.',
+            'celular.unique' => 'Este celular ya está registrado en nuestra base de datos.',
         ]);
 
         // Encuentra el cliente por su ID
@@ -106,8 +126,10 @@ class ClienteController extends Controller
 
         // Actualiza los datos del cliente
         $cliente->update([
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
+            'nombre' => Str::upper($request->nombre),
+            'correo' => Str::lower($request->correo),
+            'ci' => $request->ci,
+            'celular' => $request->celular,
         ]);
 
         // Redirige de nuevo con un mensaje de éxito

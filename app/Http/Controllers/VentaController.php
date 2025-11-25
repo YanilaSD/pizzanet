@@ -11,6 +11,7 @@ use App\Models\TipoPago;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 
 class VentaController extends Controller
 {
@@ -27,16 +28,56 @@ class VentaController extends Controller
         return view('modules.ventas.index', compact('ventas', 'ventasCompletadas', 'ventasTotal', 'descuentoTotal', 'ventasPromedio'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function searchClient(Request $request)
+    {
+        $ci = $request->input('ci');
+        $action = $request->input('action');
+
+        if ($action === 'sin_cliente') {
+            $cliente = Cliente::where('ci', '77777777')->first();
+
+            if (!$cliente) {
+                session()->flash('cliente_no_encontrado', 'No existe un cliente genérico en la base de datos.');
+                return redirect()->back();
+            }
+
+            session(['cliente' => $cliente->toArray()]);
+
+            return redirect()->route('ventas.create');
+        }
+
+        $cliente = Cliente::where('ci', $ci)->first();
+
+        if (!$cliente) {
+            session()->flash('cliente_no_encontrado', 'No se encontró un cliente con esa CI. ¿Desea registrar este cliente?');
+            return redirect()->back();
+        }
+
+        session(['cliente' => $cliente->toArray()]);
+
+        return redirect()->route('ventas.create');
+    }
+
+
+
     public function create()
     {
+
+        Session::forget('productos');
+        Session::forget('promocion_id');
+
+        $productos_session = session('productos', []);
         $productos = Producto::where('estado', 1)->get();
+        $cliente = Session::get('cliente');
         $ventas = Venta::where('estado', 1)->get();
-        $clientes = Cliente::where('estado', 1)->get();
         $tipo_pagos = TipoPago::where('estado', 1)->get();
-        return view('modules.ventas.create', compact('productos', 'ventas', 'clientes', 'tipo_pagos'));
+        return view('modules.ventas.create', compact(
+            'productos',
+            'ventas',
+            'cliente',
+            'tipo_pagos',
+            'productos_session'
+        ));
     }
 
     /**

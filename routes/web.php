@@ -100,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ventas/{venta}/show', [VentaController::class, 'show'])->name('ventas.show');
     Route::put('/ventas/{venta}', [VentaController::class, 'update'])->name('ventas.update');
     Route::get('/ventas/{venta}/destroy', [VentaController::class, 'destroy'])->name('ventas.destroy');
+    Route::post('/ventas/cliente', [VentaController::class, 'searchClient'])->name('ventas.searchClient');
     Route::post('/ventas/add-producto', [VentaController::class, 'addProducto'])->name('ventas.addProducto');
     Route::delete('/ventas/remove-producto', [VentaController::class, 'removeProducto'])->name('ventas.removeProducto');
     Route::get('/ventas/getTotalCompra', [VentaController::class, 'getTotalCompra'])->name('ventas.getTotalCompra');

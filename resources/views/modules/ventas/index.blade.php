@@ -98,7 +98,7 @@
                         #{{ $venta->id }}
                     </th>
                     <td class="px-6 py-4">
-                        {{ $venta->cliente->nombre }}
+                        {{ $venta->cliente->nombre ?? 'Sin nombre' }}
                     </td>
                     <td class="px-6 py-4">
                         {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}

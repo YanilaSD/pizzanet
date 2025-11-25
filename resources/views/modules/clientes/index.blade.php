@@ -22,7 +22,6 @@
         </div>
     @endif
 
-    <!-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8"> -->
     <div x-data="{ selectedCliente: null }" class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-2.5">
             <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -53,10 +52,10 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $loop->iteration }}
                         </th>
-                        <td class="px-6 py-4">{{ $cliente->nombre }}</td>
+                        <td class="px-6 py-4">{{ $cliente->nombre ?? 'Sin nombre' }}</td>
                         <td class="px-6 py-4">{{ $cliente->correo }}</td>
                         <td class="px-6 py-4"><flux:icon name="star" color="orange" class="inline-block" variant="solid" />{{ $cliente->puntos }}</td>
-                        <td class="px-6 py-4">{{ $cliente->descuento }}%</td>
+                        <td class="px-6 py-4">Bs {{ $cliente->descuento }}</td>
                         <td class="px-6 py-4">
                             <flux:badge color="{{ $cliente->estado == 1 ? 'green' : 'red' }}">
                                 {{ $cliente->estado == 1 ? 'Activo' : 'Inactivo' }}
@@ -67,9 +66,6 @@
                                 <flux:icon name="pencil-square" />
                             </a>
                             <div class="mr-4">
-                                <!-- <flux:modal.trigger name="update-points" class="cursor-pointer">
-                                    <flux:icon name="star" />
-                                </flux:modal.trigger> -->
                                 <flux:modal.trigger
                                     name="update-points"
                                     class="cursor-pointer"
@@ -104,7 +100,7 @@
                             Cliente: <span x-text="selectedCliente?.nombre"></span>
                         </flux:text>
                         <div class="mt-4">
-                            <flux:callout color="amber" icon="information-circle" heading="Cada 20 puntos equivalen a 10% de descuento." />
+                            <flux:callout color="amber" icon="information-circle" heading="Cada 40 puntos equivalen a Bs 10 de descuento." />
                         </div>
                     </div>
 
