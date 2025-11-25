@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('correo')->unique();
+            $table->string('ci')->unique();
+            $table->string('celular');
             $table->integer('puntos');
             $table->decimal('descuento', 8, 2)->default(0);
             $table->tinyInteger('estado')->default('1');

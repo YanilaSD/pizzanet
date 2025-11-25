@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +21,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        DB::table('clientes')->updateOrInsert(
+            ['ci' => '77777777'], // si ya existe, actualiza
+            [
+                'nombre' => 'Sin nombre',
+                'correo' => 'sin_nombre@sistema.com',
+                'celular' => '77777777',
+                'puntos' => 0,
+                'descuento' => 0.00,
+                'estado' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }

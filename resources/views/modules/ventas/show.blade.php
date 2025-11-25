@@ -1,9 +1,9 @@
 <x-layouts.app>
     <div class="max-w-md mx-auto bg-white p-4 border border-gray-200 shadow-sm font-mono text-sm" id="recibo">
         <div class="text-center mb-2">
-            <h2 class="text-lg font-bold">Pizzería XYZ</h2>
+            <h2 class="text-lg font-bold">Pizzería Yuneth</h2>
             <p>{{ $venta->fecha->format('d/m/Y H:i') }}</p>
-            <p>Cliente: {{ $venta->cliente->nombre }}</p>
+            <p>Cliente: {{ $venta->cliente->nombre ?? 'Sin nombre' }}</p>
             <p>Método de pago: {{ $venta->tipoPago->nombre }}</p>
         </div>
 
@@ -21,8 +21,8 @@
                     <tr>
                         <td class="py-1">{{ $detalle->producto->nombre }}</td>
                         <td class="py-1 text-center">{{ $detalle->cantidad }}</td>
-                        <td class="py-1 text-right">${{ number_format($detalle->precio_unitario, 2) }}</td>
-                        <td class="py-1 text-right">${{ number_format($detalle->subtotal, 2) }}</td>
+                        <td class="py-1 text-right">Bs {{ number_format($detalle->precio_unitario, 2) }}</td>
+                        <td class="py-1 text-right">Bs {{ number_format($detalle->subtotal, 2) }}</td>
                     </tr>
                 @empty
                     <tr>

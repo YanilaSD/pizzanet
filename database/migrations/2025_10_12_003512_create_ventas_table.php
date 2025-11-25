@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade')->nullable();
             $table->foreignId('promocion_id')->constrained('promociones')->nullable()->onDelete('cascade');
             $table->foreignId('tipo_pago_id')->constrained('tipo_pagos')->onDelete('cascade');
             $table->integer('puntos');
