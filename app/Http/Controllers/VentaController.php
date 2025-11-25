@@ -317,13 +317,13 @@ class VentaController extends Controller
     // Limpia cualquier descuento previo
     session()->forget(['promocion_id', 'descuento_cliente', 'porcentaje_descuento']);
 
-    // 🟢 Caso 1: Descuento del cliente
+    // Caso 1: Descuento del cliente
     if ($descuentoCliente) {
         session()->put('porcentaje_descuento', floatval($descuentoCliente));
         return response()->json(['success' => true, 'message' => 'Descuento del cliente aplicado']);
     }
 
-    // 🟢 Caso 2: Promoción
+    // Caso 2: Promoción
     if ($promocionId) {
         $promocion = Promocion::find($promocionId);
 
@@ -346,7 +346,7 @@ class VentaController extends Controller
         return response()->json(['success' => true, 'message' => 'Promoción aplicada correctamente']);
     }
 
-    // 🟢 Caso 3: Ninguno seleccionado
+    // Caso 3: Ninguno seleccionado
     return response()->json(['success' => true, 'message' => 'Descuento eliminado']);
 }
 

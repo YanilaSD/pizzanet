@@ -55,16 +55,16 @@
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('roles.show', $rol->id) }}" class="text-white dark:text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('roles.show', $rol->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="eye" />
                             </a>
 
                             <a href="{{ route('roles.edit', $rol->id) }}"
-                                class="text-white dark:text-gray-500 hover:underline mr-4">
+                                class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
                             <a href="{{ route('roles.toggle', $rol->id) }}"
-                                class="font-medium text-white dark:text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
+                                class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
                                 <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
                         </td>

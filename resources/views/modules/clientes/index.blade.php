@@ -109,8 +109,8 @@
                         type="number"
                         label="Puntos a canjear"
                         placeholder="Cantidad de puntos"
-                        min="40"
-                        step="40"
+                        min="20"
+                        step="20"
                         required
                     />
 
