@@ -62,7 +62,7 @@
             
     
             <flux:modal name="searchClientModal" class="w-full" class="md:w-96">
-                <form method="POST" action="{{ route('clientes.search') }}">
+                <form method="POST" action="{{ route('clientes.search') }}" autocomplete="off">
                     @csrf
                     <h2 class="text-xl font-semibold mb-4">Buscar Cliente</h2>
                     <div class="mb-4">
@@ -72,9 +72,7 @@
                                 <flux:text class="mt-2">Ingresa tus datos.</flux:text>
                             </div>
 
-                            <flux:input label="Nombre" name="nombre" placeholder="Ingresa tu nombre" />
-                            <flux:input label="Correo" name="correo" placeholder="Ingresa tu correo" />
-                            <flux:input label="Codigo de Cliente" name="codigo_cliente" type="password" />
+                            <flux:input label="CI del Ciente" name="ci" type="number" placeholder="Ingresa el ci del cliente" />
 
                             <div class="flex">
                                 <flux:spacer />

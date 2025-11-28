@@ -22,12 +22,6 @@
                 "current" => request()->routeIs("login")
             ],
             [
-                "name" => "Descuentos",
-                "icon" => "home",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
-            ],
-            [
                 "name" => "Festividades",
                 "icon" => "home",
                 "route" => route("festividades.index"),

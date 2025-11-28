@@ -11,7 +11,27 @@
 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+<script>
+    window.pizzaColors = [
+        '#FF6A00', // naranja pizza
+        '#FF8C42', 
+        '#FF4500',
+        '#FFA500',
+        '#E63946'
+    ];
 
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+    window.Apex = {
+        grid: {
+            padding: { top: 10, right: 12, bottom: 10, left: 12 }
+        },
+        theme: {
+            mode: 'light',
+            palette: 'palette1',
+            monochrome: { enabled: false }
+        }
+    };
+</script>
+
+@vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dashboard-charts.js'])
 @fluxAppearance
 

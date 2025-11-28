@@ -1,31 +1,9 @@
 <div 
-x-data="dashboardCharts"
-x-init="initCharts()"
-x-on:refresh-charts.window="updateAllCharts()"
-class="space-y-6"
+    x-data="dashboardCharts()"
+    x-init="$nextTick(() => initCharts())"
+    x-on:refresh-charts.window="updateAllCharts()"
+    class="space-y-6"
 >
-    <script>
-        Apex.grid = {
-            padding: { top: 10, right: 12, bottom: 10, left: 12 }
-        };
-
-        Apex.theme = {
-            mode: 'light',
-            palette: 'palette1',
-            monochrome: {
-                enabled: false
-            }
-        };
-
-        const pizzaColors = [
-            '#FF6A00', // naranja pizza
-            '#FF8C42', // naranja claro
-            '#FF4500', // rojo fuerte
-            '#FFA500', // amarillo cálido
-            '#E63946'  // rojo pizza intenso
-        ];
-
-    </script>
 
     <!-- ========================= -->
     <!-- TARJETAS DE TOTALES -->
@@ -113,7 +91,7 @@ class="space-y-6"
             <div class="mt-2 text-xs opacity-70">Registrados en el sistema</div>
         </div>
 
-    <!-- Productos -->
+        <!-- Productos -->
         <div class="relative p-5 rounded-xl shadow-xl text-white bg-gradient-to-br from-orange-400 to-red-600 overflow-hidden">
             <div class="absolute right-3 top-3 opacity-20">
                 <svg
@@ -146,7 +124,7 @@ class="space-y-6"
     <!-- ========================= -->
     <!-- GRÁFICOS -->
     <!-- ========================= -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div class="p-5 rounded-xl shadow-xl bg-gradient-to-br from-orange-50 to-yellow-100 border border-orange-200">
             <h3 class="font-bold mb-2">Ventas últimas 7 semanas</h3>
@@ -170,192 +148,39 @@ class="space-y-6"
 
     </div>
 
+
 </div>
 
-
 <script>
-document.addEventListener('alpine:init', () => {
-    Alpine.data('dashboardCharts', () => ({
-        charts: {},
+window.chartSemanalConfig = {
+    chart: { type: 'line', height: 320, toolbar: { show: false }},
+    stroke: { curve: 'smooth', width: 4, colors: ['#FF6A00'] },
+    series: [{ name: "Ventas", data: @js($ventasSemanales) }],
+    xaxis: { categories: @js($semanas) },
+    tooltip: { theme: 'dark' }
+};
 
-        initCharts() {
-            this.drawSemanal();
-            this.drawProductos();
-            this.drawIngresos();
-            this.drawClientes();
-        },
+window.chartProductosConfig = {
+    chart: { type: 'bar', height: 320 },
+    plotOptions: { bar: { horizontal: true, borderRadius: 8 }},
+    colors: ['#E63946'],
+    series: [{ name: "Vendidos", data: @js($topCantidades) }],
+    xaxis: { categories: @js($topProductos) }
+};
 
-        destroy(chartId) {
-            if (this.charts[chartId]) {
-                this.charts[chartId].destroy();
-            }
-        },
+window.chartIngresosConfig = {
+    chart: { type: 'area', height: 320 },
+    stroke: { curve: 'smooth', width: 4, colors: ['#FF4500'] },
+    fill: { type: 'gradient', gradient: { shadeIntensity: 0.7, opacityFrom: 0.7, opacityTo: 0.3 }},
+    series: [{ name: "Ingresos", data: @js($ingresosMensuales) }],
+    xaxis: { categories: @js($meses) }
+};
 
-        updateAllCharts() {
-            this.initCharts();
-        },
-
-        drawSemanal() {
-            this.destroy('semanal');
-
-            this.charts.semanal = new ApexCharts(
-                document.querySelector("#chartSemanal"),
-                {
-                    chart: { 
-                        type: 'line',
-                        height: 320,
-                        toolbar: { show: false },
-                        dropShadow: {
-                            enabled: true,
-                            color: '#FF6A00',
-                            top: 3,
-                            left: 3,
-                            blur: 4,
-                            opacity: 0.3
-                        }
-                    },
-                    stroke: { 
-                        curve: 'smooth',
-                        width: 4,
-                        colors: ['#FF6A00']
-                    },
-                    markers: {
-                        size: 5,
-                        colors: ['#ffffff'],
-                        strokeColors: '#FF6A00',
-                        strokeWidth: 3
-                    },
-                    series: [{
-                        name: "Ventas (Bs)",
-                        data: @js($ventasSemanales)
-                    }],
-                    xaxis: { 
-                        categories: @js($semanas),
-                        labels: { style: { colors: '#333', fontWeight: 600 } }
-                    },
-                    tooltip: { theme: 'dark' },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shade: 'light',
-                            type: "vertical",
-                            gradientToColors: ["#FFA766"],
-                            opacityFrom: 0.7,
-                            opacityTo: 0.1,
-                        }
-                    }
-                }
-            ).render();
-        },
-
-        drawProductos() {
-            this.destroy('productos');
-
-            this.charts.productos = new ApexCharts(
-                document.querySelector("#chartProductos"),
-                {
-                    chart: { 
-                        type: 'bar', 
-                        height: 320,
-                        toolbar: { show: false }
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: true,
-                            borderRadius: 8,
-                            colors: { backgroundBarOpacity: 0.1 }
-                        }
-                    },
-                    colors: ['#E63946'],
-                    series: [{ 
-                        name: "Vendidos",
-                        data: @js($topCantidades)
-                    }],
-                    xaxis: { 
-                        categories: @js($topProductos),
-                        labels: { style: { colors: '#333', fontWeight: 600 } }
-                    },
-                    tooltip: { theme: 'dark' }
-                }
-            ).render();
-        },
-
-        drawIngresos() {
-            this.destroy('ingresos');
-
-            this.charts.ingresos = new ApexCharts(
-                document.querySelector("#chartIngresos"),
-                {
-                    chart: { 
-                        type: 'area', 
-                        height: 320,
-                        toolbar: { show: false }
-                    },
-                    stroke: {
-                        curve: 'smooth',
-                        width: 4,
-                        colors: ['#FF4500']
-                    },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shadeIntensity: 1,
-                            gradientToColors: ['#FF8C42'],
-                            opacityFrom: 0.7,
-                            opacityTo: 0.0
-                        }
-                    },
-                    series: [{
-                        name: "Ingresos (Bs)",
-                        data: @js($ingresosMensuales)
-                    }],
-                    xaxis: { 
-                        categories: @js($meses),
-                        labels: { style: { colors: '#333', fontWeight: 600 } }
-                    },
-                    tooltip: { theme: 'dark' },
-                }
-            ).render();
-        },
-
-        drawClientes() {
-    this.destroy('clientes');
-
-    this.charts.clientes = new ApexCharts(
-        document.querySelector("#chartClientes"),
-        {
-            chart: {
-                type: 'donut',
-                height: 320
-            },
-            colors: pizzaColors,
-            series: @js($clientesCantidad),
-            labels: @js($clientesMes),
-            legend: {
-                position: 'bottom',
-                markers: { width: 12, height: 12 }
-            },
-            stroke: { width: 2 },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '65%',
-                        labels: {
-                            show: true,
-                            total: {
-                                show: true,
-                                label: 'Total',
-                                color: '#FF6A00',
-                                formatter: () => @js(array_sum($clientesCantidad))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    ).render();
-}
-
-    }))
-})
+window.chartClientesConfig = {
+    chart: { type: 'donut', height: 320 },
+    colors: pizzaColors,
+    series: @js($clientesCantidad),
+    labels: @js($clientesMes),
+    legend: { position: 'bottom' }
+};
 </script>

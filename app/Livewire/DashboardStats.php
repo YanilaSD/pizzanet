@@ -10,20 +10,25 @@ use Carbon\Carbon;
 
 class DashboardStats extends Component
 {
+    // Totales
     public $totalVentas;
     public $totalIngresos;
     public $totalClientes;
     public $totalProductos;
 
+    // Ventas semanales
     public $semanas = [];
     public $ventasSemanales = [];
 
+    // Top productos
     public $topProductos = [];
     public $topCantidades = [];
 
+    // Ingresos últimos meses
     public $meses = [];
     public $ingresosMensuales = [];
 
+    // Clientes últimos meses
     public $clientesMes = [];
     public $clientesCantidad = [];
 
@@ -35,7 +40,7 @@ class DashboardStats extends Component
     public function loadStats()
     {
         // ======================
-        // Totales
+        // 1. Totales
         // ======================
         $this->totalVentas = Venta::count();
         $this->totalIngresos = Venta::sum('total');
@@ -43,7 +48,7 @@ class DashboardStats extends Component
         $this->totalProductos = Producto::count();
 
         // ======================
-        // 1. Ventas semanales
+        // 2. Ventas semanales (últimas 7 semanas)
         // ======================
         $this->semanas = [];
         $this->ventasSemanales = [];
@@ -59,7 +64,7 @@ class DashboardStats extends Component
         }
 
         // ======================
-        // 2. Top productos
+        // 3. Top 5 productos más vendidos
         // ======================
         $productos = Producto::with('detalleVentas')
             ->get()
@@ -74,13 +79,14 @@ class DashboardStats extends Component
         $this->topCantidades = $productos->pluck('vendidos')->values();
 
         // ======================
-        // 3. Ingresos últimos meses
+        // 4. Ingresos últimos 6 meses
         // ======================
         $this->meses = [];
         $this->ingresosMensuales = [];
 
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
+
             $this->meses[] = $mes->format('M');
 
             $this->ingresosMensuales[] = Venta::whereYear('fecha', $mes->year)
@@ -89,13 +95,14 @@ class DashboardStats extends Component
         }
 
         // ======================
-        // 4. Clientes últimos meses
+        // 5. Clientes últimos 6 meses
         // ======================
         $this->clientesMes = [];
         $this->clientesCantidad = [];
 
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
+
             $this->clientesMes[] = $mes->format('M');
 
             $this->clientesCantidad[] = Cliente::whereYear('created_at', $mes->year)

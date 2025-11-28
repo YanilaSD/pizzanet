@@ -14,42 +14,7 @@ class DashboardController extends Controller
     // Totales
     public function index()
     {
-        $totalVentas = Venta::count();
-        $totalIngresos = Venta::sum('total');
-        $totalClientes = Cliente::count();
-        $totalProductos = Producto::count();
-
-        // Ventas semanales (últimas 7 semanas)
-        $semanas = collect();
-        $ventasSemanales = collect();
-
-        for ($i = 6; $i >= 0; $i--) {
-            $fechaInicio = Carbon::now()->subWeeks($i)->startOfWeek();
-            $fechaFin = Carbon::now()->subWeeks($i)->endOfWeek();
-
-            $semanas->push($fechaInicio->format('d M'));
-            $ventasSemanales->push(
-                Venta::whereBetween('fecha', [$fechaInicio, $fechaFin])->sum('total')
-            );
-        }
-
-        // Productos más vendidos
-        $productos = Producto::with('detalleVentas')
-            ->get()
-            ->map(function ($producto) {
-                $producto->vendidos = $producto->detalleVentas->sum('cantidad');
-                return $producto;
-            })
-            ->sortByDesc('vendidos')
-            ->take(5); // top 5
-
-        $nombresProductos = $productos->pluck('nombre');
-        $cantidadVendida = $productos->pluck('vendidos');
-
-        return view('dashboard', compact(
-            'totalVentas', 'totalIngresos', 'totalClientes', 'totalProductos',
-            'semanas', 'ventasSemanales', 'nombresProductos', 'cantidadVendida'
-        ));
+        return view('dashboard');
     }
 
     public function predashboard()
@@ -59,33 +24,63 @@ class DashboardController extends Controller
 
     public function client(Request $request)
     {
+        // ================================
+        // VALIDACIÓN
+        // ================================
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'correo' => 'required|email|max:255',
-            'codigo_cliente' => 'required|string|max:50',
+            'ci' => 'required|string|max:20'
         ], [
-            'nombre.required' => 'El campo nombre es obligatorio.',
-            'correo.required' => 'El campo correo es obligatorio.',
-            'codigo_cliente.required' => 'El campo código de cliente es obligatorio.',
-            'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
+            'ci.required' => 'El número de CI es obligatorio.',
+            'ci.string' => 'El CI debe ser un texto válido.',
+            'ci.max' => 'El CI no puede exceder 20 caracteres.',
         ]);
 
+        // ================================
+        // BUSCAR CLIENTE POR CI
+        // ================================
+        $cliente = Cliente::where('ci', $request->ci)->first();
+
+        if (!$cliente) {
+            return back()->withErrors(['ci' => 'No existe un cliente registrado con ese número de CI.']);
+        }
+
+        // ================================
+        // ESTADÍSTICAS DEL CLIENTE
+        // ================================
         $mesActual = Carbon::now()->month;
         $anioActual = Carbon::now()->year;
-        $totalVentas = Cliente::find(1)
-        ->ventas()
-        ->whereYear('created_at', $anioActual)
-        ->whereMonth('created_at', $mesActual)
-        ->sum('total');
-        $comprasRealizadas = Cliente::find(1)
-        ->ventas()
-        ->whereYear('created_at', $anioActual)
-        ->whereMonth('created_at', $mesActual)
-        ->count();
-        $promociones = Promocion::where('estado', 1)->orderBy('created_at', 'desc')->paginate(10);
-        $productos = Producto::where('estado', 1)->orderBy('created_at', 'desc')->paginate(10);
 
-        $cliente = Cliente::findOrFail($request->codigo_cliente);
-        return view('modules.public.verificar', compact('productos', 'promociones', 'cliente', 'totalVentas', 'comprasRealizadas'));
+        $totalVentas = $cliente->ventas()
+            ->whereYear('created_at', $anioActual)
+            ->whereMonth('created_at', $mesActual)
+            ->sum('total');
+
+        $comprasRealizadas = $cliente->ventas()
+            ->whereYear('created_at', $anioActual)
+            ->whereMonth('created_at', $mesActual)
+            ->count();
+
+        // ================================
+        // LISTAS DE PRODUCTOS Y PROMOS
+        // ================================
+        $promociones = Promocion::where('estado', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $productos = Producto::where('estado', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // ================================
+        // RESPUESTA
+        // ================================
+        return view('modules.public.verificar', compact(
+            'productos',
+            'promociones',
+            'cliente',
+            'totalVentas',
+            'comprasRealizadas'
+        ));
     }
+
 }

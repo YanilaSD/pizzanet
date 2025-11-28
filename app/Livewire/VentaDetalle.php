@@ -10,6 +10,9 @@ use App\Models\Cliente;
 use App\Models\Promocion;
 use App\Models\DetalleVenta;
 use App\Models\TipoPago;
+use App\Mail\SaleDone;
+use Illuminate\Support\Facades\Mail;
+
 
 class VentaDetalle extends Component
 {
@@ -182,6 +185,7 @@ class VentaDetalle extends Component
                 'subtotal' => $producto['subtotal'],
             ]);
         }
+        Mail::to($clienteSession['correo'])->send(new SaleDone($venta));
 
         // Limpiar sesión y resetear variables
         Session::forget('productos_venta');
