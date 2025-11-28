@@ -19,7 +19,7 @@
 
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mb-2.5">
+        <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <caption
                 class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
 
@@ -90,7 +90,10 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $privilegios->links() }}
+
+        <div class="p-4 bg-white">
+            {{ $privilegios->links() }}
+        </div>
     </div>
 
 </x-layouts.app>

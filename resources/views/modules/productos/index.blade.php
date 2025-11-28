@@ -17,7 +17,7 @@
     @endif
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-2.5">
+        <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
             <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 <div class="row justify-between flex items-center">
                     <div>
@@ -84,6 +84,8 @@
             </tbody>
         </table>
 
-        {{ $productos->links() }}
+        <div class="p-4 bg-white">
+            {{ $productos->links() }}
+        </div>
     </div>
 </x-layouts.app>
