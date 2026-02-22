@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
@@ -12,7 +13,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-         $categorias = Categoria::paginate(10);  // Obtener todos los tipos de pago
+         $categorias = Categoria::where('estado', '1')->paginate(10);
         return view('modules.categorias.index', compact('categorias'));
     }
 
@@ -30,25 +31,22 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'nombre' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categorias', 'nombre'),
+            ],
         ], [
             'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de caracteres.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'Ya se registro una categoría con ese nombre antes. Contactese con el administrador de sistema',
         ]);
 
         Categoria::create($request->only('nombre'));
         return redirect()->route('categorias.index')->with('success', 'Categoria creada exitosamente');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Categoria $categoria)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -70,7 +68,7 @@ class CategoriaController extends Controller
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
         ]);
 
-        $categoria->update($request->only('nombre'));  // Actualizar tipo de pago
+        $categoria->update($request->only('nombre'));
         return redirect()->route('categorias.index')->with('success', 'Categoria actualizada exitosamente');
     }
 
@@ -80,6 +78,6 @@ class CategoriaController extends Controller
     public function destroy(Categoria $categoria)
     {
         $categoria->update(['estado' => 0]);
-        return redirect()->route('categorias.index')->with('success', 'Categoria desactivada');
+        return redirect()->route('categorias.index')->with('success', 'Categoria eliminada');
     }
 }

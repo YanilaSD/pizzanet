@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Festividad;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class FestividadController extends Controller
@@ -37,15 +38,21 @@ class FestividadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('festividades', 'nombre'),
+            ],
             'descripcion' => 'required|string',
         ], [
             'nombre.required' => 'El campo nombre es obligatorio.',
-            'nombre.string' => 'El nombre debe ser una cadena de texto.',
-            'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'nombre.string'   => 'El nombre debe ser una cadena de texto.',
+            'nombre.max'      => 'El nombre no puede tener más de 255 caracteres.',
+            'nombre.unique'   => 'Ya existe un registro con ese nombre.',
 
-            'descripcion.string' => 'La descripción debe ser una cadena de texto.',
-            'descripcion.required' => 'El campo descripcion es obligatorio.',
+            'descripcion.required' => 'El campo descripción es obligatorio.',
+            'descripcion.string'   => 'La descripción debe ser una cadena de texto.',
         ]);
 
 
@@ -107,6 +114,6 @@ class FestividadController extends Controller
     {
         $festividad->update(['estado' => 0]);
 
-        return redirect()->route('festividades.index')->with('success', 'Festividad desactivada.');
+        return redirect()->route('festividades.index')->with('success', 'Festividad eliminada.');
     }
 }

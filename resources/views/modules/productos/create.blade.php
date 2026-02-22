@@ -1,19 +1,17 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
-            <h1 class="text-2xl">Nuevo Producto</h1>
-            <p>Completa el formulario para registrar un nuevo producto.</p>
+            <h1 class="text-2xl font-semibold">Nuevo Producto</h1>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                Completa el formulario para registrar un nuevo producto.
+            </p>
         </div>
-        <a href="{{ route('productos.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
-    {{-- Mensajes de error --}}
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            <strong class="font-bold">¡Ups!</strong>
-            <ul class="mt-2 list-disc list-inside text-sm">
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+            <div class="font-semibold">Revisa los campos:</div>
+            <ul class="mt-2 list-disc list-inside text-sm space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -21,75 +19,51 @@
         </div>
     @endif
 
-    {{-- Tarjeta del formulario --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-        <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
-            {{-- Inputs en una fila --}}
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
-                <div class="md:w-1/3">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nombre</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Nombre <span class="text-red-500">*</span>
+                    </label>
                     <flux:input
                         id="nombre"
                         name="nombre"
-                        placeholder="Nombre del producto"
+                        placeholder="Ej: Pizza Familiar"
                         value="{{ old('nombre') }}"
                         required
                     />
                 </div>
 
-                {{-- Descripción --}}
-                <div class="md:w-1/3">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Descripción</label>
-                    <flux:input
-                        id="descripcion"
-                        name="descripcion"
-                        placeholder="Descripción del producto"
-                        value="{{ old('descripcion') }}"
-                        required
-                    />
-                </div>
-
-                {{-- Precio --}}
-                <div class="md:w-1/3">
-                    <label for="precio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Precio</label>
+                <div>
+                    <label for="precio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Precio <span class="text-red-500">*</span>
+                    </label>
                     <flux:input
                         id="precio"
                         name="precio"
-                        placeholder="Precio del producto"
+                        placeholder="Ej: 59.90"
                         value="{{ old('precio') }}"
                         type="number"
+                        inputmode="decimal"
+                        min="0"
                         step="0.01"
                         required
                     />
-                </div>
-            </div>
-
-            {{-- Inputs en una fila --}}
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Imagen --}}
-                <div class="md:w-1/3">
-                    <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Imagen</label>
-                    <input
-                        id="imagen"
-                        name="imagen"
-                        type="file"
-                        accept="image/*"
-                        class="block w-full mt-1 border h-10 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        required
-                    />
+                    <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Usa punto para decimales. Ej: 59.90</p>
                 </div>
 
-
-                {{-- Categoría --}}
-                <div class="md:w-1/3">
-                    <label for="categoria_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Categoría</label>
+                <div>
+                    <label for="categoria_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Categoría <span class="text-red-500">*</span>
+                    </label>
                     <select
                         id="categoria_id"
                         name="categoria_id"
-                        class="block w-full mt-1 border h-10 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        class="block w-full h-10 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                         required
                     >
                         <option value="">Selecciona una categoría</option>
@@ -102,9 +76,58 @@
                 </div>
             </div>
 
-            {{-- Botón de guardar --}}
-            <div class="flex justify-end">
-                <flux:button type="submit">Guardar</flux:button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-2">
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Descripción <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        rows="3"
+                        placeholder="Ej: Pizza con mozzarella, jamón y champiñones..."
+                        class="block w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 py-2 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                        required
+                    >{{ old('descripcion') }}</textarea>
+                </div>
+
+                <div>
+                    <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Imagen <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        id="imagen"
+                        name="imagen"
+                        type="file"
+                        accept="image/*"
+                        class="block w-full h-10 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 text-sm
+                               file:mr-3 file:border-0 file:bg-orange-500 file:text-white file:px-3 file:py-2 file:rounded-md
+                               hover:file:bg-orange-600
+                               focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                        required
+                    />
+                    <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Formato sugerido: JPG/PNG. Máx recomendado: 2MB.</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <a href="{{ route('productos.index') }}">
+                    <flux:button
+                        variant="primary"
+                        color="gray"
+                >
+                        Volver
+                    </flux:button>
+                </a>
+
+                <flux:button
+                    type="submit"
+                    variant="primary"
+                    color="orange"
+                >
+                    Guardar
+                </flux:button>
             </div>
         </form>
     </div>

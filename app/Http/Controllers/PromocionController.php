@@ -30,9 +30,7 @@ class PromocionController extends Controller
      */
     public function create()
     {
-        // Cargar todas las festividades
-        $festividades = Festividad::all();
-
+        $festividades = Festividad::where('estado', '1')->get();
         return view('modules.promociones.create', compact('festividades'));
     }
 

@@ -101,81 +101,57 @@ new #[Layout('components.layouts.auth')] class extends Component {
 }; ?>
 
 <div class="flex flex-col gap-6">
-    <x-auth-header title="Pizzería Yuneth SRL" description="Ingresa tu correo y contraseña para iniciar sesion" />
+    <x-auth-header class="text-white" title="Pizzería Yuneth SRL" description="Ingresa tu correo y contraseña para iniciar sesion" />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form method="POST" wire:submit="login" class="flex flex-col gap-6" autocomplete="off">
+    <form method="POST" wire:submit="login" class="flex flex-col gap-6">
+        @csrf
         <!-- Email Address -->
-        <flux:field>
-            <flux:label class="text-white font-medium">
-                {{ __('Correo') }}
-            </flux:label>
-
-            <flux:input
-                wire:model="email"
-                type="email"
-                required
-                autofocus
-                autocomplete="email"
-                :placeholder="__('mi_correo@pizzanet.com')"
-                class="w-full"
-                class:input="px-3 py-2"
-            />
-
-            <flux:error name="email" />
-        </flux:field>
+        <flux:input
+            wire:model="email"
+            :label="__('Email address')"
+            type="email"
+            required
+            autofocus
+            autocomplete="email"
+            placeholder="email@example.com"
+        />
 
         <!-- Password -->
         <div class="relative">
-            <flux:field>
-                <flux:label class="text-white font-medium">
-                    {{ __('Contraseña') }}
-                </flux:label>
-
-                <flux:input
-                    wire:model="password"
-                    type="password"
-                    required
-                    autocomplete="current-password"
-                    :placeholder="__('Ingresa tu contraseña')"
-                    viewable
-                    class="w-full"
-                    class:input="px-3 py-2"
-                />
-
-                <flux:error name="password" />
-            </flux:field>
-
+            <flux:input
+                wire:model="password"
+                :label="__('Password')"
+                type="password"
+                required
+                autocomplete="current-password"
+                :placeholder="__('Password')"
+                viewable
+            />
 
             @if (Route::has('password.request'))
-                <!-- <flux:link class="absolute top-0 text-sm end-0 text-white" :href="route('password.request')" wire:navigate>
-                    {{ __('Olvidaste tu contraseña?') }}
-                </flux:link> -->
+                <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
+                    {{ __('Forgot your password?') }}
+                </flux:link>
             @endif
         </div>
 
         <!-- Remember Me -->
-        <flux:field variant="inline">
-            <flux:checkbox wire:model="remember" id="remember" />
-            <flux:label for="remember" class="text-white">
-                {{ __('Recuerdame') }}
-            </flux:label>
-        </flux:field>
-
+        <flux:checkbox wire:model="remember" :label="__('Remember me')" />
 
         <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full bg-orange-500" data-test="login-button">
-                {{ __('Iniciar sesión') }}
+            <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
+                {{ __('Log in') }}
             </flux:button>
         </div>
     </form>
 
     @if (Route::has('register'))
-        <!-- <div class="space-x-1 text-sm text-center text-white rtl:space-x-reverse  dark:text-zinc-400">
+        <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
             <span>{{ __('Don\'t have an account?') }}</span>
-            <flux:link class="text-white" :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
-        </div> -->
+            <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
+        </div>
     @endif
 </div>

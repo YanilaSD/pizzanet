@@ -4,12 +4,11 @@
             <h1 class="text-2xl">Gestión de Categorias</h1>
             <p>Registra y gestiona todos los categorias del sistema.</p>
         </div>
-        <flux:button href="{{ route('categorias.create') }}">
-            + Nueva categoria
+        <flux:button variant="primary" color="orange" href="{{ route('categorias.create') }}">
+            Crear categoria
         </flux:button>
     </div>
 
-    {{-- Mensajes de éxito --}}
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
@@ -17,7 +16,6 @@
         </div>
     @endif
 
-    {{-- Tabla de Tipos de Pago --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -64,9 +62,11 @@
                             <a href="{{ route('categorias.edit', $categoria) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
-                            <a href="{{ route('categorias.destroy', $categoria) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="trash" />
-                            </a>
+                            @if($categoria->estado == '1')
+                                <a href="{{ route('categorias.destroy', $categoria) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
+                                    <flux:icon name="trash" />
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @empty

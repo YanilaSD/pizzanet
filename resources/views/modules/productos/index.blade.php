@@ -4,8 +4,8 @@
             <h1 class="text-2xl">Gestión de Productos</h1>
             <p>Registra y gestiona todos los productos del sistema</p>
         </div>
-        <flux:button href="{{ route('productos.create') }}">
-            + Nuevo Producto
+        <flux:button variant="primary" color="orange" href="{{ route('productos.create') }}">
+            Nuevo Producto
         </flux:button>
     </div>
 
@@ -62,16 +62,18 @@
                                 {{ $producto->estado == 1 ? 'Activo' : 'Inactivo' }}
                             </flux:badge>
                         </td>
-                        <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('productos.show', $producto->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="eye" />
-                            </a>
-                            <a href="{{ route('productos.edit', $producto->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="pencil-square" />
-                            </a>
-                            <a href="{{ route('productos.destroy', $producto) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="trash" />
-                            </a>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2.5">
+                                <a href="{{ route('productos.edit', $producto->id) }}"
+                                class="text-gray-500 dark:text-white hover:text-orange-500">
+                                    <flux:icon name="pencil-square" />
+                                </a>
+
+                                <a href="{{ route('productos.toggle', $producto) }}"
+                                class="text-gray-500 dark:text-white hover:text-red-500">
+                                    <flux:icon name="{{ $producto->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 @empty

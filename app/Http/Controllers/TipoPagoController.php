@@ -12,7 +12,13 @@ class TipoPagoController extends Controller
      */
     public function index()
     {
-        $tipo_pagos = TipoPago::paginate(10);  // Obtener todos los tipos de pago
+        $query = TipoPago::query();
+
+        $tipo_pagos = $query->orderBy('estado', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->paginate(10)
+                    ->withQueryString();
+
         return view('modules.tipo_pagos.index', compact('tipo_pagos'));
     }
 
@@ -59,16 +65,19 @@ class TipoPagoController extends Controller
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
         ]);
 
-        $tipo_pago->update($request->only('nombre'));  // Actualizar tipo de pago
+        $tipo_pago->update($request->only('nombre'));
         return redirect()->route('tipo_pagos.index')->with('success', 'Tipo de pago actualizado exitosamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipoPago $tipo_pago)
+    public function toggle(TipoPago $tipo_pago)
     {
-        $tipo_pago->update(['estado' => 0]);
-        return redirect()->route('tipo_pagos.index')->with('success', 'Tipo de pago desactivado');
+        $tipo_pago->estado = $tipo_pago->estado == '1' ? '0' : '1';
+        $tipo_pago->save();
+        $mensaje = $tipo_pago->estado == '1' ? 'Tipo de pago activado' : 'Tipo de pago desactivado';
+
+        return redirect()->route('tipo_pagos.index')->with('success', $mensaje);
     }
 }

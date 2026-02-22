@@ -4,12 +4,11 @@
             <h1 class="text-2xl">Gestión de Tipos de Pago</h1>
             <p>Registra y gestiona todos los tipos de pago del sistema.</p>
         </div>
-        <flux:button href="{{ route('tipo_pagos.create') }}">
-            + Nuevo Tipo de Pago
+        <flux:button variant="primary" color="orange" href="{{ route('tipo_pagos.create') }}">
+            Crear Tipo de Pago
         </flux:button>
     </div>
 
-    {{-- Mensajes de éxito --}}
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
@@ -17,7 +16,6 @@
         </div>
     @endif
 
-    {{-- Tabla de Tipos de Pago --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -64,8 +62,9 @@
                             <a href="{{ route('tipo_pagos.edit', $tipo_pago) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
-                            <a href="{{ route('tipo_pagos.destroy', $tipo_pago) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="trash" />
+                            <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
+                                class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
+                                <flux:icon name="{{ $tipo_pago->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
                         </td>
                     </tr>

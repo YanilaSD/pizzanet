@@ -51,7 +51,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tipo_pagos', [TipoPagoController::class, 'store'])->name('tipo_pagos.store');
     Route::get('/tipo_pagos/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->name('tipo_pagos.edit');
     Route::put('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'update'])->name('tipo_pagos.update');
-    Route::get('/tipo_pagos/{tipo_pago}/destroy', [TipoPagoController::class, 'destroy'])->name('tipo_pagos.destroy');
     Route::get('/tipo_pagos/{tipo_pago}/toggle', [TipoPagoController::class, 'toggle'])->name('tipo_pagos.toggle');
 
     Route::get('/festividades', [FestividadController::class, 'index'])->name('festividades.index');
@@ -92,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/productos/{producto}/show', [ProductoController::class, 'show'])->name('productos.show');
     Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
     Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
-    Route::get('/productos/{producto}/destroy', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    Route::get('/productos/{producto}/toggle', [ProductoController::class, 'toggle'])->name('productos.toggle');
 
     Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
     Route::get('/ventas/create', [VentaController::class, 'create'])->name('ventas.create');

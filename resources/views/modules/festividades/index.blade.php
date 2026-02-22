@@ -4,8 +4,8 @@
             <h1 class="text-2xl">Gestión de Festividades</h1>
             <p>Registra y gestiona todas las festividades del sistema</p>
         </div>
-        <flux:button href="{{ route('festividades.create') }}">
-            + Nueva Festividad
+        <flux:button variant="primary" color="orange" href="{{ route('festividades.create') }}">
+            Nueva Festividad
         </flux:button>
     </div>
 
@@ -24,7 +24,6 @@
                         Registro de Festividades
                         <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">Listado de festividades registradas</p>
                     </div>
-                    <!-- Buscador -->
                     <form method="GET" action="{{ route('festividades.index') }}" class="flex items-center gap-2">
                         <flux:input name="search" icon="magnifying-glass" placeholder="Buscar festividad" value="{{ request('search') }}" />
                     </form>
