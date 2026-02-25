@@ -57,8 +57,8 @@
             [
                 "name" => "Usuarios",
                 "icon" => "user",
-                "route" => route("login"),
-                "current" => request()->routeIs("login")
+                "route" => route("usuarios.index"),
+                "current" => request()->routeIs("usuarios.index")
             ],
             [
                 "name" => "Roles",

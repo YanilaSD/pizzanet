@@ -110,7 +110,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
         @csrf
         <!-- Email Address -->
         <flux:input
-            class="text-white"
             wire:model="email"
             :label="__('Email address')"
             type="email"

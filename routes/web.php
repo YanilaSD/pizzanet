@@ -14,6 +14,7 @@ use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\UsuarioController;
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -43,8 +44,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/roles/{rol}/edit', [RolController::class, 'edit'])->name('roles.edit');
     Route::put('/roles/{rol}', [RolController::class, 'update'])->name('roles.update');
     Route::get('/roles/{rol}', [RolController::class, 'show'])->name('roles.show');
-    Route::get('/roles/{id}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
     Route::get('roles/{rol}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
+
+
+    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+    Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
+    Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+    Route::get('/usuarios/{rol}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{rol}', [UsuarioController::class, 'update'])->name('usuarios.update');
+    Route::get('/usuarios/{rol}', [UsuarioController::class, 'show'])->name('usuarios.show');
+    Route::get('/usuarios/{id}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
+    Route::get('usuarios/{rol}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
 
     Route::get('/tipo_pagos', [TipoPagoController::class, 'index'])->name('tipo_pagos.index');
     Route::get('/tipo_pagos/create', [TipoPagoController::class, 'create'])->name('tipo_pagos.create');
