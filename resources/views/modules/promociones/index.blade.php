@@ -101,11 +101,6 @@
 
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('promociones.show', $promocion->id) }}"
-                                   class="text-gray-500 dark:text-white hover:text-orange-500">
-                                    <flux:icon name="eye" />
-                                </a>
-
                                 <a href="{{ route('promociones.edit', $promocion->id) }}"
                                    class="text-gray-500 dark:text-white hover:text-orange-500">
                                     <flux:icon name="pencil-square" />

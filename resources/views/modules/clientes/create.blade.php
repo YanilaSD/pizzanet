@@ -1,19 +1,17 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
-            <h1 class="text-2xl">Nuevo Cliente</h1>
-            <p>Completa el formulario para registrar un nuevo cliente.</p>
+            <h1 class="text-2xl font-semibold">Nuevo Cliente</h1>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Completa el formulario para registrar un nuevo cliente.
+            </p>
         </div>
-        <a href="{{ route('clientes.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
-    {{-- Mensajes de error --}}
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            <strong class="font-bold">¡Ups!</strong>
-            <ul class="mt-2 list-disc list-inside text-sm">
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+            <strong class="font-semibold">Revisa los campos:</strong>
+            <ul class="mt-2 list-disc list-inside text-sm space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -21,16 +19,15 @@
         </div>
     @endif
 
-    {{-- Formulario de Cliente --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-        <form action="{{ route('clientes.store') }}" method="POST">
+        <form action="{{ route('clientes.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            {{-- Inputs en una fila --}}
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
-                <div class="md:w-1/2">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nombre</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Nombre
+                    </label>
                     <flux:input
                         id="nombre"
                         name="nombre"
@@ -40,48 +37,62 @@
                     />
                 </div>
 
-                {{-- CI --}}
-                <div class="md:w-1/2">
-                    <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">CI</label>
+                <div>
+                    <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        CI
+                    </label>
                     <flux:input
-                        type="number"
                         id="ci"
                         name="ci"
                         placeholder="CI del cliente"
                         value="{{ old('ci') }}"
+                        inputmode="numeric"
                         required
                     />
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        Solo números (sin espacios).
+                    </p>
                 </div>
 
-                {{-- Celular --}}
-                <div class="md:w-1/2">
-                    <label for="celular" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Celular</label>
+                <div>
+                    <label for="celular" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Celular
+                    </label>
                     <flux:input
                         id="celular"
                         name="celular"
-                        placeholder="Celular del cliente"
+                        placeholder="Ej: 7XXXXXXX"
                         value="{{ old('celular') }}"
+                        inputmode="tel"
                         required
                     />
                 </div>
 
-                {{-- Correo --}}
-                <div class="md:w-1/2">
-                    <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Correo</label>
+                <div>
+                    <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Correo
+                    </label>
                     <flux:input
                         id="correo"
                         name="correo"
                         type="email"
-                        placeholder="Correo del cliente"
+                        placeholder="correo@ejemplo.com"
                         value="{{ old('correo') }}"
                         required
                     />
                 </div>
             </div>
 
-            {{-- Botón de guardar --}}
-            <div class="flex justify-end">
-                <flux:button type="submit">Guardar</flux:button>
+            <div class="flex justify-end gap-2 pt-2">
+                <a href="{{ route('clientes.index') }}">
+                    <flux:button variant="primary" color="gray">
+                        Volver
+                    </flux:button>
+                </a>
+
+                <flux:button variant="primary" color="orange" type="submit">
+                    Guardar
+                </flux:button>
             </div>
         </form>
     </div>

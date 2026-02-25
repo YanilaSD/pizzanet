@@ -1,19 +1,17 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
-            <h1 class="text-2xl">Editar Promoción</h1>
-            <p>Modifica los datos de la promoción seleccionada.</p>
+            <h1 class="text-2xl font-semibold">Editar Promoción</h1>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Modifica los datos de la promoción seleccionada.
+            </p>
         </div>
-        <a href="{{ route('promociones.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
-    {{-- Mensajes de error --}}
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            <strong class="font-bold">¡Ups!</strong>
-            <ul class="mt-2 list-disc list-inside text-sm">
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+            <strong class="font-semibold">Revisa los campos:</strong>
+            <ul class="mt-2 list-disc list-inside text-sm space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -21,17 +19,16 @@
         </div>
     @endif
 
-    {{-- Tarjeta del formulario --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-        <form action="{{ route('promociones.update', $promocion->id) }}" method="POST">
+        <form action="{{ route('promociones.update', $promocion->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
-            {{-- Inputs en una fila --}}
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
-                <div class="md:w-1/3">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nombre</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Nombre
+                    </label>
                     <flux:input
                         id="nombre"
                         name="nombre"
@@ -41,102 +38,128 @@
                     />
                 </div>
 
-                {{-- Descripción --}}
-                <div class="md:w-2/3">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Descripción</label>
+                <div>
+                    <label for="descuento" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Descuento (%)
+                    </label>
                     <flux:input
-                        id="descripcion"
-                        name="descripcion"
-                        placeholder="Descripción de la promoción"
-                        value="{{ old('descripcion', $promocion->descripcion) }}"
+                        id="descuento"
+                        name="descuento"
+                        placeholder="Ej: 10"
+                        value="{{ old('descuento', $promocion->descuento) }}"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        required
                     />
+                </div>
+
+                <div>
+                    <label for="festividad_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Festividad
+                    </label>
+                    <select
+                        id="festividad_id"
+                        name="festividad_id"
+                        class="block w-full h-10 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                        required
+                    >
+                        <option value="">Selecciona una festividad</option>
+                        @foreach ($festividades as $festividad)
+                            <option value="{{ $festividad->id }}"
+                                {{ old('festividad_id', $promocion->festividad_id) == $festividad->id ? 'selected' : '' }}>
+                                {{ $festividad->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
-            {{-- Descuento --}}
-            <div class="mb-6">
-                <label for="descuento" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Descuento</label>
-                <flux:input
-                    id="descuento"
-                    name="descuento"
-                    placeholder="Descuento (%)"
-                    value="{{ old('descuento', $promocion->descuento) }}"
-                    type="number"
-                    min="0"
-                    max="100"
-                    required
-                />
+            <div>
+                <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    Descripción
+                </label>
+                <textarea
+                    id="descripcion"
+                    name="descripcion"
+                    rows="3"
+                    class="block w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 py-2 text-sm
+                           focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Descripción de la promoción"
+                >{{ old('descripcion', $promocion->descripcion) }}</textarea>
             </div>
 
-            {{-- Fechas --}}
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Fecha Inicio --}}
-                <div class="md:w-1/3">
-                    <label for="fecha_inicio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Fecha de Inicio</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="fecha_inicio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Fecha de inicio
+                    </label>
                     <flux:input
                         id="fecha_inicio"
                         name="fecha_inicio"
                         type="date"
-                        value="{{ old('fecha_inicio', $promocion->fecha_inicio->toDateString()) }}"
+                        value="{{ old('fecha_inicio', optional($promocion->fecha_inicio)->toDateString()) }}"
                         required
                     />
                 </div>
 
-                {{-- Fecha Fin --}}
-                <div class="md:w-1/3">
-                    <label for="fecha_fin" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Fecha de Fin</label>
+                <div>
+                    <label for="fecha_fin" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Fecha de fin
+                    </label>
                     <flux:input
                         id="fecha_fin"
                         name="fecha_fin"
                         type="date"
-                        value="{{ old('fecha_fin', $promocion->fecha_fin->toDateString()) }}"
+                        value="{{ old('fecha_fin', optional($promocion->fecha_fin)->toDateString()) }}"
                         required
+                    />
+                </div>
+
+                <div>
+                    <label for="compra_minima" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Compra mínima (Bs)
+                    </label>
+                    <flux:input
+                        id="compra_minima"
+                        name="compra_minima"
+                        placeholder="Ej: 50.00"
+                        value="{{ old('compra_minima', $promocion->compra_minima) }}"
+                        type="number"
+                        step="0.01"
+                        min="0"
                     />
                 </div>
             </div>
 
-            {{-- Compra Mínima --}}
-            <div class="mb-6">
-                <label for="compra_minima" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Compra Mínima</label>
-                <flux:input
-                    id="compra_minima"
-                    name="compra_minima"
-                    placeholder="Compra mínima"
-                    value="{{ old('compra_minima', $promocion->compra_minima) }}"
-                    type="number"
-                    min="0"
-                />
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="limite_uso" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Límite de uso (por cliente)
+                    </label>
+                    <flux:input
+                        id="limite_uso"
+                        name="limite_uso"
+                        placeholder="Ej: 1"
+                        value="{{ old('limite_uso', $promocion->limite_uso) }}"
+                        type="number"
+                        min="0"
+                    />
+                </div>
             </div>
 
-            {{-- Límite de Uso --}}
-            <div class="mb-6">
-                <label for="limite_uso" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Límite de Uso</label>
-                <flux:input
-                    id="limite_uso"
-                    name="limite_uso"
-                    placeholder="Límite de uso"
-                    value="{{ old('limite_uso', $promocion->limite_uso) }}"
-                    type="number"
-                    min="1"
-                />
-            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <a href="{{ route('promociones.index') }}">
+                    <flux:button variant="primary" color="gray">
+                        Cancelar
+                    </flux:button>
+                </a>
 
-            {{-- Festividad --}}
-            <div class="mb-6">
-                <label for="festividad_id" class="block text-sm font-medium dark:text-gray-700 text-white mb-1">Festividad</label>
-                <select id="festividad_id" name="festividad_id" class="block w-full mt-1 border h-10 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                     required>
-                    @foreach ($festividades as $festividad)
-                        <option value="{{ $festividad->id }}" {{ old('festividad_id', $promocion->festividad_id) == $festividad->id ? 'selected' : '' }}>
-                            {{ $festividad->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            {{-- Botón de Guardar --}}
-            <div class="flex justify-end">
-                <flux:button type="submit">Guardar</flux:button>
+                <flux:button type="submit" variant="primary" color="orange">
+                    Guardar cambios
+                </flux:button>
             </div>
         </form>
     </div>

@@ -4,7 +4,7 @@
             <h1 class="text-2xl">Gestión de Clientes</h1>
             <p>Registra y gestiona todos los clientes del sistema</p>
         </div>
-        <flux:button href="{{ route('clientes.create') }}">+ Nuevo Cliente</flux:button>
+        <flux:button variant="primary" color="orange" href="{{ route('clientes.create') }}">Crear cliente</flux:button>
     </div>
 
     @if (session('success'))
