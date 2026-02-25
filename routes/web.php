@@ -50,11 +50,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
     Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
-    Route::get('/usuarios/{rol}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
-    Route::put('/usuarios/{rol}', [UsuarioController::class, 'update'])->name('usuarios.update');
-    Route::get('/usuarios/{rol}', [UsuarioController::class, 'show'])->name('usuarios.show');
+    Route::get('/usuarios/{usuario}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
+    Route::get('/usuarios/{usuario}', [UsuarioController::class, 'show'])->name('usuarios.show');
     Route::get('/usuarios/{id}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
-    Route::get('usuarios/{rol}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
+    Route::get('usuarios/{usuario}/reset', [UsuarioController::class, 'toggle'])->name('usuarios.reset');
 
     Route::get('/tipo_pagos', [TipoPagoController::class, 'index'])->name('tipo_pagos.index');
     Route::get('/tipo_pagos/create', [TipoPagoController::class, 'create'])->name('tipo_pagos.create');

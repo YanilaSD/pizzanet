@@ -119,7 +119,6 @@ class UsuarioController extends Controller
             'email' => Str::lower($request->email),
         ]);
 
-        // Sync roles (si no manda nada, se quedan sin roles)
         $usuario->roles()->sync($request->roles ?? []);
 
         return redirect()
@@ -130,19 +129,21 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function toggle(User $usuario)
+    public function toggle(string $id)
     {
+        $usuario = User::findOrFail($id);
         $usuario->estado = $usuario->estado == '1' ? '0' : '1';
-        $usuario->save();
+        $usuario->update();
 
         return redirect()->route('usuarios.index')->with('success', 'Estado actualizado correctamente.');
     }
 
-    public function reset_pwd(User $usuario)
+    public function reset_pwd(string $id)
     {
+        $usuario = User::findOrFail($id);
         $usuario->password = Hash::make(12345678);
-        $usuario->save();
+        $usuario->update();
 
-        return redirect()->route('usuarios.index')->with('success', 'Estado actualizado correctamente.');
+        return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente.');
     }
 }

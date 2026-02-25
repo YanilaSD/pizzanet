@@ -1,13 +1,12 @@
 <x-layouts.app>
     <div class="flex justify-between">
-        <div class="">
-            <h1 class=" text-2xl">Gestión de Privilegios</h1>
-            <p>Registra y gestiona todas los privilegios del sistema</p>
+        <div>
+            <h1 class="text-2xl">Gestión de Privilegios</h1>
+            <p>Registra y gestiona todos los privilegios del sistema</p>
         </div>
-        <flux:button href="{{ route('privilegios.create') }}">
-            + Nueva Privilegios
+        <flux:button variant="primary" color="orange" href="{{ route('privilegios.create') }}">
+            Crear Privilegio
         </flux:button>
-
     </div>
 
     @if (session('success'))
@@ -17,77 +16,79 @@
         </div>
     @endif
 
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <caption
-                class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-
-                {{-- Revisa CSS --}}
-                <div class="row justify-between">
-                    <div class="">
+        <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
+            <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                <div class="row justify-between flex items-center">
+                    <div>
                         Registro de Privilegios
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">Listado de los
-                            privilegios
-                            registrados</p>
+                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">
+                            Listado de los privilegios registrados
+                        </p>
                     </div>
-                    <form method="GET" action="{{ route('privilegios.index') }}">
-                        <flux:input name="search" icon="magnifying-glass" placeholder="Buscar privilegio"
-                            value="{{ request('search') }}" />
+
+                    <form method="GET" action="{{ route('privilegios.index') }}" class="flex">
+                        <flux:input
+                            name="search"
+                            icon="magnifying-glass"
+                            placeholder="Buscar privilegio"
+                            value="{{ request('search') }}"
+                        />
                     </form>
                 </div>
-
-
             </caption>
+
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nombre
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Descripcion
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Estado
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Acciones
-                    </th>
+                    <th scope="col" class="px-6 py-3">#</th>
+                    <th scope="col" class="px-6 py-3">Nombre</th>
+                    <th scope="col" class="px-6 py-3">Descripción</th>
+                    <th scope="col" class="px-6 py-3">Estado</th>
+                    <th scope="col" class="px-6 py-3">Acciones</th>
                 </tr>
             </thead>
+
             <tbody>
-                @foreach ($privilegios as $privilegio)
+                @forelse ($privilegios as $privilegio)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <th scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->index + 1 }}
+                            {{ $loop->iteration }}
                         </th>
+
                         <td class="px-6 py-4">
                             {{ $privilegio->nombre }}
                         </td>
+
                         <td class="px-6 py-4">
                             {{ $privilegio->descripcion }}
                         </td>
+
                         <td class="px-6 py-4">
                             <flux:badge color="{{ $privilegio->estado == '1' ? 'green' : 'red' }}">
                                 {{ $privilegio->estado == '1' ? 'Activo' : 'Inactivo' }}
                             </flux:badge>
-
                         </td>
+
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('privilegios.edit', $privilegio) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
+                            <a href="{{ route('privilegios.edit', $privilegio) }}"
+                               class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
+
                             <a href="{{ route('privilegios.toggle', $privilegio->id) }}"
-                                class="font-medium  dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
+                               class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
                                 <flux:icon name="{{ $privilegio->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-6 text-gray-500 dark:text-gray-400">
+                            No se encontraron privilegios registrados.
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
 
@@ -95,5 +96,4 @@
             {{ $privilegios->links() }}
         </div>
     </div>
-
 </x-layouts.app>
