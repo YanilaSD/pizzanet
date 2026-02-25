@@ -4,11 +4,9 @@
             <h1 class="text-2xl">Editar Privilegio</h1>
             <p>Modifica los datos del privilegio.</p>
         </div>
-        <a href="{{ route('privilegios.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
+    {{-- Mensajes de error --}}
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             <strong class="font-bold">¡Ups!</strong>
@@ -20,14 +18,19 @@
         </div>
     @endif
 
+    {{-- Tarjeta del formulario --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
         <form action="{{ route('privilegios.update', $privilegio) }}" method="POST">
             @csrf
             @method('PUT')
 
+            {{-- Inputs en una fila --}}
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                <div class="md:flex-[2]">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nombre</label>
+                {{-- Nombre --}}
+                <div class="md:flex-[1]">
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Nombre
+                    </label>
                     <flux:input
                         id="nombre"
                         name="nombre"
@@ -37,8 +40,11 @@
                     />
                 </div>
 
-                <div class="md:flex-[1]">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Descripción</label>
+                {{-- Descripción --}}
+                <div class="md:flex-[2]">
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Descripción
+                    </label>
                     <flux:input
                         id="descripcion"
                         name="descripcion"
@@ -48,8 +54,17 @@
                 </div>
             </div>
 
-            <div class="flex justify-end">
-                <flux:button type="submit">Actualizar</flux:button>
+            {{-- Botones --}}
+            <div class="flex justify-end gap-2">
+                <a href="{{ route('privilegios.index') }}">
+                    <flux:button variant="primary" color="gray">
+                        Cancelar
+                    </flux:button>
+                </a>
+
+                <flux:button variant="primary" color="orange" type="submit">
+                    Guardar
+                </flux:button>
             </div>
         </form>
     </div>

@@ -4,8 +4,8 @@
             <h1 class="text-2xl">Gestión de Roles</h1>
             <p>Registra y gestiona todos los roles del sistema</p>
         </div>
-        <flux:button href="{{ route('roles.create') }}">
-            + Nuevo Rol
+        <flux:button variant="primary" color="orange" href="{{ route('roles.create') }}">
+            Crear Rol
         </flux:button>
     </div>
 
@@ -22,15 +22,22 @@
                 <div class="row justify-between flex items-center">
                     <div>
                         Registro de Roles
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">Listado de roles
-                            registrados</p>
+                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">
+                            Listado de los roles registrados
+                        </p>
                     </div>
+
                     <form method="GET" action="{{ route('roles.index') }}" class="flex">
-                        <flux:input name="search" icon="magnifying-glass" placeholder="Buscar rol"
-                            value="{{ request('search') }}" />
+                        <flux:input
+                            name="search"
+                            icon="magnifying-glass"
+                            placeholder="Buscar rol"
+                            value="{{ request('search') }}"
+                        />
                     </form>
                 </div>
             </caption>
+
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">#</th>
@@ -40,6 +47,7 @@
                     <th scope="col" class="px-6 py-3">Acciones</th>
                 </tr>
             </thead>
+
             <tbody>
                 @forelse ($roles as $rol)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
@@ -47,24 +55,29 @@
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $loop->iteration }}
                         </th>
-                        <td class="px-6 py-4">{{ $rol->nombre }}</td>
-                        <td class="px-6 py-4">{{ $rol->descripcion }}</td>
+
+                        <td class="px-6 py-4">
+                            {{ $rol->nombre }}
+                        </td>
+
+                        <td class="px-6 py-4">
+                            {{ $rol->descripcion }}
+                        </td>
+
                         <td class="px-6 py-4">
                             <flux:badge color="{{ $rol->estado == '1' ? 'green' : 'red' }}">
                                 {{ $rol->estado == '1' ? 'Activo' : 'Inactivo' }}
                             </flux:badge>
                         </td>
-                        <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('roles.show', $rol->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="eye" />
-                            </a>
 
+                        <td class="px-6 py-4 text-right flex gap-2.5">
                             <a href="{{ route('roles.edit', $rol->id) }}"
-                                class="dark:text-white text-gray-500 hover:underline mr-4">
+                               class="dark:text-white text-gray-500 hover:underline mr-4">
                                 <flux:icon name="pencil-square" />
                             </a>
+
                             <a href="{{ route('roles.toggle', $rol->id) }}"
-                                class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
+                               class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
                                 <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
                         </td>
@@ -77,10 +90,8 @@
                     </tr>
                 @endforelse
             </tbody>
-
         </table>
 
-        
         <div class="p-4 bg-white">
             {{ $roles->links() }}
         </div>

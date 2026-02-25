@@ -28,14 +28,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::redirect('settings', 'settings/profile');
 
-
-
-    //Privilegio
-    Route::get('/privilegios', [PrivilegioController::class, 'index'])->name('privilegios.index');
-    Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:privilegio-create')->name('privilegios.create');
-    Route::post('/privilegios', [PrivilegioController::class, 'store'])->middleware('privilege:privilegio-store')->name('privilegios.store');
+    Route::get('/privilegios', [PrivilegioController::class, 'index'])->middleware('privilege:listar-privilegio')->name('privilegios.index');
+    Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:crear-privilegio')->name('privilegios.create');
+    Route::post('/privilegios', [PrivilegioController::class, 'store'])->middleware('privilege:guardar-privilegio')->name('privilegios.store');
     Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->middleware('privilege:editar-privilegio')->name('privilegios.edit');
-    Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:privilegio-update')->name('privilegios.update');
+    Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:actualizar-privilegio')->name('privilegios.update');
     Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->name('privilegios.toggle');
 
     Route::get('/roles', [RolController::class, 'index'])->name('roles.index');
@@ -45,7 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/roles/{rol}', [RolController::class, 'update'])->name('roles.update');
     Route::get('/roles/{rol}', [RolController::class, 'show'])->name('roles.show');
     Route::get('roles/{rol}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
-
 
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
     Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
@@ -116,7 +112,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ventas/setPromocion', [VentaController::class, 'setPromocion'])->name('ventas.setPromocion');
     Route::post('/ventas/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->name('ventas.getPuntosCliente');
     Route::post('/ventas/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->name('ventas.setUsoPuntos');
-
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');

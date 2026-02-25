@@ -18,6 +18,15 @@
         </div>
     @endif
 
+    {{-- Alerta contraseña por defecto --}}
+    <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded mb-6">
+        <strong class="font-bold">Atención:</strong>
+        <span class="block sm:inline">
+            La contraseña por defecto del usuario será <strong>12345678</strong>.
+            Se recomienda que el usuario la cambie en su primer inicio de sesión.
+        </span>
+    </div>
+
     {{-- Tarjeta del formulario --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
         <form action="{{ route('usuarios.store') }}" method="POST">

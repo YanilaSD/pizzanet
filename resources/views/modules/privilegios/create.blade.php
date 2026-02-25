@@ -4,9 +4,6 @@
             <h1 class="text-2xl">Nuevo Privilegio</h1>
             <p>Completa el formulario para registrar un nuevo privilegio en el sistema.</p>
         </div>
-        <a href="{{ route('privilegios.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
     {{-- Mensajes de error --}}
@@ -52,9 +49,11 @@
                 </div>
             </div>
 
-            {{-- Botón alineado a la derecha --}}
-            <div class="flex justify-end">
-                <flux:button type="submit">Guardar</flux:button>
+            <div class="flex justify-end gap-2">
+                 <a href="{{ route('privilegios.index') }}">
+                    <flux:button variant="primary" color="gray">Cancelar</flux:button>
+                </a>
+                <flux:button variant="primary" color="orange" type="submit">Guardar</flux:button>
             </div>
         </form>
     </div>

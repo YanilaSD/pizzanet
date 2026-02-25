@@ -4,9 +4,6 @@
             <h1 class="text-2xl">Editar Rol</h1>
             <p>Modifica los datos del rol seleccionado.</p>
         </div>
-        <a href="{{ route('roles.index') }}">
-            <flux:button color="gray">← Volver</flux:button>
-        </a>
     </div>
 
     @if ($errors->any())
@@ -27,40 +24,60 @@
 
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
                 <div class="md:flex-[2]">
-                    <label for="nombre"
-                        class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nombre</label>
-                    <flux:input id="nombre" name="nombre" placeholder="Nombre del rol"
-                        value="{{ old('nombre', $rol->nombre) }}" required />
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Nombre
+                    </label>
+                    <flux:input
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Nombre del rol"
+                        value="{{ old('nombre', $rol->nombre) }}"
+                        required
+                    />
                 </div>
 
                 <div class="md:flex-[1]">
-                    <label for="descripcion"
-                        class="block text-sm font-medium text-gray-700 dark:text-white mb-1">Descripción</label>
-                    <flux:input id="descripcion" name="descripcion" placeholder="Descripción breve"
-                        value="{{ old('descripcion', $rol->descripcion) }}" />
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                        Descripción
+                    </label>
+                    <flux:input
+                        id="descripcion"
+                        name="descripcion"
+                        placeholder="Descripción breve"
+                        value="{{ old('descripcion', $rol->descripcion) }}"
+                    />
                 </div>
             </div>
+
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Privilegios</label>
                 <div
                     class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-auto border border-gray-300 dark:border-gray-600 rounded p-3 bg-white dark:bg-gray-800">
                     @foreach ($privilegiosOptions as $option)
                         <label class="inline-flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" name="privilegios[]" value="{{ $option['value'] }}"
+                            <input
+                                type="checkbox"
+                                name="privilegios[]"
+                                value="{{ $option['value'] }}"
                                 class="rounded text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600"
-                                {{ in_array($option['value'], old('privilegios', $privilegiosAsignados)) ? 'checked' : '' }} />
+                                {{ in_array($option['value'], old('privilegios', $privilegiosAsignados)) ? 'checked' : '' }}
+                            />
                             <span class="text-gray-700 dark:text-gray-300">{{ $option['label'] }}</span>
                         </label>
                     @endforeach
                 </div>
+
                 @error('privilegios')
                     <p class="text-red-600 mt-1 text-sm">{{ $message }}</p>
                 @enderror
             </div>
 
-
-            <div class="flex justify-end">
-                <flux:button type="submit">Actualizar</flux:button>
+            {{-- Botones --}}
+            <div class="flex justify-end gap-2">
+                <a href="{{ route('roles.index') }}">
+                    <flux:button variant="primary" color="gray">Cancelar</flux:button>
+                </a>
+                <flux:button variant="primary" color="orange" type="submit">Guardar</flux:button>
             </div>
         </form>
     </div>
