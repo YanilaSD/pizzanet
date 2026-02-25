@@ -100,7 +100,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
+<div class="dark flex flex-col gap-6">
     <x-auth-header class="text-white" title="Pizzería Yuneth SRL" description="Ingresa tu correo y contraseña para iniciar sesion" />
 
     <!-- Session Status -->
@@ -110,6 +110,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         @csrf
         <!-- Email Address -->
         <flux:input
+            class="text-white"
             wire:model="email"
             :label="__('Email address')"
             type="email"
@@ -142,7 +143,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <flux:checkbox wire:model="remember" :label="__('Remember me')" />
 
         <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
+            <flux:button variant="primary" color="orange" type="submit" class="w-full" data-test="login-button">
                 {{ __('Log in') }}
             </flux:button>
         </div>

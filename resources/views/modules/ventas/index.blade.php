@@ -1,169 +1,221 @@
 <x-layouts.app>
-    <div class="flex justify-between">
-        <div class="">
-            <h1 class=" text-2xl">Gestión de Ventas</h1>
-            <p>Registra y gestiona todas las ventas de la pizzería con promociones</p>
+    {{-- Header --}}
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">Gestión de Ventas</h1>
+            <p class="mt-1 text-sm text-gray-600">
+                Registra y gestiona todas las ventas de la pizzería con promociones.
+            </p>
         </div>
-        <flux:button variant="primary" color="green" href="{{ route('ventas.create') }}">
-            Nueva venta
-        </flux:button>
-    </div>
 
-<div class="flex gap-6 overflow-x-auto py-4 scrollbar-hide">
-    <div class="min-w-[300px] bg-white rounded-xl shadow-md flex items-center p-4 border border-gray-200">
-        
-        <img 
-            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-            class="w-24 h-24 rounded-lg object-cover"
-            alt="Pizza Ventas"
-        />
-
-        <div class="ml-4">
-            <h3 class="text-lg font-bold text-gray-800">Total Ventas</h3>
-            <p class="text-2xl font-extrabold text-orange-600">Bs {{ $ventasTotal }}</p>
-            <p class="text-sm text-gray-500">{{ $ventasCompletadas }} ventas registradas</p>
+        <div class="flex items-center gap-2">
+            <flux:button variant="primary" color="orange" href="{{ route('ventas.create') }}">
+                Nueva venta
+            </flux:button>
         </div>
     </div>
 
-    <div class="min-w-[300px] bg-white rounded-xl shadow-md flex items-center p-4 border border-gray-200">
-        
-        <img 
-            src="https://images.unsplash.com/photo-1655673654158-9f7285b7d1ea?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-            class="w-24 h-24 rounded-lg object-cover"
-            alt="Descuentos"
-        />
+    <div class="mt-6 flex gap-6 overflow-x-auto py-2 scrollbar-hide">
+        {{-- Card 1 --}}
+        <div class="min-w-[320px] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+            <div class="flex items-center gap-4">
+                <img
+                    src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
+                    alt="Pizza Ventas"
+                    loading="lazy"
+                />
 
-        <div class="ml-4">
-            <h3 class="text-lg font-bold text-gray-800">Descuentos Aplicados</h3>
-            <p class="text-2xl font-extrabold text-red-600">Bs {{ $descuentoTotal }}</p>
-            <p class="text-sm text-gray-500">En promociones</p>
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-600">Total Ventas</p>
+                    <p class="mt-1 truncate text-2xl font-extrabold text-orange-600">
+                        Bs {{ number_format($ventasTotal ?? 0, 2) }}
+                    </p>
+                    <p class="mt-1 text-xs text-gray-500">
+                        {{ $ventasCompletadas ?? 0 }} ventas registradas
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Card 2 --}}
+        <div class="min-w-[320px] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+            <div class="flex items-center gap-4">
+                <img
+                    src="https://images.unsplash.com/photo-1655673654158-9f7285b7d1ea?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
+                    alt="Descuentos"
+                    loading="lazy"
+                />
+
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-600">Descuentos Aplicados</p>
+                    <p class="mt-1 truncate text-2xl font-extrabold text-red-600">
+                        Bs {{ number_format($descuentoTotal ?? 0, 2) }}
+                    </p>
+                    <p class="mt-1 text-xs text-gray-500">En promociones</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Card 3 --}}
+        <div class="min-w-[320px] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+            <div class="flex items-center gap-4">
+                <img
+                    src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=300&q=60"
+                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
+                    alt="Ventas Completadas"
+                    loading="lazy"
+                />
+
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-600">Ventas Completadas</p>
+                    <p class="mt-1 truncate text-2xl font-extrabold text-green-600">
+                        {{ $ventasCompletadas ?? 0 }}
+                    </p>
+                    <p class="mt-1 text-xs text-gray-500">Entregadas</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Card 4 --}}
+        <div class="min-w-[320px] rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+            <div class="flex items-center gap-4">
+                <img
+                    src="https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=868&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
+                    alt="Venta Promedio"
+                    loading="lazy"
+                />
+
+                <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-600">Venta Promedio</p>
+                    <p class="mt-1 truncate text-2xl font-extrabold text-blue-600">
+                        Bs {{ number_format($ventasPromedio ?? 0, 2) }}
+                    </p>
+                    <p class="mt-1 text-xs text-gray-500">Por transacción</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="min-w-[300px] bg-white rounded-xl shadow-md flex items-center p-4 border border-gray-200">
+    {{-- Tabla --}}
+    <div class="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div class="border-b border-gray-200 p-5">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Registro de Ventas</h2>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Historial de todas las ventas realizadas con promociones aplicadas.
+                    </p>
+                </div>
 
-        <img 
-            src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=300&q=60" 
-            class="w-24 h-24 rounded-lg object-cover"
-            alt="Ventas Completadas"
-        />
+                {{-- (Opcional) espacio para filtros/búsqueda --}}
+                {{-- <div class="mt-3 sm:mt-0">...</div> --}}
+            </div>
+        </div>
 
-        <div class="ml-4">
-            <h3 class="text-lg font-bold text-gray-800">Ventas Completadas</h3>
-            <p class="text-2xl font-extrabold text-green-600">{{ $ventasCompletadas }}</p>
-            <p class="text-sm text-gray-500">Entregadas</p>
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-600">
+                    <tr>
+                        <th class="px-6 py-3">ID Venta</th>
+                        <th class="px-6 py-3">Cliente</th>
+                        <th class="px-6 py-3">Fecha</th>
+                        <th class="px-6 py-3">Subtotal</th>
+                        <th class="px-6 py-3">Descuento</th>
+                        <th class="px-6 py-3">Total</th>
+                        <th class="px-6 py-3">Método de Pago</th>
+                        <th class="px-6 py-3">Estado</th>
+                        <th class="px-6 py-3 text-right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-100">
+                    @forelse ($ventas as $venta)
+                        <tr class="transition hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                #{{ $venta->id }}
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $venta->cliente->nombre ?? 'Sin nombre' }}
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
+                                {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
+                                Bs {{ number_format($venta->subtotal, 2) }}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="font-medium text-red-600">
+                                    - Bs {{ number_format($venta->descuento, 2) }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-900 font-semibold whitespace-nowrap">
+                                Bs {{ number_format($venta->total, 2) }}
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <flux:badge color="lime">
+                                    {{ $venta->tipoPago->nombre ?? 'N/D' }}
+                                </flux:badge>
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
+                                    {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
+                                </flux:badge>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex justify-end gap-2">
+                                    <a
+                                        href="{{ route('ventas.show', $venta) }}"
+                                        class="inline-flex items-center rounded-lg p-2 text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                        title="Ver"
+                                        aria-label="Ver venta #{{ $venta->id }}"
+                                    >
+                                        <flux:icon name="eye" />
+                                    </a>
+
+                                    <form
+                                        action="{{ route('ventas.destroy', $venta) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="inline-flex items-center rounded-lg p-2 text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200"
+                                            title="Eliminar"
+                                            aria-label="Eliminar venta #{{ $venta->id }}"
+                                        >
+                                            <flux:icon name="trash" />
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
+                                No se han registrado ventas aún.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="border-t border-gray-200 bg-white p-4">
+            {{ $ventas->links() }}
         </div>
     </div>
-
-    <div class="min-w-[300px] bg-white rounded-xl shadow-md flex items-center p-4 border border-gray-200">
-
-        <img 
-            src="https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=868&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-            class="w-24 h-24 rounded-lg object-cover"
-            alt="Venta Promedio"
-        />
-
-        <div class="ml-4">
-            <h3 class="text-lg font-bold text-gray-800">Venta Promedio</h3>
-            <p class="text-2xl font-extrabold text-blue-600">Bs {{ $ventasPromedio }}</p>
-            <p class="text-sm text-gray-500">Por transacción</p>
-        </div>
-    </div>
-
-</div>
-
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-    <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-            Registro de Ventas
-            <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Historial completo de todas las ventas realizadas con promociones aplicadas</p>
-        </caption>
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                   ID Venta
-                </th>
-                <th scope="col" class="px-6 py-3">
-                   Cliente
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Fecha
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Subtotal
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Descuento
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Total
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Metodo de Pago
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Estado
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Acciones
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($ventas as $venta)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        #{{ $venta->id }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ $venta->cliente->nombre ?? 'Sin nombre' }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ number_format($venta->subtotal, 2) }}
-                    </td>
-                    <td class="px-6 py-4 text-red-500">
-                        -{{ number_format($venta->descuento, 2) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ number_format($venta->total, 2) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <flux:badge color="lime">{{ $venta->tipoPago->nombre }}</flux:badge>
-                    </td>
-                    <td class="px-6 py-4">
-                        <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
-                            {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
-                        </flux:badge>
-                    </td>
-                    <td class="px-6 py-4 text-right flex gap-2">
-                        <a href="{{ route('ventas.show', $venta) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                            <flux:icon name="eye" />
-                        </a>
-                        <form action="{{ route('ventas.destroy', $venta) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                <flux:icon name="trash" />
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="9" class="text-center py-4 text-gray-500 dark:text-gray-400">
-                        No se han registrado ventas aún.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-    <div class="p-4 bg-white">
-        {{ $ventas->links() }}
-    </div>
-</div>
-
 </x-layouts.app>
