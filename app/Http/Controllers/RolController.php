@@ -41,7 +41,7 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:Roles,nombre',
+            'nombre' => 'required|string|max:255|unique:roles,nombre',
             'descripcion' => 'nullable|string',
         ], [
             'nombre.required' => 'El campo Nombre es obligatorio.',
