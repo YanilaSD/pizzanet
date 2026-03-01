@@ -97,6 +97,15 @@
                                class="font-medium dark:text-white text-gray-500 hover:underline flex gap-1">
                                 <flux:icon name="{{ $usuario->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                             </a>
+
+                            @if($usuario->two_factor_secret != null)
+                                <form method="POST" action="{{ route('usuarios.reset_f2a', $usuario->id) }}">
+                                    @csrf
+                                    <button type="submit" class="dark:text-white text-gray-500 hover:underline cursor-pointer">
+                                        <flux:icon name="qr-code" />
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty

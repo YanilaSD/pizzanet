@@ -146,4 +146,15 @@ class UsuarioController extends Controller
 
         return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente.');
     }
+
+    public function reset_f2a(string $id)
+    {
+        $usuario = User::findOrFail($id);
+        $usuario->two_factor_secret = null;
+        $usuario->two_factor_recovery_codes = null;
+        $usuario->two_factor_confirmed_at = null;
+        $usuario->update();
+
+        return redirect()->route('usuarios.index')->with('success', 'Doble factor resetado.');
+    }
 }
