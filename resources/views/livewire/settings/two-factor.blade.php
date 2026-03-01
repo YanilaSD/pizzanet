@@ -177,7 +177,7 @@ new class extends Component {
     }
 } ?>
 
-<section class="dark w-full">
+<section class="w-full">
     @include('partials.settings-heading')
 
     <x-settings.layout
