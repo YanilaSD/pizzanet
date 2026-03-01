@@ -177,7 +177,7 @@ new class extends Component {
     }
 } ?>
 
-<section class="w-full">
+<section class="dark w-full">
     @include('partials.settings-heading')
 
     <x-settings.layout
@@ -223,6 +223,7 @@ new class extends Component {
                         icon="shield-check"
                         icon:variant="outline"
                         wire:click="enable"
+                        color="orange"
                     >
                         {{ __('Enable 2FA') }}
                     </flux:button>
