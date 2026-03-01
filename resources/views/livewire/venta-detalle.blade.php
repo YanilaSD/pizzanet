@@ -182,7 +182,7 @@
             </div>
         </div>
     </flux:modal>
-    
+
 </div>
 
     <script>

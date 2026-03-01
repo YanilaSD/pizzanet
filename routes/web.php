@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VentaController;
@@ -112,6 +113,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ventas/setPromocion', [VentaController::class, 'setPromocion'])->name('ventas.setPromocion');
     Route::post('/ventas/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->name('ventas.getPuntosCliente');
     Route::post('/ventas/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->name('ventas.setUsoPuntos');
+
+   Route::get('/reportes', [ReporteController::class, 'index'])
+    ->middleware('privilege:ver-reportes')
+    ->name('reportes.index');
+
+Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
+    ->middleware('privilege:reporte-ventas')
+    ->name('reportes.ventas');
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
