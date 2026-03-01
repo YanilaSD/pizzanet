@@ -50,7 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
     Route::get('/usuarios/{usuario}', [UsuarioController::class, 'show'])->name('usuarios.show');
     Route::get('/usuarios/{id}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
-    Route::get('usuarios/{usuario}/reset', [UsuarioController::class, 'toggle'])->name('usuarios.reset');
+    Route::get('usuarios/{usuario}/reset', [UsuarioController::class, 'reset_pwd'])->name('usuarios.reset');
+    Route::post('usuarios/{usuario}/reset-f2a', [UsuarioController::class, 'reset_f2a'])->name('usuarios.reset_f2a');
 
     Route::get('/tipo_pagos', [TipoPagoController::class, 'index'])->name('tipo_pagos.index');
     Route::get('/tipo_pagos/create', [TipoPagoController::class, 'create'])->name('tipo_pagos.create');
