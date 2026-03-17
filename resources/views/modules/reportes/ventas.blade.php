@@ -5,7 +5,7 @@
         <!-- Título -->
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-800">
-                Reporte de Ventas
+                Reporte Ventas
             </h1>
             <p class="text-gray-600">
                 Consulta y analiza las ventas del sistema.
