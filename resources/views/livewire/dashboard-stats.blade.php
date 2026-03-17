@@ -127,22 +127,22 @@
    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div class="p-5 rounded-xl shadow-xl bg-gradient-to-br from-orange-50 to-yellow-100 border border-orange-200">
-            <h3 class="font-bold mb-2">Ventas últimas 7 semanas</h3>
+            <h3 class="font-bold mb-2 text-orange-900">Ventas últimas 7 semanas</h3>
             <div id="chartSemanal"></div>
         </div>
 
         <div class="p-5 rounded-xl shadow-xl bg-gradient-to-br from-orange-50 to-yellow-100 border border-orange-200">
-            <h3 class="font-bold mb-2">Top 5 productos más vendidos</h3>
+            <h3 class="font-bold mb-2 text-orange-900">Top 5 productos más vendidos</h3>
             <div id="chartProductos"></div>
         </div>
 
         <div class="p-5 rounded-xl shadow-xl bg-gradient-to-br from-orange-50 to-yellow-100 border border-orange-200">
-            <h3 class="font-bold mb-2">Ingresos últimos 6 meses</h3>
+            <h3 class="font-bold mb-2 text-orange-900">Ingresos últimos 6 meses</h3>
             <div id="chartIngresos"></div>
         </div>
 
         <div class="p-5 rounded-xl shadow-xl bg-gradient-to-br from-orange-50 to-yellow-100 border border-orange-200">
-            <h3 class="font-bold mb-2">Nuevos clientes por mes</h3>
+            <h3 class="font-bold mb-2 text-orange-900">Nuevos clientes por mes</h3>
             <div id="chartClientes"></div>
         </div>
 

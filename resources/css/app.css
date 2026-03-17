@@ -64,3 +64,28 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+nav [data-flux-navlist-item] {
+    color: white;
+}
+
+nav [data-flux-navlist-item]:hover {
+    background-color: rgb(161, 44, 1);
+}
+
+nav [data-flux-navlist-item][data-current="data-current"] {
+    background-color: rgb(161, 44, 1);
+    border: none;
+}
+
+button[data-flux-profile] span {
+    color: white;
+}
+
+button[data-flux-profile] svg {
+    color: white !important;
+}
+
+[data-slot="avatar"] {
+    background-color:  rgb(161, 44, 1) !important;
+}

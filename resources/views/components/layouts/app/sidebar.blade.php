@@ -82,7 +82,7 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-[#dfdbdb] dark:bg-[#3b1f1f]">
-        <flux:sidebar sticky stashable class="border-e border-[#d4a373] bg-[#fff3e0] dark:border-[#a0522d] dark:bg-[#4e342e]">
+        <flux:sidebar sticky stashable class="border-e border-[#d4a373] bg-orange-600 dark:border-[#a0522d] dark:bg-[#4e342e]">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
@@ -93,7 +93,7 @@
                 @foreach($groups as $group => $links)
                     <flux:navlist.group :heading="$group" class="grid">
                         @foreach($links as $link)
-                            <flux:navlist.item :icon="$link['icon']" :href="$link['route']" :current="$link['current']" wire:navigate>{{$link['name'] }}</flux:navlist.item>
+                            <flux:navlist.item class="rounded-lg text-white hover:bg-zinc-100 dark:hover:bg-zinc-800" :icon="$link['icon']" :href="$link['route']" :current="$link['current']" wire:navigate>{{$link['name'] }}</flux:navlist.item>
                         @endforeach
                     </flux:navlist.group>
                 @endforeach
