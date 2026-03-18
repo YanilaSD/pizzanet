@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\TipoPago;
+use PDF;
 
 class ReporteController extends Controller
 {
@@ -16,7 +17,6 @@ class ReporteController extends Controller
     {
         $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
 
-        // Fechas (en tu migración "fecha" es DATE)
         if ($request->filled('desde') && $request->filled('hasta')) {
             $query->whereBetween('fecha', [$request->desde, $request->hasta]);
         }
@@ -38,4 +38,38 @@ class ReporteController extends Controller
 
         return view('modules.reportes.ventas', compact('ventas','total','descuentos','tipoPagos'));
     }
+
+    public function generatePDF(Request $request)
+    {
+        $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
+
+        if ($request->filled('desde') && $request->filled('hasta')) {
+            $query->whereBetween('fecha', [$request->desde, $request->hasta]);
+        }
+
+        if ($request->filled('tipo_pago_id')) {
+            $query->where('tipo_pago_id', $request->tipo_pago_id);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $ventas = $query->orderBy('fecha', 'desc')->get();
+
+        $total = $ventas->sum('total');
+        $descuentos = $ventas->sum('descuento');
+
+        $data = [
+            'ventas' => $ventas,
+            'total' => $total,
+            'descuentos' => $descuentos,
+            'fecha' => now()->format('d/m/Y'),
+        ];
+
+        $pdf = PDF::loadView('modules.reportes.pdf.ventas', $data);
+
+        return $pdf->download('reporte-ventas.pdf');
+    }
+
 }

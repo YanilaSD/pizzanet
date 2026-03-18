@@ -133,12 +133,13 @@
                     wire:change="$refresh"
                     :error="$errors->first('promocion_id')"
                 >
-                    <option value="">Ninguna</option>
 
                     @php $tieneOpciones = false; @endphp
 
                     @foreach ($promociones as $promocion)
-                        @if($promocion->descuento > 0)
+                        @if($promocion->descuento == 0)
+                            <option selected value="{{ $promocion->id }}">Ninguna</option>
+                        @else
                             <option value="{{ $promocion->id }}">
                                 {{ $promocion->nombre }}: Bs {{ $promocion->descuento }}
                             </option>

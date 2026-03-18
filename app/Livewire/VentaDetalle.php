@@ -153,7 +153,7 @@ class VentaDetalle extends Component
             'usuario_id' => auth()->id(),
             'cliente_id' => $cliente_id,
             'tipo_pago_id' => $this->tipo_pago_id,
-            'promocion_id' => $this->promocion_id === 'descuento' || $this->promocion_id === '' ? null : $this->promocion_id,
+            'promocion_id' => $this->promocion_id === 'descuento' || $this->promocion_id === '' ? 1 : $this->promocion_id,
             'puntos' => 0,
             'fecha' => now(),
             'subtotal' => $subtotal,

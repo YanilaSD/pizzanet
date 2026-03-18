@@ -64,11 +64,31 @@
                 </select>
             </div>
 
-            <!-- Botón -->
-            <div class="flex items-end">
-                <button class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
+            <!-- Botones -->
+            <div class="flex items-end gap-2">
+
+                <!-- Filtrar -->
+                <button 
+                    type="submit"
+                    class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+                >
                     Filtrar
                 </button>
+
+                <!-- PDF -->
+                <button 
+                    type="submit"
+                    formaction="{{ route('reportes.ventas.pdf') }}"
+                    class="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 4v16m8-8H4" />
+                    </svg>
+                    PDF
+                </button>
+
             </div>
 
         </form>

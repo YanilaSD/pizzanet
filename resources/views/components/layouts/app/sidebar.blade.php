@@ -72,6 +72,14 @@
                 "route" => route("privilegios.index"),
                 "current" => request()->routeIs("privilegios.index")
             ]
+        ],
+        "Reporteria" => [
+            [
+                "name" => "Reporte",
+                "icon" => "document-text",
+                "route" => route("reportes.index"),
+                "current" => request()->routeIs("reportes.index")
+            ]
         ]
     ];
 @endphp

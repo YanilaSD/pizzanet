@@ -116,12 +116,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ventas/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->name('ventas.setUsoPuntos');
 
    Route::get('/reportes', [ReporteController::class, 'index'])
-    ->middleware('privilege:ver-reportes')
     ->name('reportes.index');
 
-Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
-    ->middleware('privilege:reporte-ventas')
+    Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
     ->name('reportes.ventas');
+
+    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'generatePDF'])
+    ->name('reportes.ventas.pdf');
+
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
