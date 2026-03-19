@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\TipoPago;
+use App\Models\User;
 use PDF;
 
 class ReporteController extends Controller
@@ -39,7 +40,7 @@ class ReporteController extends Controller
         return view('modules.reportes.ventas', compact('ventas','total','descuentos','tipoPagos'));
     }
 
-    public function generatePDF(Request $request)
+    public function ventasPDF(Request $request)
     {
         $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
 
@@ -70,6 +71,55 @@ class ReporteController extends Controller
         $pdf = PDF::loadView('modules.reportes.pdf.ventas', $data);
 
         return $pdf->download('reporte-ventas.pdf');
+    }
+
+    public function usuarios(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $usuarios = $query->orderBy('created_at', 'desc')->get();
+
+        $total = $usuarios->count();
+        $activos = $usuarios->where('estado', 1)->count();
+        $inactivos = $usuarios->where('estado', 0)->count();
+
+        return view('modules.reportes.usuarios', compact(
+            'usuarios',
+            'total',
+            'activos',
+            'inactivos'
+        ));
+    }
+
+    public function usuariosPDF(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $usuarios = $query->orderBy('created_at', 'desc')->get();
+
+        $total = $usuarios->count();
+        $activos = $usuarios->where('estado', 1)->count();
+        $inactivos = $usuarios->where('estado', 0)->count();
+
+        $data = [
+            'usuarios' => $usuarios,
+            'total' => $total,
+            'activos' => $activos,
+            'inactivos' => $inactivos,
+            'fecha' => now()->format('d/m/Y'),
+        ];
+
+        $pdf = PDF::loadView('modules.reportes.pdf.usuarios', $data);
+
+        return $pdf->download('reporte-usuarios.pdf');
     }
 
 }

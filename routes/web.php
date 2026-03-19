@@ -120,9 +120,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
     ->name('reportes.ventas');
-
-    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'generatePDF'])
+    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'ventassPDF'])
     ->name('reportes.ventas.pdf');
+    Route::get('/reportes/usuarios', [ReporteController::class, 'usuarios'])
+    ->name('reportes.usuarios');
+    Route::get('/reportes/usuarios/pdf', [ReporteController::class, 'usuariosPDF'])
+    ->name('reportes.usuarios.pdf');
 
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
