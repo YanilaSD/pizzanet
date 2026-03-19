@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\TipoPago;
 use App\Models\User;
+use App\Models\Producto;
 use PDF;
 
 class ReporteController extends Controller
@@ -121,5 +122,93 @@ class ReporteController extends Controller
 
         return $pdf->download('reporte-usuarios.pdf');
     }
+    public function productos(Request $request)
+{
+    $query = Producto::with('categoria');
+
+    // Filtros
+    if ($request->filled('estado')) {
+        $query->where('estado', $request->estado);
+    }
+
+    if ($request->filled('categoria_id')) {
+        $query->where('categoria_id', $request->categoria_id);
+    }
+
+    if ($request->filled('nombre')) {
+        $query->where('nombre', 'like', '%' . $request->nombre . '%');
+    }
+
+    if ($request->filled('precio_min')) {
+        $query->where('precio', '>=', $request->precio_min);
+    }
+
+    if ($request->filled('precio_max')) {
+        $query->where('precio', '<=', $request->precio_max);
+    }
+
+    $productos = $query->orderBy('created_at', 'desc')->get();
+
+    // 🔹 Estadísticas
+    $total = $productos->count();
+    $activos = $productos->where('estado', 1)->count();
+    $inactivos = $productos->where('estado', 0)->count();
+
+    return view('modules.reportes.productos', compact(
+        'productos',
+        'total',
+        'activos',
+        'inactivos'
+    ));
+}
+
+public function productosPDF(Request $request)
+{
+    $query = Producto::with('categoria');
+
+    // mismos filtros
+    if ($request->filled('estado')) {
+        $query->where('estado', $request->estado);
+    }
+
+    if ($request->filled('categoria_id')) {
+        $query->where('categoria_id', $request->categoria_id);
+    }
+
+    if ($request->filled('nombre')) {
+        $query->where('nombre', 'like', '%' . $request->nombre . '%');
+    }
+
+    if ($request->filled('precio_min')) {
+        $query->where('precio', '>=', $request->precio_min);
+    }
+
+    if ($request->filled('precio_max')) {
+        $query->where('precio', '<=', $request->precio_max);
+    }
+
+    $productos = $query->orderBy('created_at', 'desc')->get();
+
+    $total = $productos->count();
+    $activos = $productos->where('estado', 1)->count();
+    $inactivos = $productos->where('estado', 0)->count();
+
+    // 🔥 extra útil
+    $totalPrecio = $productos->sum('precio');
+
+    $data = [
+        'productos' => $productos,
+        'total' => $total,
+        'activos' => $activos,
+        'inactivos' => $inactivos,
+        'totalPrecio' => $totalPrecio,
+        'fecha' => now()->format('d/m/Y'),
+    ];
+
+    $pdf = PDF::loadView('modules.reportes.pdf.productos', $data);
+
+    return $pdf->download('reporte-productos.pdf');
+}
+
 
 }

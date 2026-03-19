@@ -127,6 +127,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes/usuarios/pdf', [ReporteController::class, 'usuariosPDF'])
     ->name('reportes.usuarios.pdf');
 
+    Route::get('/reportes/producto', [ReporteController::class, 'productos'])
+    ->name('reportes.productos');
+    Route::get('/reportes/productos/pdf', [ReporteController::class, 'productosPDF'])
+    ->name('reportes.productos.pdf');
+
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
     Volt::route('settings/password', 'settings.password')->name('password.edit');
