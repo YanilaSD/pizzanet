@@ -120,7 +120,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
     ->name('reportes.ventas');
-    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'ventassPDF'])
+    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'ventasPDF'])
     ->name('reportes.ventas.pdf');
     Route::get('/reportes/usuarios', [ReporteController::class, 'usuarios'])
     ->name('reportes.usuarios');
