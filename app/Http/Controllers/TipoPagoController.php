@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TipoPago;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TipoPagoController extends Controller
 {
@@ -36,11 +37,19 @@ class TipoPagoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'nombre' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:tipo_pagos,nombre',
+                'regex:/\S/',
+            ],
         ], [
-            'nombre.required' => 'El campo nombre es obligatorio.',
-            'nombre.string' => 'El nombre debe ser una cadena de caracteres.',
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'El tipo de pago ya está registrado.',
+            'nombre.regex' => 'El nombre no puede estar vacío o solo contener espacios.',
         ]);
 
         TipoPago::create($request->only('nombre'));
@@ -58,11 +67,19 @@ class TipoPagoController extends Controller
     public function update(Request $request, TipoPago $tipo_pago)
     {
         $request->validate([
-        'nombre' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('tipo_pagos', 'nombre')->ignore($tipoPago->id),
+                'regex:/\S/',
+            ],
         ], [
-            'nombre.required' => 'El campo nombre es obligatorio.',
-            'nombre.string' => 'El nombre debe ser una cadena de caracteres.',
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'El tipo de pago ya está registrado.',
+            'nombre.regex' => 'El nombre no puede estar vacío o solo contener espacios.',
         ]);
 
         $tipo_pago->update($request->only('nombre'));
@@ -74,9 +91,9 @@ class TipoPagoController extends Controller
      */
     public function toggle(TipoPago $tipo_pago)
     {
-        $tipo_pago->estado = $tipo_pago->estado == '1' ? '0' : '1';
+        $tipo_pago->estado = $tipo_pago->estado == 1 ? 0 : 1;
         $tipo_pago->save();
-        $mensaje = $tipo_pago->estado == '1' ? 'Tipo de pago activado' : 'Tipo de pago desactivado';
+        $mensaje = $tipo_pago->estado == 1 ? 'Tipo de pago activado' : 'Tipo de pago desactivado';
 
         return redirect()->route('tipo_pagos.index')->with('success', $mensaje);
     }

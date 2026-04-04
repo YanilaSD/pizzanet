@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Privilegio;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PrivilegioController extends Controller
 {
@@ -41,13 +42,35 @@ class PrivilegioController extends Controller
     {
 
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:privilegios,nombre',
-            'descripcion' => 'nullable|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('privilegios', 'nombre'),
+            ],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('privilegios', 'slug'),
+            ],
+            'descripcion' => [
+                'required',
+                'string',
+                'max:255',
+            ],
         ], [
             'nombre.required' => 'El campo Nombre es obligatorio.',
             'nombre.string' => 'El Nombre debe ser un texto válido.',
             'nombre.max' => 'El Nombre no debe exceder los 255 caracteres.',
-            'nombre.unique' => 'El Nombre ya está registrado, elige otro.',
+            'nombre.unique' => 'El Nombre ya está registrado.',
+
+            'slug.required' => 'El slug es obligatorio.',
+            'slug.string' => 'El slug debe ser texto válido.',
+            'slug.max' => 'El slug no debe exceder los 255 caracteres.',
+            'slug.unique' => 'El slug ya está registrado.',
+
+            'descripcion.required' => 'La descripción es obligatoria.',
             'descripcion.string' => 'La Descripción debe ser un texto válido.',
             'descripcion.max' => 'La Descripción no debe exceder los 255 caracteres.',
         ]);
@@ -57,7 +80,7 @@ class PrivilegioController extends Controller
             'nombre' => $request->nombre,
             'slug' => $slug,
             'descripcion' => $request->descripcion,
-            'estado' => '1',
+            'estado' => 1,
         ]);
 
         return redirect()->route('privilegios.index')->with('success', 'Privilegio creado correctamente.');
@@ -75,13 +98,35 @@ class PrivilegioController extends Controller
     public function update(Request $request, Privilegio $privilegio)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:privilegios,nombre,' . $privilegio->id,
-            'descripcion' => 'nullable|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('privilegios', 'nombre')->ignore($privilegio->id),
+            ],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('privilegios', 'slug')->ignore($privilegio->id),
+            ],
+            'descripcion' => [
+                'required',
+                'string',
+                'max:255',
+            ],
         ], [
             'nombre.required' => 'El campo Nombre es obligatorio.',
             'nombre.string' => 'El Nombre debe ser un texto válido.',
             'nombre.max' => 'El Nombre no debe exceder los 255 caracteres.',
-            'nombre.unique' => 'El Nombre ya está registrado, elige otro.',
+            'nombre.unique' => 'El Nombre ya está registrado.',
+
+            'slug.required' => 'El slug es obligatorio.',
+            'slug.string' => 'El slug debe ser texto válido.',
+            'slug.max' => 'El slug no debe exceder los 255 caracteres.',
+            'slug.unique' => 'El slug ya está registrado.',
+
+            'descripcion.required' => 'La descripción es obligatoria.',
             'descripcion.string' => 'La Descripción debe ser un texto válido.',
             'descripcion.max' => 'La Descripción no debe exceder los 255 caracteres.',
         ]);
@@ -100,7 +145,7 @@ class PrivilegioController extends Controller
     public function toggle($id)
     {
         $privilegio = Privilegio::findOrFail($id);
-        $privilegio->estado = $privilegio->estado == '1' ? '0' : '1';
+        $privilegio->estado = $privilegio->estado == 1 ? 0 : 1;
         $privilegio->save();
 
         return redirect()->back()->with('success', 'Estado actualizado correctamente.');

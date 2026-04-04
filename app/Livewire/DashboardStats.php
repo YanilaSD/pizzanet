@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -7,28 +6,24 @@ use App\Models\Venta;
 use App\Models\Cliente;
 use App\Models\Producto;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardStats extends Component
 {
-    // Totales
     public $totalVentas;
     public $totalIngresos;
     public $totalClientes;
     public $totalProductos;
 
-    // Ventas semanales
     public $semanas = [];
     public $ventasSemanales = [];
 
-    // Top productos
     public $topProductos = [];
     public $topCantidades = [];
 
-    // Ingresos últimos meses
     public $meses = [];
     public $ingresosMensuales = [];
 
-    // Clientes últimos meses
     public $clientesMes = [];
     public $clientesCantidad = [];
 
@@ -39,72 +34,55 @@ class DashboardStats extends Component
 
     public function loadStats()
     {
-        // ======================
-        // 1. Totales
-        // ======================
-        $this->totalVentas = Venta::count();
-        $this->totalIngresos = Venta::sum('total');
-        $this->totalClientes = Cliente::count();
-        $this->totalProductos = Producto::count();
+        // 1. Totales — solo ventas completadas
+        $this->totalVentas    = Venta::where('estado', 1)->count();
+        $this->totalIngresos  = Venta::where('estado', 1)->sum('total');
+        $this->totalClientes  = Cliente::where('estado', 1)->count();
+        $this->totalProductos = Producto::where('estado', 1)->count();
 
-        // ======================
         // 2. Ventas semanales (últimas 7 semanas)
-        // ======================
         $this->semanas = [];
         $this->ventasSemanales = [];
-
         for ($i = 6; $i >= 0; $i--) {
             $inicio = Carbon::now()->subWeeks($i)->startOfWeek();
-            $fin = Carbon::now()->subWeeks($i)->endOfWeek();
-
-            $this->semanas[] = $inicio->format('d M');
-
-            $this->ventasSemanales[] = Venta::whereBetween('fecha', [$inicio, $fin])
+            $fin    = Carbon::now()->subWeeks($i)->endOfWeek();
+            $this->semanas[]         = $inicio->format('d M');
+            $this->ventasSemanales[] = Venta::where('estado', 1)
+                ->whereBetween('created_at', [$inicio, $fin])
                 ->sum('total');
         }
 
-        // ======================
         // 3. Top 5 productos más vendidos
-        // ======================
-        $productos = Producto::with('detalleVentas')
-            ->get()
-            ->map(function ($p) {
-                $p->vendidos = $p->detalleVentas->sum('cantidad');
-                return $p;
-            })
-            ->sortByDesc('vendidos')
-            ->take(5);
+        $productos = Producto::select('productos.nombre', DB::raw('SUM(detalle_ventas.cantidad) as vendidos'))
+            ->join('detalle_ventas', 'detalle_ventas.producto_id', '=', 'productos.id')
+            ->join('ventas', 'ventas.id', '=', 'detalle_ventas.venta_id')
+            ->where('ventas.estado', 1)
+            ->groupBy('productos.id', 'productos.nombre')
+            ->orderByDesc('vendidos')
+            ->take(5)
+            ->get();
 
-        $this->topProductos = $productos->pluck('nombre')->values();
+        $this->topProductos  = $productos->pluck('nombre')->values();
         $this->topCantidades = $productos->pluck('vendidos')->values();
 
-        // ======================
         // 4. Ingresos últimos 6 meses
-        // ======================
         $this->meses = [];
         $this->ingresosMensuales = [];
-
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
-
-            $this->meses[] = $mes->format('M');
-
-            $this->ingresosMensuales[] = Venta::whereYear('fecha', $mes->year)
-                ->whereMonth('fecha', $mes->month)
+            $this->meses[]             = $mes->format('M');
+            $this->ingresosMensuales[] = Venta::where('estado', 1)
+                ->whereYear('created_at', $mes->year)
+                ->whereMonth('created_at', $mes->month)
                 ->sum('total');
         }
 
-        // ======================
         // 5. Clientes últimos 6 meses
-        // ======================
         $this->clientesMes = [];
         $this->clientesCantidad = [];
-
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
-
-            $this->clientesMes[] = $mes->format('M');
-
+            $this->clientesMes[]      = $mes->format('M');
             $this->clientesCantidad[] = Cliente::whereYear('created_at', $mes->year)
                 ->whereMonth('created_at', $mes->month)
                 ->count();

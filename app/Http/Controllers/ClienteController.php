@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ClienteController extends Controller
 {
@@ -15,20 +16,16 @@ class ClienteController extends Controller
     {
        $clientes = Cliente::query()
         ->when(!$request->search, function ($query) {
-            // Filtra solo los clientes activos (estado = 1) cuando no se está buscando
-            $query->where('estado', '1');
+            $query->where('estado', 1);
         })
         ->when($request->search, function ($query) use ($request) {
-            // Cuando hay búsqueda, no aplica filtro por estado
             return $query->where('nombre', 'like', '%' . $request->search . '%')
                         ->orWhere('correo', 'like', '%' . $request->search . '%')
                         ->orWhere('puntos', 'like', '%' . $request->search . '%')
                         ->orWhere('descuento', 'like', '%' . $request->search . '%');
         })
-        ->paginate(10); // Paginación de 10 clientes por página
+        ->paginate(10);
 
-
-        // Retorna la vista con los clientes paginados
         return view('modules.clientes.index', compact('clientes'));
     }
 
@@ -47,25 +44,43 @@ class ClienteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'ci' => 'required|integer|unique:clientes,ci',
-            'celular' => 'required|string|max:20',
-            'correo' => 'required|email|unique:clientes,correo',
+            'ci' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[0-9A-Za-z\s\-]+$/',
+                'unique:clientes,ci'
+            ],
+            'celular' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[0-9]+$/',
+                'unique:clientes,celular'
+            ],
+            'correo' => 'nullable|email|max:255|unique:clientes,correo',
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de texto.',
             'nombre.max' => 'El nombre no debe tener más de 255 caracteres.',
-            'correo.required' => 'El correo es obligatorio.',
-            'correo.email' => 'El correo debe ser una dirección de correo electrónico válida.',
-            'correo.unique' => 'Este correo ya está registrado en nuestra base de datos.',
+
             'ci.required' => 'El CI es obligatorio.',
-            'ci.integer' => 'El CI debe ser un número entero.',
-            'ci.unique' => 'Este CI ya está registrado en nuestra base de datos.',
+            'ci.string' => 'El CI debe ser una cadena de texto.',
+            'ci.max' => 'El CI no debe tener más de 20 caracteres.',
+            'ci.regex' => 'El CI solo puede contener letras, números, espacios y guiones.',
+            'ci.unique' => 'Este CI ya está registrado.',
+
             'celular.required' => 'El celular es obligatorio.',
             'celular.string' => 'El celular debe ser una cadena de texto.',
             'celular.max' => 'El celular no debe tener más de 20 caracteres.',
+            'celular.regex' => 'El celular solo puede contener números.',
+            'celular.unique' => 'Este celular ya está registrado.',
+
+            'correo.email' => 'El correo debe ser válido.',
+            'correo.max' => 'El correo no debe tener más de 255 caracteres.',
+            'correo.unique' => 'Este correo ya está registrado.',
         ]);
 
-        // Crear el cliente
         Cliente::create([
             'nombre' => Str::upper($request->nombre),
             'correo' => Str::lower($request->correo),
@@ -102,29 +117,54 @@ class ClienteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'correo' => 'required|email|unique:clientes,correo,' . $id,
-            'ci' => 'required|integer|unique:clientes,ci,' . $id,
-            'celular' => 'required|string|max:20|unique:clientes,celular,' . $id,
+
+            'ci' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[0-9A-Za-z\s\-]+$/',
+                Rule::unique('clientes', 'ci')->ignore($id),
+            ],
+
+            'celular' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[0-9]+$/',
+                Rule::unique('clientes', 'celular')->ignore($id),
+            ],
+
+            'correo' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('clientes', 'correo')->ignore($id),
+            ],
+
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de texto.',
             'nombre.max' => 'El nombre no debe tener más de 255 caracteres.',
-            'correo.required' => 'El correo es obligatorio.',
-            'correo.email' => 'El correo debe ser una dirección de correo electrónico válida.',
-            'correo.unique' => 'Este correo ya está registrado en nuestra base de datos.',
+
             'ci.required' => 'El CI es obligatorio.',
-            'ci.integer' => 'El CI debe ser un número entero.',
-            'ci.unique' => 'Este CI ya está registrado en nuestra base de datos.',
+            'ci.string' => 'El CI debe ser una cadena de texto.',
+            'ci.max' => 'El CI no debe tener más de 20 caracteres.',
+            'ci.regex' => 'El CI solo puede contener letras, números, espacios y guiones.',
+            'ci.unique' => 'Este CI ya está registrado.',
+
             'celular.required' => 'El celular es obligatorio.',
             'celular.string' => 'El celular debe ser una cadena de texto.',
             'celular.max' => 'El celular no debe tener más de 20 caracteres.',
-            'celular.unique' => 'Este celular ya está registrado en nuestra base de datos.',
+            'celular.regex' => 'El celular solo puede contener números.',
+            'celular.unique' => 'Este celular ya está registrado.',
+
+            'correo.email' => 'El correo debe ser válido.',
+            'correo.max' => 'El correo no debe tener más de 255 caracteres.',
+            'correo.unique' => 'Este correo ya está registrado.',
         ]);
 
-        // Encuentra el cliente por su ID
         $cliente = Cliente::findOrFail($id);
 
-        // Actualiza los datos del cliente
         $cliente->update([
             'nombre' => Str::upper($request->nombre),
             'correo' => Str::lower($request->correo),
@@ -132,7 +172,6 @@ class ClienteController extends Controller
             'celular' => $request->celular,
         ]);
 
-        // Redirige de nuevo con un mensaje de éxito
         return redirect()->route('clientes.index')->with('success', 'Cliente actualizado correctamente.');
 
     }

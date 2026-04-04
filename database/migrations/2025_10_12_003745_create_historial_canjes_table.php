@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
             $table->integer('puntos');
             $table->date('fecha');
-            $table->tinyInteger('estado')->default('1');
+            $table->tinyInteger('estado')->default(1);
 
 
             $table->timestamps();

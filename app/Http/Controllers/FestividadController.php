@@ -37,14 +37,18 @@ class FestividadController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+       $request->validate([
             'nombre' => [
                 'required',
                 'string',
                 'max:255',
                 Rule::unique('festividades', 'nombre'),
             ],
-            'descripcion' => 'required|string',
+            'descripcion' => [
+                'required',
+                'string',
+                'max:255',
+            ],
         ], [
             'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.string'   => 'El nombre debe ser una cadena de texto.',
@@ -53,8 +57,8 @@ class FestividadController extends Controller
 
             'descripcion.required' => 'El campo descripción es obligatorio.',
             'descripcion.string'   => 'La descripción debe ser una cadena de texto.',
+            'descripcion.max'      => 'La descripción no puede tener más de 255 caracteres.',
         ]);
-
 
         Festividad::create([
             'nombre' => $request->nombre,
@@ -87,15 +91,26 @@ class FestividadController extends Controller
     {
 
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('festividades', 'nombre')->ignore($festividad->id),
+            ],
+            'descripcion' => [
+                'required',
+                'string',
+                'max:255',
+            ],
         ], [
             'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de texto.',
             'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'nombre.unique' => 'Ya existe otra festividad con ese nombre.',
 
+            'descripcion.required' => 'El campo descripción es obligatorio.',
             'descripcion.string' => 'La descripción debe ser una cadena de texto.',
-            'descripcion.required' => 'El campo descripcion es obligatorio.',
+            'descripcion.max' => 'La descripción no puede tener más de 255 caracteres.',
         ]);
 
         $festividad->update([

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('fecha_fin');
             $table->decimal('compra_minima', 10, 2);
             $table->integer('limite_uso');
-            $table->tinyInteger('estado')->default('1');
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

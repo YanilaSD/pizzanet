@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('descripcion');
             $table->integer('puntos');
             $table->decimal('descuento', 8, 2)->default(0);
-            $table->tinyInteger('estado')->default('1');
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

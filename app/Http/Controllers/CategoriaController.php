@@ -61,11 +61,17 @@ class CategoriaController extends Controller
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([
-        'nombre' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categorias', 'nombre')->ignore($categoria->id),
+            ],
         ], [
             'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser una cadena de caracteres.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'Ya existe otra categoría con ese nombre.',
         ]);
 
         $categoria->update($request->only('nombre'));

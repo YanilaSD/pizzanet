@@ -1,32 +1,25 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('correo')->unique();
-            $table->string('ci')->unique();
-            $table->string('celular');
-            $table->integer('puntos');
-            $table->decimal('descuento', 8, 2)->default(0);
-            $table->tinyInteger('estado')->default('1');
+            $table->string('correo')->nullable()->unique();
+            $table->string('ci', 20)->unique();
+            $table->string('celular')->unique();
+            $table->unsignedInteger('puntos')->default(0);
+            // $table->decimal('descuento', 8, 2) — eliminado, se calcula desde historial
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('clientes');

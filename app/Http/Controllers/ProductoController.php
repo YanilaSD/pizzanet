@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
@@ -32,7 +32,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        $categorias = Categoria::where('estado', '1')->get();
+        $categorias = Categoria::where('estado', 1)->get();
         return view('modules.productos.create', compact('categorias'));
     }
 
@@ -42,23 +42,57 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric',
-            'imagen' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'categoria_id' => [
+                'required',
+                'exists:categorias,id',
+            ],
+
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('productos', 'nombre'),
+            ],
+
+            'descripcion' => [
+                'required',
+                'string',
+            ],
+
+            'precio' => [
+                'required',
+                'numeric',
+                'min:0',
+                'regex:/^\d{1,8}(\.\d{1,2})?$/',
+            ],
+
+            'imagen' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,gif',
+                'max:2048',
+            ],
+
         ], [
             'categoria_id.required' => 'La categoría es obligatoria.',
             'categoria_id.exists' => 'La categoría seleccionada no es válida.',
+
             'nombre.required' => 'El nombre del producto es obligatorio.',
-            'nombre.string' => 'El nombre del producto debe ser un texto.',
-            'nombre.max' => 'El nombre del producto no puede exceder los 255 caracteres.',
-            'descripcion.string' => 'La descripción debe ser un texto.',
+            'nombre.string' => 'El nombre debe ser texto.',
+            'nombre.max' => 'No debe exceder 255 caracteres.',
+            'nombre.unique' => 'Ya existe un producto con ese nombre.',
+
+            'descripcion.required' => 'La descripción es obligatoria.',
+            'descripcion.string' => 'Debe ser texto.',
+
             'precio.required' => 'El precio es obligatorio.',
-            'precio.numeric' => 'El precio debe ser un número.',
-            'imagen.image' => 'El archivo debe ser una imagen.',
-            'imagen.mimes' => 'Solo se permiten imágenes de tipo JPG, JPEG, PNG o GIF.',
-            'imagen.max' => 'La imagen no puede exceder los 2MB.',
+            'precio.numeric' => 'Debe ser numérico.',
+            'precio.min' => 'No puede ser negativo.',
+            'precio.regex' => 'Formato inválido (máx 2 decimales).',
+
+            'imagen.image' => 'Debe ser una imagen.',
+            'imagen.mimes' => 'Solo JPG, JPEG, PNG o GIF.',
+            'imagen.max' => 'Máximo 2MB.',
         ]);
 
 
@@ -101,29 +135,59 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-            $request->validate([
-                'categoria_id' => 'required|exists:categorias,id',
-                'nombre'       => 'required|string|max:255',
-                'descripcion'  => 'nullable|string',
-                'precio'       => 'required|numeric',
-                'imagen'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            ], [
-                'categoria_id.required' => 'La categoría es obligatoria.',
-                'categoria_id.exists'   => 'La categoría seleccionada no es válida.',
+        $request->validate([
+            'categoria_id' => [
+                'required',
+                'exists:categorias,id',
+            ],
 
-                'nombre.required' => 'El nombre del producto es obligatorio.',
-                'nombre.string'   => 'El nombre del producto debe ser una cadena de texto.',
-                'nombre.max'      => 'El nombre del producto no debe exceder los 255 caracteres.',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('productos', 'nombre')->ignore($producto->id),
+            ],
 
-                'descripcion.string' => 'La descripción debe ser una cadena de texto.',
+            'descripcion' => [
+                'required',
+                'string',
+            ],
 
-                'precio.required' => 'El precio es obligatorio.',
-                'precio.numeric'  => 'El precio debe ser un valor numérico.',
+            'precio' => [
+                'required',
+                'numeric',
+                'min:0',
+                'regex:/^\d{1,8}(\.\d{1,2})?$/',
+            ],
 
-                'imagen.image' => 'El archivo debe ser una imagen.',
-                'imagen.mimes' => 'La imagen debe ser JPG, JPEG, PNG o GIF.',
-                'imagen.max'   => 'La imagen no debe exceder los 2MB.',
-            ]);
+            'imagen' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,gif',
+                'max:2048',
+            ],
+
+        ], [
+            'categoria_id.required' => 'La categoría es obligatoria.',
+            'categoria_id.exists' => 'La categoría seleccionada no es válida.',
+
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'nombre.string' => 'El nombre debe ser texto.',
+            'nombre.max' => 'No debe exceder 255 caracteres.',
+            'nombre.unique' => 'Ya existe otro producto con ese nombre.',
+
+            'descripcion.required' => 'La descripción es obligatoria.',
+            'descripcion.string' => 'Debe ser texto.',
+
+            'precio.required' => 'El precio es obligatorio.',
+            'precio.numeric' => 'Debe ser numérico.',
+            'precio.min' => 'No puede ser negativo.',
+            'precio.regex' => 'Formato inválido (máx 2 decimales).',
+
+            'imagen.image' => 'Debe ser una imagen.',
+            'imagen.mimes' => 'Solo JPG, JPEG, PNG o GIF.',
+            'imagen.max' => 'Máximo 2MB.',
+        ]);
 
         $imagen = $producto->imagen;
         if ($request->hasFile('imagen')) {
@@ -152,9 +216,9 @@ class ProductoController extends Controller
         // if ($producto->imagen) {
         //     Storage::disk('public')->delete($producto->imagen);
         // }
-        $producto->estado = $producto->estado == '1' ? '0' : '1';
+        $producto->estado = $producto->estado == 1 ? 0 : 1;
         $producto->save();
-        $mensaje = $producto->estado == '1' ? 'Producto habilitado' : 'Producto inhabilitado';
+        $mensaje = $producto->estado == 1 ? 'Producto habilitado' : 'Producto inhabilitado';
 
         return redirect()->route('productos.index')->with('success', $mensaje);
     }

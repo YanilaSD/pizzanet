@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rol;
 use App\Models\Privilegio;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RolController extends Controller
 {
@@ -22,10 +23,7 @@ class RolController extends Controller
 
     public function create()
     {
-        // Obtener los privilegios activos ordenados por nombre
-        $privilegios = Privilegio::where('estado', '1')->orderBy('nombre')->get();
-
-        // Mapear privilegios para el select: [{value: id, label: nombre}, ...]
+        $privilegios = Privilegio::where('estado', 1)->orderBy('nombre')->get();
         $privilegiosOptions = $privilegios->map(function ($p) {
             return [
                 'value' => $p->id,
@@ -33,7 +31,6 @@ class RolController extends Controller
             ];
         });
 
-        // Pasar las opciones a la vista (sin rol porque es creación)
         return view('modules.roles.create', compact('privilegiosOptions'));
     }
 
@@ -41,17 +38,33 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:roles,nombre',
-            'descripcion' => 'nullable|string',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:roles,nombre',
+            ],
+
+            'descripcion' => [
+                'nullable',
+                'string',
+            ],
+
         ], [
-            'nombre.required' => 'El campo Nombre es obligatorio.',
-            'nombre.unique' => 'El Nombre ya está registrado.',
+            // nombre
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser texto.',
+            'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'El nombre ya está registrado.',
+
+            // descripcion
+            'descripcion.string' => 'La descripción debe ser texto.',
         ]);
 
         $rol = Rol::create([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
-            'estado' => '1',
+            'estado' => 1,
         ]);
 
         $rol->privilegios()->sync($request->privilegios);
@@ -81,11 +94,27 @@ class RolController extends Controller
     public function update(Request $request, Rol $rol)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:roles,nombre,' . $rol->id, // table en minúsculas
-            'descripcion' => 'nullable|string',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'nombre')->ignore($rol->id),
+            ],
+
+            'descripcion' => [
+                'nullable',
+                'string',
+            ],
+
         ], [
-            'nombre.required' => 'El campo Nombre es obligatorio.',
-            'nombre.unique' => 'El Nombre ya está registrado.',
+            // nombre
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser texto.',
+            'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'nombre.unique' => 'El nombre ya está registrado.',
+
+            // descripcion
+            'descripcion.string' => 'La descripción debe ser texto.',
         ]);
 
         $rol->update([

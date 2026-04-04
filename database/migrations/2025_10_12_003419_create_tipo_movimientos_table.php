@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tipo_movimientos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
-            $table->tinyInteger('estado')->default('1');
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }
