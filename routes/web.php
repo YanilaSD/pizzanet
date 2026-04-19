@@ -29,108 +29,122 @@ Route::middleware(['auth'])->group(function () {
 
     Route::redirect('settings', 'settings/profile');
 
-    Route::get('/privilegios', [PrivilegioController::class, 'index'])->middleware('privilege:listar-privilegio')->name('privilegios.index');
-    Route::get('/privilegios/create', [PrivilegioController::class, 'create'])->middleware('privilege:crear-privilegio')->name('privilegios.create');
-    Route::post('/privilegios', [PrivilegioController::class, 'store'])->middleware('privilege:guardar-privilegio')->name('privilegios.store');
-    Route::get('/privilegios/{privilegio}/edit', [PrivilegioController::class, 'edit'])->middleware('privilege:editar-privilegio')->name('privilegios.edit');
-    Route::put('/privilegios/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:actualizar-privilegio')->name('privilegios.update');
-    Route::get('/privilegios/{id}/toggle', [PrivilegioController::class, 'toggle'])->name('privilegios.toggle');
+    Route::prefix('privilegios')->group(function () {
+        Route::get('/', [PrivilegioController::class, 'index'])->middleware('privilege:privilegios.index')->name('privilegios.index');
+        Route::get('/create', [PrivilegioController::class, 'create'])->middleware('privilege:privilegios.create')->name('privilegios.create');
+        Route::post('/', [PrivilegioController::class, 'store'])->middleware('privilege:privilegios.store')->name('privilegios.store');
+        Route::get('/{privilegio}/edit', [PrivilegioController::class, 'edit'])->middleware('privilege:privilegios.edit')->name('privilegios.edit');
+        Route::put('/{privilegio}', [PrivilegioController::class, 'update'])->middleware('privilege:privilegios.update')->name('privilegios.update');
+        Route::get('/{id}/toggle', [PrivilegioController::class, 'toggle'])->middleware('privilege:privilegios.toggle')->name('privilegios.toggle');
+    });
 
-    Route::get('/roles', [RolController::class, 'index'])->name('roles.index');
-    Route::get('/roles/create', [RolController::class, 'create'])->name('roles.create');
-    Route::post('/roles', [RolController::class, 'store'])->name('roles.store');
-    Route::get('/roles/{rol}/edit', [RolController::class, 'edit'])->name('roles.edit');
-    Route::put('/roles/{rol}', [RolController::class, 'update'])->name('roles.update');
-    Route::get('/roles/{rol}', [RolController::class, 'show'])->name('roles.show');
-    Route::get('roles/{rol}/toggle', [RolController::class, 'toggle'])->name('roles.toggle');
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [RolController::class, 'index'])->middleware('privilege:roles.index')->name('roles.index');
+        Route::get('/create', [RolController::class, 'create'])->middleware('privilege:roles.create')->name('roles.create');
+        Route::post('/', [RolController::class, 'store'])->middleware('privilege:roles.store')->name('roles.store');
+        Route::get('/{rol}', [RolController::class, 'show'])->middleware('privilege:roles.show')->name('roles.show');
+        Route::get('/{rol}/edit', [RolController::class, 'edit'])->middleware('privilege:roles.edit')->name('roles.edit');
+        Route::put('/{rol}', [RolController::class, 'update'])->middleware('privilege:roles.update')->name('roles.update');
+        Route::get('/{rol}/toggle', [RolController::class, 'toggle'])->middleware('privilege:roles.toggle')->name('roles.toggle');
+    });
 
-    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
-    Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
-    Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
-    Route::get('/usuarios/{usuario}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
-    Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
-    Route::get('/usuarios/{usuario}', [UsuarioController::class, 'show'])->name('usuarios.show');
-    Route::get('/usuarios/{id}/toggle', [UsuarioController::class, 'toggle'])->name('usuarios.toggle');
-    Route::get('usuarios/{usuario}/reset', [UsuarioController::class, 'reset_pwd'])->name('usuarios.reset');
-    Route::post('usuarios/{usuario}/reset-f2a', [UsuarioController::class, 'reset_f2a'])->name('usuarios.reset_f2a');
+    Route::prefix('usuarios')->group(function () {
+        Route::get('/', [UsuarioController::class, 'index'])->middleware('privilege:usuarios.index')->name('usuarios.index');
+        Route::get('/create', [UsuarioController::class, 'create'])->middleware('privilege:usuarios.create')->name('usuarios.create');
+        Route::post('/', [UsuarioController::class, 'store'])->middleware('privilege:usuarios.store')->name('usuarios.store');
+        Route::get('/{usuario}', [UsuarioController::class, 'show'])->middleware('privilege:usuarios.show')->name('usuarios.show');
+        Route::get('/{usuario}/edit', [UsuarioController::class, 'edit'])->middleware('privilege:usuarios.edit')->name('usuarios.edit');
+        Route::put('/{usuario}', [UsuarioController::class, 'update'])->middleware('privilege:usuarios.update')->name('usuarios.update');
+        Route::get('/{id}/toggle', [UsuarioController::class, 'toggle'])->middleware('privilege:usuarios.toggle')->name('usuarios.toggle');
+        Route::get('/{usuario}/reset', [UsuarioController::class, 'reset_pwd'])->middleware('privilege:usuarios.reset')->name('usuarios.reset');
+        Route::post('/{usuario}/reset-f2a', [UsuarioController::class, 'reset_f2a'])->middleware('privilege:usuarios.reset_f2a')->name('usuarios.reset_f2a');
+    });
 
-    Route::get('/tipo_pagos', [TipoPagoController::class, 'index'])->name('tipo_pagos.index');
-    Route::get('/tipo_pagos/create', [TipoPagoController::class, 'create'])->name('tipo_pagos.create');
-    Route::post('/tipo_pagos', [TipoPagoController::class, 'store'])->name('tipo_pagos.store');
-    Route::get('/tipo_pagos/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->name('tipo_pagos.edit');
-    Route::put('/tipo_pagos/{tipo_pago}', [TipoPagoController::class, 'update'])->name('tipo_pagos.update');
-    Route::get('/tipo_pagos/{tipo_pago}/toggle', [TipoPagoController::class, 'toggle'])->name('tipo_pagos.toggle');
+    Route::prefix('tipo_pagos')->group(function () {
+        Route::get('/', [TipoPagoController::class, 'index'])->middleware('privilege:tipo_pagos.index')->name('tipo_pagos.index');
+        Route::get('/create', [TipoPagoController::class, 'create'])->middleware('privilege:tipo_pagos.create')->name('tipo_pagos.create');
+        Route::post('/', [TipoPagoController::class, 'store'])->middleware('privilege:tipo_pagos.store')->name('tipo_pagos.store');
+        Route::get('/{tipo_pago}/edit', [TipoPagoController::class, 'edit'])->middleware('privilege:tipo_pagos.edit')->name('tipo_pagos.edit');
+        Route::put('/{tipo_pago}', [TipoPagoController::class, 'update'])->middleware('privilege:tipo_pagos.update')->name('tipo_pagos.update');
+        Route::get('/{tipo_pago}/toggle', [TipoPagoController::class, 'toggle'])->middleware('privilege:tipo_pagos.toggle')->name('tipo_pagos.toggle');
+    });
 
-    Route::get('/festividades', [FestividadController::class, 'index'])->name('festividades.index');
-    Route::get('/festividades/create', [FestividadController::class, 'create'])->name('festividades.create');
-    Route::post('/festividades', [FestividadController::class, 'store'])->name('festividades.store');
-    Route::get('/festividades/{festividad}/edit', [FestividadController::class, 'edit'])->name('festividades.edit');
-    Route::put('/festividades/{festividad}', [FestividadController::class, 'update'])->name('festividades.update');
-    Route::get('/festividades/{festividad}/destroy', [FestividadController::class, 'destroy'])->name('festividades.destroy');
+    Route::prefix('festividades')->group(function () {
+        Route::get('/', [FestividadController::class, 'index'])->middleware('privilege:festividades.index')->name('festividades.index');
+        Route::get('/create', [FestividadController::class, 'create'])->middleware('privilege:festividades.create')->name('festividades.create');
+        Route::post('/', [FestividadController::class, 'store'])->middleware('privilege:festividades.store')->name('festividades.store');
+        Route::get('/{festividad}/edit', [FestividadController::class, 'edit'])->middleware('privilege:festividades.edit')->name('festividades.edit');
+        Route::put('/{festividad}', [FestividadController::class, 'update'])->middleware('privilege:festividades.update')->name('festividades.update');
+        Route::get('/{festividad}/destroy', [FestividadController::class, 'destroy'])->middleware('privilege:festividades.destroy')->name('festividades.destroy');
+    });
 
-    Route::get('/promociones', [PromocionController::class, 'index'])->name('promociones.index');
-    Route::get('/promociones/create', [PromocionController::class, 'create'])->name('promociones.create');
-    Route::post('/promociones', [PromocionController::class, 'store'])->name('promociones.store');
-    Route::get('/promociones/{promocion}/show', [PromocionController::class, 'show'])->name('promociones.show');
-    Route::get('/promociones/{promocion}/edit', [PromocionController::class, 'edit'])->name('promociones.edit');
-    Route::put('/promociones/{promocion}', [PromocionController::class, 'update'])->name('promociones.update');
-    Route::get('/promociones/{promocion}/destroy', [PromocionController::class, 'destroy'])->name('promociones.destroy');
+    Route::prefix('promociones')->group(function () {
+        Route::get('/', [PromocionController::class, 'index'])->middleware('privilege:promociones.index')->name('promociones.index');
+        Route::get('/create', [PromocionController::class, 'create'])->middleware('privilege:promociones.create')->name('promociones.create');
+        Route::post('/', [PromocionController::class, 'store'])->middleware('privilege:promociones.store')->name('promociones.store');
+        Route::get('/{promocion}/show', [PromocionController::class, 'show'])->middleware('privilege:promociones.show')->name('promociones.show');
+        Route::get('/{promocion}/edit', [PromocionController::class, 'edit'])->middleware('privilege:promociones.edit')->name('promociones.edit');
+        Route::put('/{promocion}', [PromocionController::class, 'update'])->middleware('privilege:promociones.update')->name('promociones.update');
+        Route::get('/{promocion}/destroy', [PromocionController::class, 'destroy'])->middleware('privilege:promociones.destroy')->name('promociones.destroy');
+    });
 
-    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
-    Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
-    Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
-    Route::get('/clientes/{cliente}/show', [ClienteController::class, 'show'])->name('clientes.show');
-    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
-    Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
-    Route::get('/clientes/{cliente}/destroy', [ClienteController::class, 'destroy'])->name('clientes.destroy');
-    Route::post('/clientes/{cliente}/canjear', [ClienteController::class, 'canjear'])->name('clientes.canjear');
+    Route::prefix('clientes')->group(function () {
+        Route::get('/', [ClienteController::class, 'index'])->middleware('privilege:clientes.index')->name('clientes.index');
+        Route::get('/create', [ClienteController::class, 'create'])->middleware('privilege:clientes.create')->name('clientes.create');
+        Route::post('/', [ClienteController::class, 'store'])->middleware('privilege:clientes.store')->name('clientes.store');
+        Route::get('/{cliente}/show', [ClienteController::class, 'show'])->middleware('privilege:clientes.show')->name('clientes.show');
+        Route::get('/{cliente}/edit', [ClienteController::class, 'edit'])->middleware('privilege:clientes.edit')->name('clientes.edit');
+        Route::put('/{cliente}', [ClienteController::class, 'update'])->middleware('privilege:clientes.update')->name('clientes.update');
+        Route::get('/{cliente}/destroy', [ClienteController::class, 'destroy'])->middleware('privilege:clientes.destroy')->name('clientes.destroy');
+        Route::post('/{cliente}/canjear', [ClienteController::class, 'canjear'])->middleware('privilege:clientes.canjear')->name('clientes.canjear');
+    });
 
-    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
-    Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('categorias.create');
-    Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
-    Route::get('/categorias/{categoria}/show', [CategoriaController::class, 'show'])->name('categorias.show');
-    Route::get('/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
-    Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
-    Route::get('/categorias/{categoria}/destroy', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
+    Route::prefix('categorias')->group(function () {
+        Route::get('/', [CategoriaController::class, 'index'])->middleware('privilege:categorias.index')->name('categorias.index');
+        Route::get('/create', [CategoriaController::class, 'create'])->middleware('privilege:categorias.create')->name('categorias.create');
+        Route::post('/', [CategoriaController::class, 'store'])->middleware('privilege:categorias.store')->name('categorias.store');
+        Route::get('/{categoria}/show', [CategoriaController::class, 'show'])->middleware('privilege:categorias.show')->name('categorias.show');
+        Route::get('/{categoria}/edit', [CategoriaController::class, 'edit'])->middleware('privilege:categorias.edit')->name('categorias.edit');
+        Route::put('/{categoria}', [CategoriaController::class, 'update'])->middleware('privilege:categorias.update')->name('categorias.update');
+        Route::get('/{categoria}/destroy', [CategoriaController::class, 'destroy'])->middleware('privilege:categorias.destroy')->name('categorias.destroy');
+    });
 
-    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
-    Route::get('/productos/create', [ProductoController::class, 'create'])->name('productos.create');
-    Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
-    Route::get('/productos/{producto}/show', [ProductoController::class, 'show'])->name('productos.show');
-    Route::get('/productos/{producto}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
-    Route::put('/productos/{producto}', [ProductoController::class, 'update'])->name('productos.update');
-    Route::get('/productos/{producto}/toggle', [ProductoController::class, 'toggle'])->name('productos.toggle');
+    Route::prefix('productos')->group(function () {
+        Route::get('/', [ProductoController::class, 'index'])->middleware('privilege:productos.index')->name('productos.index');
+        Route::get('/create', [ProductoController::class, 'create'])->middleware('privilege:productos.create')->name('productos.create');
+        Route::post('/', [ProductoController::class, 'store'])->middleware('privilege:productos.store')->name('productos.store');
+        Route::get('/{producto}/show', [ProductoController::class, 'show'])->middleware('privilege:productos.show')->name('productos.show');
+        Route::get('/{producto}/edit', [ProductoController::class, 'edit'])->middleware('privilege:productos.edit')->name('productos.edit');
+        Route::put('/{producto}', [ProductoController::class, 'update'])->middleware('privilege:productos.update')->name('productos.update');
+        Route::get('/{producto}/toggle', [ProductoController::class, 'toggle'])->middleware('privilege:productos.toggle')->name('productos.toggle');
+    });
 
-    Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
-    Route::get('/ventas/create', [VentaController::class, 'create'])->name('ventas.create');
-    Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
-    Route::get('/ventas/{venta}/show', [VentaController::class, 'show'])->name('ventas.show');
-    Route::put('/ventas/{venta}', [VentaController::class, 'update'])->name('ventas.update');
-    Route::get('/ventas/{venta}/destroy', [VentaController::class, 'destroy'])->name('ventas.destroy');
-    Route::post('/ventas/cliente', [VentaController::class, 'searchClient'])->name('ventas.searchClient');
-    Route::post('/ventas/add-producto', [VentaController::class, 'addProducto'])->name('ventas.addProducto');
-    Route::delete('/ventas/remove-producto', [VentaController::class, 'removeProducto'])->name('ventas.removeProducto');
-    Route::get('/ventas/getTotalCompra', [VentaController::class, 'getTotalCompra'])->name('ventas.getTotalCompra');
-    Route::post('/ventas/setPromocion', [VentaController::class, 'setPromocion'])->name('ventas.setPromocion');
-    Route::post('/ventas/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->name('ventas.getPuntosCliente');
-    Route::post('/ventas/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->name('ventas.setUsoPuntos');
+    Route::prefix('ventas')->group(function () {
+        Route::get('/', [VentaController::class, 'index'])->middleware('privilege:ventas.index')->name('ventas.index');
+        Route::get('/create', [VentaController::class, 'create'])->middleware('privilege:ventas.create')->name('ventas.create');
+        Route::post('/', [VentaController::class, 'store'])->middleware('privilege:ventas.store')->name('ventas.store');
+        Route::get('/{venta}/show', [VentaController::class, 'show'])->middleware('privilege:ventas.show')->name('ventas.show');
+        Route::put('/{venta}', [VentaController::class, 'update'])->middleware('privilege:ventas.update')->name('ventas.update');
+        Route::get('/{venta}/destroy', [VentaController::class, 'destroy'])->middleware('privilege:ventas.destroy')->name('ventas.destroy');
 
-   Route::get('/reportes', [ReporteController::class, 'index'])
-    ->name('reportes.index');
+        Route::post('/cliente', [VentaController::class, 'searchClient'])->middleware('privilege:ventas.searchClient')->name('ventas.searchClient');
+        Route::post('/add-producto', [VentaController::class, 'addProducto'])->middleware('privilege:ventas.addProducto')->name('ventas.addProducto');
+        Route::delete('/remove-producto', [VentaController::class, 'removeProducto'])->middleware('privilege:ventas.removeProducto')->name('ventas.removeProducto');
+        Route::get('/getTotalCompra', [VentaController::class, 'getTotalCompra'])->middleware('privilege:ventas.getTotalCompra')->name('ventas.getTotalCompra');
+        Route::post('/setPromocion', [VentaController::class, 'setPromocion'])->middleware('privilege:ventas.setPromocion')->name('ventas.setPromocion');
+        Route::post('/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->middleware('privilege:ventas.getPuntosCliente')->name('ventas.getPuntosCliente');
+        Route::post('/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->middleware('privilege:ventas.setUsoPuntos')->name('ventas.setUsoPuntos');
+    });
 
-    Route::get('/reportes/ventas', [ReporteController::class, 'ventas'])
-    ->name('reportes.ventas');
-    Route::get('/reportes/ventas/pdf', [ReporteController::class, 'ventasPDF'])
-    ->name('reportes.ventas.pdf');
-    Route::get('/reportes/usuarios', [ReporteController::class, 'usuarios'])
-    ->name('reportes.usuarios');
-    Route::get('/reportes/usuarios/pdf', [ReporteController::class, 'usuariosPDF'])
-    ->name('reportes.usuarios.pdf');
-
-    Route::get('/reportes/producto', [ReporteController::class, 'productos'])
-    ->name('reportes.productos');
-    Route::get('/reportes/productos/pdf', [ReporteController::class, 'productosPDF'])
-    ->name('reportes.productos.pdf');
+    Route::prefix('reportes')->group(function () {
+        Route::get('/', [ReporteController::class, 'index'])->middleware('privilege:reportes.index')->name('reportes.index');
+        Route::get('/ventas', [ReporteController::class, 'ventas'])->middleware('privilege:reportes.ventas')->name('reportes.ventas');
+        Route::get('/ventas/pdf', [ReporteController::class, 'ventasPDF'])->middleware('privilege:reportes.ventas.pdf')->name('reportes.ventas.pdf');
+        Route::get('/usuarios', [ReporteController::class, 'usuarios'])->middleware('privilege:reportes.usuarios')->name('reportes.usuarios');
+        Route::get('/usuarios/pdf', [ReporteController::class, 'usuariosPDF'])->middleware('privilege:reportes.usuarios.pdf')->name('reportes.usuarios.pdf');
+        Route::get('/producto', [ReporteController::class, 'productos'])->middleware('privilege:reportes.productos')->name('reportes.productos');
+        Route::get('/productos/pdf', [ReporteController::class, 'productosPDF'])->middleware('privilege:reportes.productos.pdf')->name('reportes.productos.pdf');
+    });
 
 
     Volt::route('settings/profile', 'settings.profile')->name('profile.edit');
