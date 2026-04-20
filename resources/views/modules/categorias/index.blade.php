@@ -1,13 +1,10 @@
 <x-layouts.app>
-    <div class="flex justify-between">
-        <div class="">
-            <h1 class="text-2xl">Gestión de Categorias</h1>
-            <p>Registra y gestiona todos los categorias del sistema.</p>
-        </div>
-        <flux:button variant="primary" color="orange" href="{{ route('categorias.create') }}">
-            Crear categoria
-        </flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Categorías"
+        description="Registra y gestiona todos los categorias del sistema."
+        button-text="Nueva categoria"
+        :button-link="route('categorias.create')"
+    />
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">

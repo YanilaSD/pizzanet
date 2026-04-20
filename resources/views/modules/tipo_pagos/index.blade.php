@@ -1,13 +1,10 @@
 <x-layouts.app>
-    <div class="flex justify-between">
-        <div class="">
-            <h1 class="text-2xl">Gestión de Tipos de Pago</h1>
-            <p>Registra y gestiona todos los tipos de pago del sistema.</p>
-        </div>
-        <flux:button variant="primary" color="orange" href="{{ route('tipo_pagos.create') }}">
-            Crear Tipo de Pago
-        </flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Tipos de Pago"
+        description="Registra y gestiona todos los tipos de pago del sistema."
+        button-text="Nuevo tipo de pago"
+        :button-link="route('tipo_pagos.create')"
+    />
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">

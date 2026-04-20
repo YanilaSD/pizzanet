@@ -1,13 +1,10 @@
 <x-layouts.app>
-    <div class="flex justify-between">
-        <div>
-            <h1 class="text-2xl">Gestión de Festividades</h1>
-            <p>Registra y gestiona todas las festividades del sistema</p>
-        </div>
-        <flux:button variant="primary" color="orange" href="{{ route('festividades.create') }}">
-            Nueva Festividad
-        </flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Festividades"
+        description="Registra y gestiona todas las festividades del sistema."
+        button-text="Nueva festividad"
+        :button-link="route('festividades.create')"
+    />
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">

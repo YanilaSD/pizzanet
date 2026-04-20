@@ -1,13 +1,10 @@
 <x-layouts.app>
-    <div class="flex justify-between">
-        <div>
-            <h1 class="text-2xl">Gestión de Productos</h1>
-            <p>Registra y gestiona todos los productos del sistema</p>
-        </div>
-        <flux:button variant="primary" color="orange" href="{{ route('productos.create') }}">
-            Nuevo Producto
-        </flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Productos"
+        description="Registra y gestiona todos los productos del sistema."
+        button-text="Nuevo producto"
+        :button-link="route('productos.create')"
+    />
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">

@@ -1,11 +1,10 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Gestión de Clientes</h1>
-            <p>Registra y gestiona todos los clientes del sistema</p>
-        </div>
-        <flux:button variant="primary" color="orange" href="{{ route('clientes.create') }}">Crear cliente</flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Clientes"
+        description="Registra y gestiona todos los clientes del sistema."
+        button-text="Nuevo cliente"
+        :button-link="route('clientes.create')"
+    />
 
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">

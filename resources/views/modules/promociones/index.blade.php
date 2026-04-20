@@ -1,17 +1,10 @@
 <x-layouts.app>
-    {{-- Header --}}
-    <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Gestión de Promociones</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Registra y gestiona todas las promociones del sistema.
-            </p>
-        </div>
-
-        <flux:button variant="primary" color="orange" href="{{ route('promociones.create') }}">
-            Agregar nueva promoción
-        </flux:button>
-    </div>
+    <x-card-header 
+        title="Gestión de Promociones"
+        description="Registra y gestiona todas las promociones del sistema."
+        button-text="Nueva promoción"
+        :button-link="route('promociones.create')"
+    />
 
     {{-- Success --}}
     @if (session('success'))

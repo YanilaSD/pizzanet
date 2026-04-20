@@ -1,19 +1,10 @@
 <x-layouts.app>
-    {{-- Header --}}
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-            <h1 class="text-2xl font-semibold text-gray-900">Gestión de Ventas</h1>
-            <p class="mt-1 text-sm text-gray-600">
-                Registra y gestiona todas las ventas de la pizzería con promociones.
-            </p>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <flux:button variant="primary" color="orange" href="{{ route('ventas.create') }}">
-                Nueva venta
-            </flux:button>
-        </div>
-    </div>
+    <x-card-header 
+        title="Gestión de Ventas"
+        description="Registra y gestiona todas las ventas de la pizzería con promociones."
+        button-text="Nueva venta"
+        :button-link="route('ventas.create')"
+    />
 
     <div class="mt-6 flex gap-6 overflow-x-auto py-2 scrollbar-hide">
         {{-- Card 1 --}}
