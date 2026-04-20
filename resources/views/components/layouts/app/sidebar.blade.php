@@ -28,11 +28,17 @@
                 "current" => request()->routeIs("festividades.index")
             ],
 
-             [
+            [
                 "name" => "Promocion",
                 "icon" => "home",
                 "route" => route("promociones.index"),
                 "current" => request()->routeIs("promociones.index")
+            ],
+            [
+                "name" => "Descuentos",
+                "icon" => "home",
+                "route" => route("descuentos.index"),
+                "current" => request()->routeIs("descuentos.index")
             ],
             [
                 "name" => "Productos",
