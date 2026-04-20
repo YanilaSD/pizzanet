@@ -70,6 +70,11 @@
                             @if ($cliente->ci == config("app.ci_anonimo"))
                                 <span class="text-gray-400">No disponible</span>
                             @else
+                                <a href="{{ route('clientes.canjes', $cliente) }}"
+                                   class="p-2 rounded-lg hover:bg-green-100 text-gray-500 hover:text-green-600 transition">
+                                    <flux:icon name="clock" />
+                                </a>
+
                                 <a href="{{ route('clientes.edit', $cliente->id) }}"
                                    class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
                                     <flux:icon name="pencil-square" />

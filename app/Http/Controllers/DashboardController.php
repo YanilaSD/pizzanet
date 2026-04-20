@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Venta;
 use App\Models\Cliente;
+use App\Models\HistorialCanje;
 use App\Models\Producto;
 use App\Models\Promocion;
 use Carbon\Carbon;
@@ -71,6 +72,13 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        $canjes = HistorialCanje::with(['descuento', 'venta'])
+            ->where('cliente_id', $cliente->id)
+            ->orderByDesc('fecha')
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
         // ================================
         // RESPUESTA
         // ================================
@@ -79,7 +87,8 @@ class DashboardController extends Controller
             'promociones',
             'cliente',
             'totalVentas',
-            'comprasRealizadas'
+            'comprasRealizadas',
+            'canjes'
         ));
     }
 

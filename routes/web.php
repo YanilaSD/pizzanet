@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DescuentoController;
+use App\Http\Controllers\HistorialController;
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -95,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [ClienteController::class, 'store'])->middleware('privilege:clientes.store')->name('clientes.store');
         Route::get('/{cliente}/show', [ClienteController::class, 'show'])->middleware('privilege:clientes.show')->name('clientes.show');
         Route::get('/{cliente}/edit', [ClienteController::class, 'edit'])->middleware('privilege:clientes.edit')->name('clientes.edit');
+        Route::get('/{cliente}/canjes', [HistorialController::class, 'index'])->middleware('privilege:clientes.index')->name('clientes.canjes');
         Route::put('/{cliente}', [ClienteController::class, 'update'])->middleware('privilege:clientes.update')->name('clientes.update');
         Route::get('/{cliente}/destroy', [ClienteController::class, 'destroy'])->middleware('privilege:clientes.destroy')->name('clientes.destroy');
     });

@@ -6,7 +6,6 @@
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
             <div class="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 py-10 px-6">
-                <!-- Nivel y puntos -->
                 <div class="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
                     <div class="col-span-2">
                         <h1 class="text-3xl font-bold text-center mb-4">Bienvenido: {{ $cliente->nombre ?? 'Invitado' }}</h1>
@@ -25,13 +24,11 @@
                             <x-flux::icon name="star" class="w-12 h-12 text-white opacity-90" />
                         </div>
 
-                        <!-- Barra de progreso -->
                         <div class="w-full bg-orange-200 rounded-full h-2.5 mt-6">
                             <div class="bg-white h-2.5 rounded-full" style="width: 50%"></div>
                         </div>
                     </div>
 
-                    <!-- Estadísticas -->
                     <div class="bg-white rounded-2xl shadow-md p-6">
                         <h3 class="text-2xl font-semibold text-gray-800 flex items-center space-x-2">
                             <x-flux::icon name="chart-bar" class="w-5 h-5 text-green-500" />
@@ -44,7 +41,6 @@
                     </div>
                 </div>
 
-                <!-- Cómo ganar puntos -->
                 <div class="max-w-7xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">¿Cómo ganar y usar puntos?</h3>
                     <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
@@ -63,11 +59,9 @@
                             <p>🍕 500 puntos = 1 Pizza gratis</p>
                             <p>🥤 100 puntos = 1 Bebida gratis</p>
                         </div>
-                        <!-- <flux:button color="primary">Canjear Puntos</flux:button> -->
                     </div>
                 </div>
 
-                <!-- Productos disponibles -->
                 <div class="max-w-7xl mx-auto mt-10">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
                         <x-flux::icon name="square-3-stack-3d" class="w-5 h-5 text-orange-500" />
@@ -75,7 +69,6 @@
                     </h3>
 
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <!-- Producto -->
                         @foreach ($productos as $producto)
                             <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
                                 <img src="{{ $producto->imagenUrl }}" alt="{{ $producto->nombre }}" class="h-40 w-full object-cover">
@@ -84,19 +77,12 @@
                                     <p class="text-sm text-gray-500">{{ $producto->descripcion }}</p>
                                     <p class="text-xs text-gray-400 mt-1">Categoría: {{ $producto->categoria->nombre }}</p>
                                     <p class="text-sm font-medium text-gray-800 mt-2">Precio: Bs. {{ number_format($producto->precio, 2) }}</p>
-
-                                    <!-- @if ($cliente->puntos >= $producto->puntos)
-                                        <flux:button class="mt-3 w-full" color="orange">Canjear</flux:button>
-                                    @else
-                                        <button disabled class="mt-3 w-full bg-orange-100 text-orange-400 text-sm font-semibold py-2 rounded-xl">Puntos insuficientes</button>
-                                    @endif -->
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
-                <!-- Promociones especiales -->
                 <div class="max-w-7xl mx-auto mt-12">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
                         <x-flux::icon name="gift" class="w-5 h-5 text-purple-500" />
@@ -114,6 +100,15 @@
                             </div>
                         @endforeach
                     </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto mt-12">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+                        <x-flux::icon name="clock" class="w-5 h-5 text-green-500" />
+                        <span>Historial de Canjes</span>
+                    </h3>
+
+                    @include('modules.clientes.partials.canjes-table', ['canjes' => $canjes])
                 </div>
 
             </div>
