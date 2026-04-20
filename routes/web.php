@@ -16,6 +16,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\DescuentoController;
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -96,6 +97,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{cliente}/edit', [ClienteController::class, 'edit'])->middleware('privilege:clientes.edit')->name('clientes.edit');
         Route::put('/{cliente}', [ClienteController::class, 'update'])->middleware('privilege:clientes.update')->name('clientes.update');
         Route::get('/{cliente}/destroy', [ClienteController::class, 'destroy'])->middleware('privilege:clientes.destroy')->name('clientes.destroy');
+    });
+
+    Route::prefix('descuentos')->group(function () {
+        Route::get('/', [DescuentoController::class, 'index'])->name('descuentos.index');
+        Route::get('/create', [DescuentoController::class, 'create'])->name('descuentos.create');
+        Route::post('/', [DescuentoController::class, 'store'])->name('descuentos.store');
+        Route::get('/{descuento}/edit', [DescuentoController::class, 'edit'])->name('descuentos.edit');
+        Route::put('/{descuento}', [DescuentoController::class, 'update'])->name('descuentos.update');
+        Route::get('/{descuento}/destroy', [DescuentoController::class, 'destroy'])->name('descuentos.destroy');
     });
 
     Route::prefix('categorias')->group(function () {
