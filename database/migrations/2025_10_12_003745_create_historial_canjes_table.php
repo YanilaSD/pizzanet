@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('historial_canjes', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('descuento_id')->constrained('descuentos')->onDelete('cascade');
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->foreignId('descuento_id')->constrained('descuentos')->onDelete('cascade');
+            $table->foreignId('venta_id')->nullable()->constrained('ventas')->nullOnDelete();
             $table->integer('puntos');
             $table->date('fecha');
             $table->tinyInteger('estado')->default(1);
-
-
             $table->timestamps();
         });
     }

@@ -22,4 +22,26 @@ class Cliente extends Model
     {
         return $this->hasMany(Venta::class);
     }
+
+    public function historialCanjes()
+    {
+        return $this->hasMany(HistorialCanje::class);
+    }
+
+    public function getSaldoPuntosAttribute(): int
+    {
+        $ganados  = $this->ventas()->where('estado', 1)->sum('puntos');
+        $canjeados = $this->historialCanjes()->sum('puntos');
+        return $ganados - $canjeados;
+    }
+
+    public static function calcularPuntos(float $total): int
+    {
+        return (int) floor($total / 10);
+    }
+
+    public static function validateClienteAnonimo($cliente): bool
+    {
+        return $cliente->ci === config('app.ci_anonimo');
+    }
 }

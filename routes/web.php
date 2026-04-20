@@ -96,7 +96,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{cliente}/edit', [ClienteController::class, 'edit'])->middleware('privilege:clientes.edit')->name('clientes.edit');
         Route::put('/{cliente}', [ClienteController::class, 'update'])->middleware('privilege:clientes.update')->name('clientes.update');
         Route::get('/{cliente}/destroy', [ClienteController::class, 'destroy'])->middleware('privilege:clientes.destroy')->name('clientes.destroy');
-        Route::post('/{cliente}/canjear', [ClienteController::class, 'canjear'])->middleware('privilege:clientes.canjear')->name('clientes.canjear');
     });
 
     Route::prefix('categorias')->group(function () {

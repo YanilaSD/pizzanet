@@ -14,9 +14,8 @@ class ClienteSeeder extends Seeder
             [
                 'nombre' => 'Sin nombre',
                 'correo' => null,
-                'ci' => 77777777,
-                'celular' => 77777777,
-                'puntos' => 0,
+                'ci' => config('app.ci_anonimo'),
+                'celular' => config('app.ci_anonimo'),
                 'estado' => 1,
                 'created_at' => now(),
                 'updated_at' => now()

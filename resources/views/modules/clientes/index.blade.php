@@ -40,7 +40,6 @@
                     <th scope="col" class="px-6 py-3">#</th>
                     <th scope="col" class="px-6 py-3">Nombre</th>
                     <th scope="col" class="px-6 py-3">Correo</th>
-                    <th scope="col" class="px-6 py-3">Puntos</th>
                     <th scope="col" class="px-6 py-3">Descuento</th>
                     <th scope="col" class="px-6 py-3">Estado</th>
                     <th scope="col" class="px-6 py-3">Acciones</th>
@@ -53,31 +52,25 @@
                             {{ $loop->iteration }}
                         </th>
                         <td class="px-6 py-4">{{ $cliente->nombre ?? 'Sin nombre' }}</td>
-                        <td class="px-6 py-4">{{ $cliente->correo }}</td>
-                        <td class="px-6 py-4"><flux:icon name="star" color="orange" class="inline-block" variant="solid" />{{ $cliente->puntos }}</td>
-                        <td class="px-6 py-4">Bs {{ $cliente->descuento }}</td>
+                        <td class="px-6 py-4">{{ $cliente->correo ?? 'Sin correo' }}</td>
+                        <td class="px-6 py-4">Bs {{ $cliente->getSaldoPuntosAttribute() }}</td>
                         <td class="px-6 py-4">
                             <flux:badge color="{{ $cliente->estado == 1 ? 'green' : 'red' }}">
                                 {{ $cliente->estado == 1 ? 'Activo' : 'Inactivo' }}
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('clientes.edit', $cliente->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="pencil-square" />
-                            </a>
-                            <div class="mr-4">
-                                <flux:modal.trigger
-                                    name="update-points"
-                                    class="cursor-pointer"
-                                    @click="selectedCliente = { id: {{ $cliente->id }}, nombre: '{{ $cliente->nombre }}' }"
-                                >
-                                    <flux:icon name="star" />
-                                </flux:modal.trigger>
-                            </div>
+                            @if ($cliente->ci == config("app.ci_anonimo"))
+                                No disponible
+                            @else
+                                <a href="{{ route('clientes.edit', $cliente->id) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
+                                    <flux:icon name="pencil-square" />
+                                </a>
 
-                             <a href="{{ route('clientes.destroy', $cliente) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="trash" />
-                            </a>
+                                <a href="{{ route('clientes.destroy', $cliente) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
+                                    <flux:icon name="trash" />
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @empty
@@ -89,40 +82,6 @@
                 @endforelse
             </tbody>
         </table>
-
-        <flux:modal name="update-points" class="md:w-96">
-            <form method="POST" :action="'/clientes/' + selectedCliente?.id + '/canjear'">
-                @csrf
-                <div class="space-y-6">
-                    <div>
-                        <flux:heading size="lg">Canjear puntos</flux:heading>
-                        <flux:text class="mt-2">
-                            Cliente: <span x-text="selectedCliente?.nombre"></span>
-                        </flux:text>
-                        <div class="mt-4">
-                            <flux:callout color="amber" icon="information-circle" heading="Cada 40 puntos equivalen a Bs 10 de descuento." />
-                        </div>
-                    </div>
-
-                    <flux:input
-                        name="puntos"
-                        type="number"
-                        label="Puntos a canjear"
-                        placeholder="Cantidad de puntos"
-                        min="20"
-                        step="20"
-                        required
-                    />
-
-                    <div class="flex">
-                        <flux:spacer />
-                        <flux:button type="submit" variant="primary">
-                            Canjear puntos
-                        </flux:button>
-                    </div>
-                </div>
-            </form>
-        </flux:modal>
 
         <div class="p-4 bg-white">
             {{ $clientes->links() }}

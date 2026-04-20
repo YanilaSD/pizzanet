@@ -13,8 +13,6 @@ return new class extends Migration
             $table->string('correo')->nullable()->unique();
             $table->string('ci', 20)->unique();
             $table->string('celular')->unique();
-            $table->unsignedInteger('puntos')->default(0);
-            // $table->decimal('descuento', 8, 2) — eliminado, se calcula desde historial
             $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });

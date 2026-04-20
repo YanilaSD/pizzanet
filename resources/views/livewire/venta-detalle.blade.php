@@ -1,4 +1,5 @@
 <div>
+    {{-- Agregar producto --}}
     <div class="mt-4 flex gap-4 my-4">
         <div class="w-full">
             <label for="producto_id" class="block text-sm font-medium text-gray-700">Producto</label>
@@ -14,7 +15,6 @@
                     </option>
                 @endforeach
             </flux:select>
-
         </div>
 
         <div class="w-full">
@@ -54,7 +54,6 @@
                     <th class="px-6 py-3">Acción</th>
                 </tr>
             </thead>
-
             <tbody class="bg-gray-100 border-b">
                 @forelse($detalle as $p)
                     <tr class="bg-white border-b">
@@ -86,28 +85,28 @@
     </div>
 
     <div class="flex justify-end gap-4 mt-6">
-
-        <flux:button
-            variant="primary" color="red"
-            wire:click="cancelarVenta"
-        >
+        <flux:button variant="primary" color="red" wire:click="cancelarVenta">
             Cancelar Venta
         </flux:button>
 
         <flux:modal.trigger name="method-pay">
-            <flux:button :disabled="count($detalle) === 0">Ir al método de pago</flux:button>
+            <flux:button :disabled="count($detalle) === 0">
+                Ir al método de pago
+            </flux:button>
         </flux:modal.trigger>
     </div>
 
-    <flux:modal name="method-pay" :disabled="count($detalle) === 0" class="md:w-96">
+    {{-- Modal de pago --}}
+    <flux:modal name="method-pay" class="md:w-[480px]">
         <div class="space-y-6">
             <div>
-                <flux:heading size="lg">Confirmar ventas</flux:heading>
-                <flux:text class="mt-2">Ya falta poco para completar tu compra.</flux:text>
+                <flux:heading size="lg">Confirmar venta</flux:heading>
+                <flux:text class="mt-2">Revisa los descuentos y el método de pago antes de confirmar.</flux:text>
             </div>
 
+            {{-- Tipo de pago --}}
             <div class="w-full">
-                <label for="tipo_pago_id" class="block text-sm font-medium text-gray-700">Tipo de pago</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de pago</label>
                 <flux:select
                     name="tipo_pago_id"
                     wire:model="tipo_pago_id"
@@ -116,83 +115,93 @@
                 >
                     <option value="">Selecciona un tipo de pago</option>
                     @foreach ($tipo_pagos as $tipo_pago)
-                        <option value="{{ $tipo_pago->id }}">
-                            {{ $tipo_pago->nombre }}
-                        </option>
+                        <option value="{{ $tipo_pago->id }}">{{ $tipo_pago->nombre }}</option>
                     @endforeach
-
                 </flux:select>
-
             </div>
 
             <div class="w-full">
-                <label for="promocion_id" class="block text-sm font-medium text-gray-700">Descuento</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Promoción</label>
                 <flux:select
                     name="promocion_id"
                     wire:model="promocion_id"
                     wire:change="$refresh"
                     :error="$errors->first('promocion_id')"
                 >
-
-                    @php $tieneOpciones = false; @endphp
-
+                    <option value="">Sin promoción</option>
                     @foreach ($promociones as $promocion)
-                        @if($promocion->descuento == 0)
-                            <option selected value="{{ $promocion->id }}">Ninguna</option>
-                        @else
-                            <option value="{{ $promocion->id }}">
-                                {{ $promocion->nombre }}: Bs {{ $promocion->descuento }}
-                            </option>
-                            @php $tieneOpciones = true; @endphp
-                        @endif
-                    @endforeach
-
-                    @if(session('cliente') && isset(session('cliente')['descuento']) && session('cliente')['descuento'] > 0)
-                        <option value="descuento">
-                            Descuento especial: Bs {{ session('cliente')['descuento'] }}
+                        <option value="{{ $promocion->id }}">
+                            {{ $promocion->nombre }} — {{ $promocion->descuento }}% dto.
+                            (hasta {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }})
                         </option>
-                        @php $tieneOpciones = true; @endphp
-                    @endif
-
-                    @unless($tieneOpciones)
-                        <option value="">Sin promoción activa</option>
-                    @endunless
+                    @endforeach
                 </flux:select>
+            </div>
 
+            @if($puede_canjear)
+                <div class="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                    <div>
+                        <p class="text-sm font-medium text-green-800">Canje de puntos disponible</p>
+                        <p class="text-xs text-green-600 mt-0.5">
+                            El cliente tiene {{ $saldo_puntos }} puntos —
+                            canjear 100 pts = Bs {{ number_format($descuento_canje, 2) }} de descuento
+                        </p>
+                    </div>
+                    <flux:switch wire:model.live="usar_puntos" />
+                </div>
+            @else
+                <div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
+                    <p class="text-sm text-gray-500">
+                        @if(session('cliente'))
+                            El cliente tiene {{ $saldo_puntos }} puntos —
+                            necesita 100 para canjear Bs {{ number_format($descuento_canje, 2) }}
+                        @else
+                            Venta sin cliente — no aplica canje de puntos
+                        @endif
+                    </p>
+                </div>
+            @endif
 
-                <div class="mt-4">
-                    <flux:callout variant="secondary" icon="information-circle" heading="Subtotal de la venta: Bs {{ number_format(collect($detalle)->sum('subtotal'), 2) }}" />
+            {{-- Resumen de totales --}}
+            <div class="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 space-y-1 text-sm">
+                <div class="flex justify-between text-gray-600">
+                    <span>Subtotal</span>
+                    <span>Bs {{ number_format(collect($detalle)->sum('subtotal'), 2) }}</span>
+                </div>
+                @if($descuento > 0)
+                    <div class="flex justify-between text-green-600">
+                        <span>Descuento aplicado</span>
+                        <span>- Bs {{ number_format($descuento, 2) }}</span>
+                    </div>
+                @endif
+                <div class="flex justify-between font-semibold text-gray-900 border-t border-gray-200 pt-2 mt-1">
+                    <span>Total a pagar</span>
+                    <span>Bs {{ number_format($total, 2) }}</span>
                 </div>
             </div>
 
-
-            <div class="flex">
-                <flux:spacer />
-
-                <flux:button
-                    :disabled="!$tipo_pago_id || count($detalle) === 0"
-                    wire:click="confirmarVenta()"
-                    class="w-full"
-                    type="button"
-                    color="green"
-                    variant="primary"
-                >
-                    Completar venta por <strong> Bs {{ number_format($total, 2) }}</strong>
-                </flux:button>
-
-            </div>
+            <flux:button
+                :disabled="!$tipo_pago_id || count($detalle) === 0"
+                wire:click="confirmarVenta()"
+                wire:loading.attr="disabled"
+                wire:target="confirmarVenta"
+                class="w-full"
+                type="button"
+                color="green"
+                variant="primary"
+            >
+                Completar venta — Bs {{ number_format($total, 2) }}
+            </flux:button>
         </div>
     </flux:modal>
-
 </div>
 
-    <script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('validarBoton', () => {
-            console.log('Validando botón Agregar Producto');
-            const producto = document.querySelector('[wire\\:model="producto_id"]').value;
-            const cantidad = document.querySelector('[wire\\:model="cantidad"]').value;
-            document.getElementById('btn-agregar').disabled = !(producto && cantidad > 0);
-        });
+<script>
+document.addEventListener('livewire:init', () => {
+    Livewire.on('validarBoton', () => {
+        const producto = document.querySelector('[wire\\:model="producto_id"]').value;
+        const cantidad = document.querySelector('[wire\\:model="cantidad"]').value;
+        document.getElementById('btn-agregar').disabled = !(producto && cantidad > 0);
     });
+});
 </script>

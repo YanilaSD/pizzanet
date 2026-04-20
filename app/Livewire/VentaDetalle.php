@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -8,24 +7,25 @@ use App\Models\Venta;
 use App\Models\Producto;
 use App\Models\Cliente;
 use App\Models\Promocion;
+use App\Models\Descuento;
 use App\Models\DetalleVenta;
+use App\Models\HistorialCanje;
 use App\Models\TipoPago;
 use App\Mail\SaleDone;
 use Illuminate\Support\Facades\Mail;
 
-
 class VentaDetalle extends Component
 {
-    public $producto_id = '';
-    public $cantidad = 1;
+    public $producto_id  = '';
+    public $cantidad     = 1;
     public $productosDisponibles = [];
 
-    public $promocion_id = null; // para el descuento/promoción seleccionado
-    public $detalle = []; // opcional, para mantener localmente la lista de productos
-    public $descuento = 0;
-    public $total = 0;     // total de la venta
-
-    public $tipo_pago_id = null; // ← AGREGAR ESTO
+    public $promocion_id  = null;
+    public $usar_puntos   = false;
+    public $detalle       = [];
+    public $descuento     = 0;
+    public $total         = 0;
+    public $tipo_pago_id  = null;
 
     public function mount($productos)
     {
@@ -36,30 +36,23 @@ class VentaDetalle extends Component
         }
     }
 
-    public function updatedProductoId()
-    {
-        $this->dispatch('validarBoton');
-    }
-
-    public function updatedCantidad()
-    {
-        $this->dispatch('validarBoton');
-    }
+    public function updatedProductoId()   { $this->dispatch('validarBoton'); }
+    public function updatedCantidad()     { $this->dispatch('validarBoton'); }
 
     public function agregarProducto()
     {
         $this->validate([
             'producto_id' => 'required',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad'    => 'required|integer|min:1',
         ], [
             'producto_id.required' => 'Debe seleccionar un producto primero.',
-            'cantidad.required' => 'Debe ingresar una cantidad.',
-            'cantidad.min' => 'La cantidad debe ser mayor a 0.',
+            'cantidad.required'    => 'Debe ingresar una cantidad.',
+            'cantidad.min'         => 'La cantidad debe ser mayor a 0.',
         ]);
 
         $productoId = intval($this->producto_id);
-        $productos = Session::get('productos_venta');
-        $producto = $this->buscarProducto($productoId);
+        $productos  = Session::get('productos_venta');
+        $producto   = $this->buscarProducto($productoId);
 
         if (!$producto) return;
 
@@ -67,25 +60,21 @@ class VentaDetalle extends Component
             $productos[$productoId]['cantidad'] += $this->cantidad;
         } else {
             $productos[$productoId] = [
-                'id' => $producto->id,
-                'nombre' => $producto->nombre,
-                'cantidad' => $this->cantidad,
-                'precio_unitario' => $producto->precio,
-                'subtotal' => $producto->precio * $this->cantidad,
+                'id'             => $producto->id,
+                'nombre'         => $producto->nombre,
+                'cantidad'       => $this->cantidad,
+                'precio_unitario'=> $producto->precio,
+                'subtotal'       => $producto->precio * $this->cantidad,
             ];
         }
 
-        // Recalcular subtotal
         $productos[$productoId]['subtotal'] =
-            $productos[$productoId]['cantidad'] *
-            $productos[$productoId]['precio_unitario'];
+            $productos[$productoId]['cantidad'] * $productos[$productoId]['precio_unitario'];
 
         Session::put('productos_venta', $productos);
 
-        // Limpia inputs
         $this->producto_id = '';
-        $this->cantidad = 1;
-
+        $this->cantidad    = 1;
         $this->dispatch('validarBoton');
     }
 
@@ -96,9 +85,131 @@ class VentaDetalle extends Component
         Session::put('productos_venta', $productos);
     }
 
-    public function calcularTotal()
+    public function calcularSubtotal(): float
     {
         return collect(Session::get('productos_venta'))->sum('subtotal');
+    }
+
+    public function calcularTotalConDescuento(): float
+    {
+        $subtotal        = $this->calcularSubtotal();
+        $this->descuento = 0;
+
+        // Descuento por promoción
+        if ($this->promocion_id) {
+            $promocion = Promocion::find($this->promocion_id);
+            if ($promocion) {
+                $this->descuento += ($subtotal * $promocion->descuento) / 100;
+            }
+        }
+
+        // Descuento por canje de puntos
+        if ($this->usar_puntos) {
+            $clienteSession = Session::get('cliente');
+            if ($clienteSession) {
+                $cliente        = Cliente::find($clienteSession['id']);
+                $descuentoCanje = Descuento::where('estado', 1)->first();
+                if ($cliente && $descuentoCanje && $cliente->saldo_puntos >= $descuentoCanje->puntos) {
+                    $this->descuento += $descuentoCanje->descuento;
+                } else {
+                    $this->usar_puntos = false;
+                }
+            }
+        }
+
+        return max($subtotal - $this->descuento, 0);
+    }
+
+    public function updatedPromocionId()  { $this->total = $this->calcularTotalConDescuento(); }
+    public function updatedUsarPuntos()   { $this->total = $this->calcularTotalConDescuento(); }
+
+    public function cancelarVenta()
+    {
+        Session::forget(['cliente', 'productos_venta']);
+        $this->detalle       = [];
+        $this->total         = 0;
+        $this->usar_puntos   = false;
+        $this->promocion_id  = null;
+
+        return redirect()->route('ventas.create');
+    }
+
+    public function confirmarVenta()
+    {
+        $clienteSession = Session::get('cliente');
+        $cliente        = $clienteSession ? Cliente::find($clienteSession['id']) : null;
+        $subtotal       = $this->calcularSubtotal();
+        $this->descuento = 0;
+
+        // Descuento por promoción
+        $promocion = $this->promocion_id ? Promocion::find($this->promocion_id) : null;
+        if ($promocion) {
+            $this->descuento += ($subtotal * $promocion->descuento) / 100;
+            $promocion->decrement('limite_uso');
+        }
+
+        // Descuento por canje de puntos
+        $descuentoCanje = null;
+        if ($this->usar_puntos && $cliente) {
+            $descuentoCanje = Descuento::where('estado', 1)->first();
+            if ($descuentoCanje && $cliente->saldo_puntos >= $descuentoCanje->puntos) {
+                $this->descuento += $descuentoCanje->descuento;
+            } else {
+                $descuentoCanje = null;
+            }
+        }
+
+        $cliente_anonimo = Cliente::validateClienteAnonimo($cliente);
+        $total  = max($subtotal - $this->descuento, 0);
+
+        $puntos = Cliente::calcularPuntos($total);
+
+        $venta = Venta::create([
+            'usuario_id'   => auth()->id(),
+            'cliente_id'   => $cliente?->id,
+            'tipo_pago_id' => $this->tipo_pago_id,
+            'promocion_id' => $promocion?->id,
+            'puntos'       => $cliente_anonimo ? 0 : $puntos,
+            'subtotal'     => $subtotal,
+            'descuento'    => $this->descuento,
+            'total'        => $total,
+            'estado'       => 1,
+        ]);
+
+        if ($descuentoCanje && $cliente) {
+            HistorialCanje::create([
+                'cliente_id'   => $cliente->id,
+                'descuento_id' => $descuentoCanje->id,
+                'venta_id'     => $venta->id,
+                'puntos'       => $descuentoCanje->puntos,
+                'fecha'        => now()->toDateString(),
+                'estado'       => 1,
+            ]);
+        }
+
+
+        foreach ($this->detalle as $producto) {
+            DetalleVenta::create([
+                'venta_id'        => $venta->id,
+                'producto_id'     => $producto['id'],
+                'cantidad'        => $producto['cantidad'],
+                'precio_unitario' => $producto['precio_unitario'],
+                'subtotal'        => $producto['subtotal'],
+            ]);
+        }
+
+        if ($cliente && !empty($cliente->correo) && config('app.send_mail')) {
+            Mail::to($cliente->correo)->send(new SaleDone($venta));
+        }
+
+        Session::forget(['productos_venta', 'cliente']);
+        $this->detalle      = [];
+        $this->tipo_pago_id = null;
+        $this->promocion_id = null;
+        $this->usar_puntos  = false;
+        $this->total        = 0;
+
+        return redirect()->route('ventas.index')->with('success', 'Venta registrada correctamente.');
     }
 
     private function buscarProducto($id)
@@ -106,140 +217,23 @@ class VentaDetalle extends Component
         return collect($this->productosDisponibles)->firstWhere('id', $id);
     }
 
-    public function updatedPromocionId()
-    {
-        $this->detalle = Session::get('productos_venta', []);
-        $this->total = $this->calcularTotalConDescuento();
-    }
-
-
-    public function cancelarVenta()
-    {
-        Session::forget('cliente');
-        Session::forget('productos_venta');
-        $this->detalle = [];
-        $this->total = 0;
-
-        return redirect()->route('ventas.create');
-    }
-
-    public function confirmarVenta()
-    {
-        // Validación básica
-        // if (count($this->detalle) === 0) {
-        //     $this->dispatch('alerta', 'Debes agregar al menos un producto.');
-        //     return;
-        // }
-
-        $clienteSession = Session::get('cliente');
-        $cliente_id = $clienteSession['id'] ?? null;
-        // Calcular subtotal y descuento
-        $subtotal = $this->calcularTotal();
-        $descuento = 0;
-        
-        if ($this->promocion_id) {
-            if ($this->promocion_id === 'descuento' && isset($clienteSession['descuento'])) {
-                $descuento = $clienteSession['descuento'];
-            } else {
-                $promocion = Promocion::find($this->promocion_id);
-                $descuento = $promocion ? $promocion->descuento : 0;
-            }
-        }
-        
-        $total = max($subtotal - $descuento, 0);
-
-        // Guardar la venta
-        $venta = Venta::create([
-            'usuario_id' => auth()->id(),
-            'cliente_id' => $cliente_id,
-            'tipo_pago_id' => $this->tipo_pago_id,
-            'promocion_id' => $this->promocion_id === 'descuento' || $this->promocion_id === '' ? 1 : $this->promocion_id,
-            'puntos' => 0,
-            'fecha' => now(),
-            'subtotal' => $subtotal,
-            'descuento' => $descuento,
-            'total' => $total,
-            'estado' => 1,
-        ]);
-
-        // Calcular puntos ganados
-        $puntos = floor($total / 20);
-
-        // Actualizar puntos y descuento del cliente
-        if ($cliente_id) {
-            $cliente = Cliente::find($cliente_id);
-            if ($cliente) {
-                $cliente->puntos += $puntos;
-                $cliente->descuento = max(($cliente->descuento ?? 0) - $descuento, 0);
-                $cliente->save();
-            }
-        }
-
-        // Guardar detalles de venta
-        foreach ($this->detalle as $producto) {
-            DetalleVenta::create([
-                'venta_id' => $venta->id,
-                'producto_id' => $producto['id'],
-                'cantidad' => $producto['cantidad'],
-                'precio_unitario' => $producto['precio_unitario'],
-                'subtotal' => $producto['subtotal'],
-            ]);
-        }
-        Mail::to($clienteSession['correo'])->send(new SaleDone($venta));
-
-        // Limpiar sesión y resetear variables
-        Session::forget('productos_venta');
-        Session::forget('cliente');
-        $this->detalle = [];
-        $this->tipo_pago_id = null;
-        $this->promocion_id = null;
-        $this->total = 0;
-
-        return redirect()
-            ->route('ventas.index')
-            ->with('success', 'Detalle de venta creado correctamente.');
-    }
-
-    public function calcularTotalConDescuento()
-    {
-        $total = collect(Session::get('productos_venta', []))->sum('subtotal');
-
-        // 🔹 Si no hay promoción → no tocar el total
-        if (!$this->promocion_id) {
-            return $total;
-        }
-
-        // 🔹 Si la opción es "descuento" de cliente (tu caso especial)
-        if ($this->promocion_id === 'descuento'
-            && session('cliente')
-            && isset(session('cliente')['descuento'])
-        ) {
-            $this->descuento = session('cliente')['descuento'];
-            $total -= session('cliente')['descuento'];
-            return max($total, 0);
-        }
-
-        // 🔹 Si es una promoción normal
-        $promocion = \App\Models\Promocion::find($this->promocion_id);
-        if ($promocion) {
-            $this->descuento = $promocion->descuento;
-            $total -= $promocion->descuento;
-        }
-
-        return max($total, 0);
-    }
-
     public function render()
     {
         $this->detalle = Session::get('productos_venta', []);
-        $this->total = $this->calcularTotalConDescuento();
+        $this->total   = $this->calcularTotalConDescuento();
+
+        $clienteSession = Session::get('cliente');
+        $cliente        = $clienteSession ? Cliente::find($clienteSession['id']) : null;
+        $descuentoCanje = Descuento::where('estado', 1)->first();
 
         return view('livewire.venta-detalle', [
-            'detalle' => $this->detalle,
-            'total' => $this->total,
-            'tipo_pagos' => \App\Models\TipoPago::where('estado', 1)->get(),
-            'promociones' => \App\Models\Promocion::where('estado', 1)->get(),
+            'detalle'        => $this->detalle,
+            'total'          => $this->total,
+            'tipo_pagos'     => TipoPago::where('estado', 1)->get(),
+            'promociones'    => Promocion::where('estado', 1)->get(),
+            'saldo_puntos'   => $cliente?->saldo_puntos ?? 0,
+            'puede_canjear'  => $cliente && $descuentoCanje && $cliente->saldo_puntos >= $descuentoCanje->puntos,
+            'descuento_canje'=> $descuentoCanje?->descuento ?? 0,
         ]);
     }
-
 }
