@@ -6,23 +6,19 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class CardHeader extends Component
+class DataTable extends Component
 {
     public $title;
     public $description;
-    public $buttonText;
-    public $buttonLink;
 
-    public function __construct($title, $description = null, $buttonText = null, $buttonLink = null)
+    public function __construct($title, $description = null)
     {
         $this->title = $title;
         $this->description = $description;
-        $this->buttonText = $buttonText;
-        $this->buttonLink = $buttonLink;
     }
 
     public function render(): View|Closure|string
     {
-        return view('components.card-header');
+        return view('components.data-table');
     }
 }
