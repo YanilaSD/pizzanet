@@ -14,84 +14,73 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
-            <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                <div class="row justify-between flex items-center">
-                    <div>
-                        Registro de Roles
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">
-                            Listado de los roles registrados
-                        </p>
-                    </div>
+    <x-data-table 
+        title="Registro de Roles"
+        description="Listado de los roles registrados"
+    >
+        <x-slot name="actions">
+            <form method="GET" action="{{ route('roles.index') }}">
+                <flux:input
+                    name="search"
+                    icon="magnifying-glass"
+                    placeholder="Buscar rol"
+                    value="{{ request('search') }}"
+                />
+            </form>
+        </x-slot>
 
-                    <form method="GET" action="{{ route('roles.index') }}" class="flex">
-                        <flux:input
-                            name="search"
-                            icon="magnifying-glass"
-                            placeholder="Buscar rol"
-                            value="{{ request('search') }}"
-                        />
-                    </form>
-                </div>
-            </caption>
+        <x-slot name="head">
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </x-slot>
 
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">#</th>
-                    <th scope="col" class="px-6 py-3">Nombre</th>
-                    <th scope="col" class="px-6 py-3">Descripción</th>
-                    <th scope="col" class="px-6 py-3">Estado</th>
-                    <th scope="col" class="px-6 py-3">Acciones</th>
+        <x-slot name="body">
+            @forelse ($roles as $rol)
+                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                    <td class="px-6 py-4 text-gray-500">
+                        {{ $loop->iteration }}
+                    </td>
+
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        {{ $rol->nombre }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        {{ $rol->descripcion }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <flux:badge color="{{ $rol->estado == '1' ? 'green' : 'red' }}">
+                            {{ $rol->estado == '1' ? 'Activo' : 'Inactivo' }}
+                        </flux:badge>
+                    </td>
+
+                    <td class="px-6 py-4 flex justify-end gap-2">
+                        <a href="{{ route('roles.edit', $rol->id) }}"
+                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                            <flux:icon name="pencil-square" />
+                        </a>
+
+                        <a href="{{ route('roles.toggle', $rol->id) }}"
+                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                            <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
+                        </a>
+                    </td>
                 </tr>
-            </thead>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center py-8 text-gray-400">
+                        No se encontraron roles registrados.
+                    </td>
+                </tr>
+            @endforelse
+        </x-slot>
 
-            <tbody>
-                @forelse ($roles as $rol)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <th scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->iteration }}
-                        </th>
-
-                        <td class="px-6 py-4">
-                            {{ $rol->nombre }}
-                        </td>
-
-                        <td class="px-6 py-4">
-                            {{ $rol->descripcion }}
-                        </td>
-
-                        <td class="px-6 py-4">
-                            <flux:badge color="{{ $rol->estado == '1' ? 'green' : 'red' }}">
-                                {{ $rol->estado == '1' ? 'Activo' : 'Inactivo' }}
-                            </flux:badge>
-                        </td>
-
-                        <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('roles.edit', $rol->id) }}"
-                               class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="pencil-square" />
-                            </a>
-
-                            <a href="{{ route('roles.toggle', $rol->id) }}"
-                               class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
-                                <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center py-6 text-gray-500 dark:text-gray-400">
-                            No se encontraron roles registrados.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-        <div class="p-4 bg-white">
+        <x-slot name="pagination">
             {{ $roles->links() }}
-        </div>
-    </div>
+        </x-slot>
+    </x-data-table>
 </x-layouts.app>

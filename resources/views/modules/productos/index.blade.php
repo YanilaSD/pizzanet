@@ -13,78 +13,76 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
-            <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                <div class="row justify-between flex items-center">
-                    <div>
-                        Registro de Productos
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">Listado de productos registrados</p>
-                    </div>
-                    <form method="GET" action="{{ route('productos.index') }}" class="flex">
-                        <flux:input name="search" icon="magnifying-glass" placeholder="Buscar producto"
-                            value="{{ request('search') }}" />
-                    </form>
-                </div>
-            </caption>
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">#</th>
-                    <th scope="col" class="px-6 py-3">Imagen</th>
-                    <th scope="col" class="px-6 py-3">Nombre</th>
-                    <th scope="col" class="px-6 py-3">Categoría</th>
-                    <th scope="col" class="px-6 py-3">Precio</th>
-                    <th scope="col" class="px-6 py-3">Estado</th>
-                    <th scope="col" class="px-6 py-3">Acciones</th>
+    <x-data-table 
+        title="Registro de Productos"
+        description="Listado de productos registrados"
+    >
+        <x-slot name="actions">
+            <form method="GET" action="{{ route('productos.index') }}">
+                <flux:input name="search" icon="magnifying-glass" placeholder="Buscar producto" value="{{ request('search') }}" />
+            </form>
+        </x-slot>
+
+        <x-slot name="head">
+            <th>#</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </x-slot>
+
+        <x-slot name="body">
+            @forelse ($productos as $producto)
+                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                    <td class="px-6 py-4 text-gray-500">
+                        {{ $loop->iteration }}
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($producto->imagen)
+                            <img src="{{ $producto->imagenUrl }}" alt="Imagen de {{ $producto->nombre }}" class="w-16 h-16 object-cover rounded-md">
+                        @else
+                            <span class="text-gray-400">No disponible</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        {{ $producto->nombre }}
+                    </td>
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        {{ $producto->categoria->nombre }}
+                    </td>
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        Bs {{ number_format($producto->precio, 2) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <flux:badge color="{{ $producto->estado == 1 ? 'green' : 'red' }}">
+                            {{ $producto->estado == 1 ? 'Activo' : 'Inactivo' }}
+                        </flux:badge>
+                    </td>
+                    <td class="px-6 py-4 flex justify-end gap-2">
+                        <a href="{{ route('productos.edit', $producto->id) }}"
+                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                            <flux:icon name="pencil-square" />
+                        </a>
+
+                        <a href="{{ route('productos.toggle', $producto) }}"
+                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                            <flux:icon name="{{ $producto->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse ($productos as $producto)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->iteration }}
-                        </th>
-                        <td class="px-6 py-4">
-                            @if($producto->imagen)
-                                <img src="{{ $producto->imagenUrl }}" alt="Imagen de {{ $producto->nombre }}" class="w-16 h-16 object-cover rounded-md">
-                            @else
-                                <span>No disponible</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">{{ $producto->nombre }}</td>
-                        <td class="px-6 py-4">{{ $producto->categoria->nombre }}</td>
-                        <td class="px-6 py-4">Bs {{ number_format($producto->precio, 2) }}</td>
-                        <td class="px-6 py-4">
-                            <flux:badge color="{{ $producto->estado == 1 ? 'green' : 'red' }}">
-                                {{ $producto->estado == 1 ? 'Activo' : 'Inactivo' }}
-                            </flux:badge>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2.5">
-                                <a href="{{ route('productos.edit', $producto->id) }}"
-                                class="text-gray-500 dark:text-white hover:text-orange-500">
-                                    <flux:icon name="pencil-square" />
-                                </a>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center py-8 text-gray-400">
+                        No se encontraron productos registrados.
+                    </td>
+                </tr>
+            @endforelse
+        </x-slot>
 
-                                <a href="{{ route('productos.toggle', $producto) }}"
-                                class="text-gray-500 dark:text-white hover:text-red-500">
-                                    <flux:icon name="{{ $producto->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-6 text-gray-500 dark:text-gray-400">
-                            No se encontraron productos registrados.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-        <div class="p-4 bg-white">
+        <x-slot name="pagination">
             {{ $productos->links() }}
-        </div>
-    </div>
+        </x-slot>
+    </x-data-table>
 </x-layouts.app>

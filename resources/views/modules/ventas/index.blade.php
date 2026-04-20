@@ -91,122 +91,105 @@
     </div>
 
     {{-- Tabla --}}
-    <div class="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div class="border-b border-gray-200 p-5">
-            <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-900">Registro de Ventas</h2>
-                    <p class="mt-1 text-sm text-gray-600">
-                        Historial de todas las ventas realizadas con promociones aplicadas.
-                    </p>
-                </div>
+    <x-data-table 
+        title="Registro de Ventas"
+        description="Historial de todas las ventas realizadas con promociones aplicadas."
+    >
+        <x-slot name="head">
+            <th>ID Venta</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Subtotal</th>
+            <th>Descuento</th>
+            <th>Total</th>
+            <th>Método de Pago</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </x-slot>
 
-                {{-- (Opcional) espacio para filtros/búsqueda --}}
-                {{-- <div class="mt-3 sm:mt-0">...</div> --}}
-            </div>
-        </div>
+        <x-slot name="body">
+            @forelse ($ventas as $venta)
+                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition whitespace-nowrap">
+                        #{{ $venta->id }}
+                    </td>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-                <thead class="bg-gray-50 text-xs uppercase text-gray-600">
-                    <tr>
-                        <th class="px-6 py-3">ID Venta</th>
-                        <th class="px-6 py-3">Cliente</th>
-                        <th class="px-6 py-3">Fecha</th>
-                        <th class="px-6 py-3">Subtotal</th>
-                        <th class="px-6 py-3">Descuento</th>
-                        <th class="px-6 py-3">Total</th>
-                        <th class="px-6 py-3">Método de Pago</th>
-                        <th class="px-6 py-3">Estado</th>
-                        <th class="px-6 py-3 text-right">Acciones</th>
-                    </tr>
-                </thead>
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        {{ $venta->cliente->nombre ?? 'Sin nombre' }}
+                    </td>
 
-                <tbody class="divide-y divide-gray-100">
-                    @forelse ($ventas as $venta)
-                        <tr class="transition hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                #{{ $venta->id }}
-                            </td>
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
+                    </td>
 
-                            <td class="px-6 py-4 text-gray-700">
-                                {{ $venta->cliente->nombre ?? 'Sin nombre' }}
-                            </td>
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        Bs {{ number_format($venta->subtotal, 2) }}
+                    </td>
 
-                            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-                                {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
-                            </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="font-medium text-red-600">
+                            - Bs {{ number_format($venta->descuento, 2) }}
+                        </span>
+                    </td>
 
-                            <td class="px-6 py-4 text-gray-700 whitespace-nowrap">
-                                Bs {{ number_format($venta->subtotal, 2) }}
-                            </td>
+                    <td class="px-6 py-4 font-semibold text-gray-800 group-hover:text-gray-900 transition whitespace-nowrap">
+                        Bs {{ number_format($venta->total, 2) }}
+                    </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-medium text-red-600">
-                                    - Bs {{ number_format($venta->descuento, 2) }}
-                                </span>
-                            </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <flux:badge color="lime">
+                            {{ $venta->tipoPago->nombre ?? 'N/D' }}
+                        </flux:badge>
+                    </td>
 
-                            <td class="px-6 py-4 text-gray-900 font-semibold whitespace-nowrap">
-                                Bs {{ number_format($venta->total, 2) }}
-                            </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
+                            {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
+                        </flux:badge>
+                    </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <flux:badge color="lime">
-                                    {{ $venta->tipoPago->nombre ?? 'N/D' }}
-                                </flux:badge>
-                            </td>
+                    <td class="px-6 py-4">
+                        <div class="flex justify-end gap-2">
+                            <a
+                                href="{{ route('ventas.show', $venta) }}"
+                                class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition"
+                                title="Ver"
+                                aria-label="Ver venta #{{ $venta->id }}"
+                            >
+                                <flux:icon name="eye" />
+                            </a>
 
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
-                                    {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
-                                </flux:badge>
-                            </td>
+                            <form
+                                action="{{ route('ventas.destroy', $venta) }}"
+                                method="POST"
+                                onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
+                            >
+                                @csrf
+                                @method('DELETE')
 
-                            <td class="px-6 py-4">
-                                <div class="flex justify-end gap-2">
-                                    <a
-                                        href="{{ route('ventas.show', $venta) }}"
-                                        class="inline-flex items-center rounded-lg p-2 text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                        title="Ver"
-                                        aria-label="Ver venta #{{ $venta->id }}"
-                                    >
-                                        <flux:icon name="eye" />
-                                    </a>
+                                <button
+                                    type="submit"
+                                    class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition"
+                                    title="Eliminar"
+                                    aria-label="Eliminar venta #{{ $venta->id }}"
+                                >
+                                    <flux:icon name="trash" />
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="9" class="text-center py-8 text-gray-400">
+                        No se han registrado ventas aún.
+                    </td>
+                </tr>
+            @endforelse
+        </x-slot>
 
-                                    <form
-                                        action="{{ route('ventas.destroy', $venta) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button
-                                            type="submit"
-                                            class="inline-flex items-center rounded-lg p-2 text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200"
-                                            title="Eliminar"
-                                            aria-label="Eliminar venta #{{ $venta->id }}"
-                                        >
-                                            <flux:icon name="trash" />
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
-                                No se han registrado ventas aún.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="border-t border-gray-200 bg-white p-4">
+        <x-slot name="pagination">
             {{ $ventas->links() }}
-        </div>
-    </div>
+        </x-slot>
+    </x-data-table>
 </x-layouts.app>

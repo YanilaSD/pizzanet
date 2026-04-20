@@ -13,71 +13,58 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
-        <table class="w-full bg-white text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                <div class="flex justify-between items-center">
-                    <div>
-                        Tipos de Pago
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400 mb-2.5">Listado de los tipos de pago registrados</p>
-                    </div>
-                </div>
-            </caption>
+    <x-data-table 
+        title="Tipos de Pago"
+        description="Listado de los tipos de pago registrados"
+    >
+        <x-slot name="head">
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </x-slot>
 
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nombre
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Estado
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Acciones
-                    </th>
+        <x-slot name="body">
+            @forelse ($tipo_pagos as $tipo_pago)
+                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                    <td class="px-6 py-4 text-gray-500">
+                        {{ $loop->index + 1 }}
+                    </td>
+
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        {{ $tipo_pago->nombre }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <flux:badge color="{{ $tipo_pago->estado == 1 ? 'green' : 'red' }}">
+                            {{ $tipo_pago->estado == '1' ? 'Activo' : 'Inactivo' }}
+                        </flux:badge>
+                    </td>
+
+                    <td class="px-6 py-4 flex justify-end gap-2">
+                        <a href="{{ route('tipo_pagos.edit', $tipo_pago) }}"
+                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                            <flux:icon name="pencil-square" />
+                        </a>
+
+                        <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
+                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                            <flux:icon name="{{ $tipo_pago->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
+                        </a>
+                    </td>
                 </tr>
-            </thead>
+            @empty
+                <tr>
+                    <td colspan="4" class="text-center py-8 text-gray-400">
+                        No hay tipos de pago registrados en el sistema.
+                    </td>
+                </tr>
+            @endforelse
+        </x-slot>
 
-            <tbody>
-                @forelse ($tipo_pagos as $tipo_pago)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->index + 1 }}
-                        </th>
-                        <td class="px-6 py-4">
-                            {{ $tipo_pago->nombre }}
-                        </td>
-                        <td class="px-6 py-4">
-                            <flux:badge color="{{ $tipo_pago->estado == 1 ? 'green' : 'red' }}">
-                                {{ $tipo_pago->estado == '1' ? 'Activo' : 'Inactivo' }}
-                            </flux:badge>
-                        </td>
-                        <td class="px-6 py-4 text-right flex gap-2.5">
-                            <a href="{{ route('tipo_pagos.edit', $tipo_pago) }}" class="dark:text-white text-gray-500 hover:underline mr-4">
-                                <flux:icon name="pencil-square" />
-                            </a>
-                            <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
-                                class="font-medium dark:text-white text-gray-500 hover:underline flex justify-center justify-items-center gap-1">
-                                <flux:icon name="{{ $tipo_pago->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                            No hay tipos de pago registrados en el sistema.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-         <div class="p-4 bg-white">
+        <x-slot name="pagination">
             {{ $tipo_pagos->links() }}
-        </div>
-    </div>
+        </x-slot>
+    </x-data-table>
 
 </x-layouts.app>

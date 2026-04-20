@@ -14,110 +14,98 @@
         </div>
     @endif
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
-        <table class="w-full bg-white text-sm text-left text-gray-500 dark:text-gray-400">
-            <caption class="p-5 text-lg font-semibold text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        Registro de Promociones
-                        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Listado de promociones registradas
-                        </p>
-                    </div>
+    <x-data-table 
+        title="Registro de Promociones"
+        description="Listado de promociones registradas"
+    >
+        <x-slot name="actions">
+            <form method="GET" action="{{ route('promociones.index') }}">
+                <flux:input
+                    name="search"
+                    icon="magnifying-glass"
+                    placeholder="Buscar promoción"
+                    value="{{ request('search') }}"
+                />
+            </form>
+        </x-slot>
 
-                    <form method="GET" action="{{ route('promociones.index') }}" class="w-full sm:w-auto">
-                        <flux:input
-                            name="search"
-                            icon="magnifying-glass"
-                            placeholder="Buscar promoción"
-                            value="{{ request('search') }}"
-                        />
-                    </form>
-                </div>
-            </caption>
+        <x-slot name="head">
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Festividad</th>
+            <th>Descuento</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Compra mínima</th>
+            <th>Límite de uso</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </x-slot>
 
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">#</th>
-                    <th scope="col" class="px-6 py-3">Nombre</th>
-                    <th scope="col" class="px-6 py-3">Festividad</th>
-                    <th scope="col" class="px-6 py-3">Descuento</th>
-                    <th scope="col" class="px-6 py-3">Inicio</th>
-                    <th scope="col" class="px-6 py-3">Fin</th>
-                    <th scope="col" class="px-6 py-3">Compra mínima</th>
-                    <th scope="col" class="px-6 py-3">Límite de uso</th>
-                    <th scope="col" class="px-6 py-3">Estado</th>
-                    <th scope="col" class="px-6 py-3 text-center">Acciones</th>
+        <x-slot name="body">
+            @forelse ($promociones as $promocion)
+                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                    <td class="px-6 py-4 text-gray-500">
+                        {{ $loop->iteration }}
+                    </td>
+
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        {{ $promocion->nombre }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ $promocion->festividad->nombre }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ rtrim(rtrim(number_format($promocion->descuento, 2), '0'), '.') }}%
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($promocion->fecha_inicio)->format('d/m/Y') }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        Bs {{ number_format($promocion->compra_minima, 2) }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                        {{ $promocion->limite_uso }}
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <flux:badge color="{{ $promocion->estado == '1' ? 'green' : 'red' }}">
+                            {{ $promocion->estado == '1' ? 'Activo' : 'Inactivo' }}
+                        </flux:badge>
+                    </td>
+
+                    <td class="px-6 py-4 flex justify-end gap-2">
+                        <a href="{{ route('promociones.edit', $promocion->id) }}"
+                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                            <flux:icon name="pencil-square" />
+                        </a>
+
+                        <a href="{{ route('promociones.destroy', $promocion) }}"
+                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                            <flux:icon name="trash" />
+                        </a>
+                    </td>
                 </tr>
-            </thead>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center py-8 text-gray-400">
+                        No se encontraron promociones registradas.
+                    </td>
+                </tr>
+            @endforelse
+        </x-slot>
 
-            <tbody>
-                @forelse ($promociones as $promocion)
-                    <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/40">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                            {{ $loop->iteration }}
-                        </th>
-
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">
-                            {{ $promocion->nombre }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ $promocion->festividad->nombre }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ rtrim(rtrim(number_format($promocion->descuento, 2), '0'), '.') }}%
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ \Carbon\Carbon::parse($promocion->fecha_inicio)->format('d/m/Y') }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            Bs {{ number_format($promocion->compra_minima, 2) }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {{ $promocion->limite_uso }}
-                        </td>
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <flux:badge color="{{ $promocion->estado == '1' ? 'green' : 'red' }}">
-                                {{ $promocion->estado == '1' ? 'Activo' : 'Inactivo' }}
-                            </flux:badge>
-                        </td>
-
-                        <td class="px-6 py-4">
-                            <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('promociones.edit', $promocion->id) }}"
-                                   class="text-gray-500 dark:text-white hover:text-orange-500">
-                                    <flux:icon name="pencil-square" />
-                                </a>
-
-                                <a href="{{ route('promociones.destroy', $promocion) }}"
-                                   class="text-gray-500 dark:text-white hover:text-red-500">
-                                    <flux:icon name="trash" />
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="10" class="text-center py-8 text-gray-500 dark:text-gray-400">
-                            No se encontraron promociones registradas.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-
-        <div class="p-4 bg-white dark:bg-gray-800">
+        <x-slot name="pagination">
             {{ $promociones->links() }}
-        </div>
-    </div>
+        </x-slot>
+    </x-data-table>
 </x-layouts.app>
