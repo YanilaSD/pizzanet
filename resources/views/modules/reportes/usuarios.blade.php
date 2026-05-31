@@ -1,25 +1,21 @@
 <x-layouts.app>
 
     <div class="p-6">
-
-        <!-- Título -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
                 Reporte de Usuarios
             </h1>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-400">
                 Consulta y analiza los usuarios del sistema.
             </p>
         </div>
 
-        <!-- Filtros -->
        <form method="GET"
       class="bg-white rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
-    <!-- Estado (izquierda) -->
     <div>
         <label class="text-sm text-gray-600">Estado</label>
-        <flux:select name="estado" placeholder="Seleccionar estado..." required>
+        <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
             <flux:select.option value="">Todos</flux:select.option>
             <flux:select.option value="1" :selected="request('estado') === '1'">
                 Activo
@@ -30,22 +26,19 @@
         </flux:select>
     </div>
 
-    <!-- Botones (derecha) -->
     <div class="flex items-end justify-end gap-2">
 
-        <!-- Filtrar -->
         <button 
             type="submit"
-            class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+            class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
         >
             Filtrar
         </button>
 
-        <!-- PDF -->
         <button 
             type="submit"
             formaction="{{ route('reportes.usuarios.pdf') }}"
-            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2 cursor-pointer"
         >
             <svg xmlns="http://www.w3.org/2000/svg" 
                  class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +53,6 @@
 </form>
 
 
-        <!-- Tarjetas resumen -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
             <div class="bg-white rounded-2xl shadow p-5">
@@ -86,7 +78,6 @@
 
         </div>
 
-        <!-- Tabla -->
         <div class="bg-white rounded-2xl shadow overflow-hidden">
 
             <table class="w-full text-sm">
@@ -102,7 +93,7 @@
 
                 <tbody>
                     @forelse($usuarios as $u)
-                        <tr class="border-t hover:bg-gray-50">
+                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400">
                             <td class="p-4">#{{ $u->id }}</td>
 
                             <td class="p-4">

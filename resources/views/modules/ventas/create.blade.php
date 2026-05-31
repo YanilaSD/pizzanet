@@ -41,8 +41,8 @@
         @endif
 
         <div class="grid grid-cols-5 gap-6 my-4">
-            <div class="col-span-2">
-                <label for="ci" class="block text-sm font-medium text-gray-700">Cliente</label>
+            <div class="col-span-3 ">
+                <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-gray-400 ">Cliente</label>
                 <flux:input.group>
                     <flux:input name="ci" placeholder="Ingresa CI del cliente" />
                     <flux:button type="submit" name="action" value="buscar" icon="magnifying-glass">

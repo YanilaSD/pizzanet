@@ -55,6 +55,22 @@
     @apply  !mb-0 !leading-tight;
 }
 
+[data-flux-select-native] {
+    background-color: #fff;
+    border-color: #d1d5db;
+}
+
+[data-flux-select-native]:focus,
+[data-flux-select-native]:focus-visible {
+    border-color: #ff8904;
+    outline: none;
+    box-shadow: 0 0 0 2px #ff8904 !important;
+}
+
+[data-flux-select-native]:active {
+    border-color: #ff8904;
+}
+
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
@@ -88,4 +104,8 @@ button[data-flux-profile] svg {
 
 [data-slot="avatar"] {
     background-color:  rgb(161, 44, 1) !important;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
 }

@@ -1,25 +1,21 @@
 <x-layouts.app>
 
     <div class="p-6">
-
-        <!-- Título -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
                 Reporte de Productos
             </h1>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-400">
                 Consulta y analiza los productos del sistema.
             </p>
         </div>
 
-        <!-- Filtros -->
         <form method="GET"
             class="bg-white rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-            <!-- Fila 1: Estado + Nombre -->
             <div>
                 <label class="text-sm text-gray-600">Estado</label>
-                <flux:select name="estado" placeholder="Seleccionar estado...">
+                <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
                     <flux:select.option value="">Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
                         Activo
@@ -37,11 +33,10 @@
                     name="nombre"
                     placeholder="Buscar por nombre..."
                     value="{{ request('nombre') }}"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 >
             </div>
 
-            <!-- Fila 2: Precio mínimo + Precio máximo -->
             <div>
                 <label class="text-sm text-gray-600">Precio mínimo</label>
                 <input
@@ -49,7 +44,7 @@
                     name="precio_min"
                     placeholder="0.00"
                     value="{{ request('precio_min') }}"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 >
             </div>
 
@@ -60,22 +55,19 @@
                     name="precio_max"
                     placeholder="0.00"
                     value="{{ request('precio_max') }}"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 >
             </div>
 
-            <!-- Botones -->
             <div class="md:col-span-4 flex justify-end gap-2">
 
-                <!-- Filtrar -->
                 <button
                     type="submit"
-                    class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+                    class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
                 >
                     Filtrar
                 </button>
 
-                <!-- PDF -->
                 <a
                     href="{{ route('reportes.productos.pdf', request()->query()) }}"
                     class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2"
@@ -92,7 +84,6 @@
 
         </form>
 
-        <!-- Tarjetas resumen -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
             <div class="bg-white rounded-2xl shadow p-5">
@@ -117,8 +108,6 @@
             </div>
 
         </div>
-
-        <!-- Tabla -->
         <div class="bg-white rounded-2xl shadow overflow-hidden">
 
             <table class="w-full text-sm">
@@ -133,16 +122,12 @@
 
                 <tbody>
                     @forelse($productos as $producto)
-                        <tr class="border-t hover:bg-gray-50">
-
+                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400 group">
                             <td class="p-4">{{ $producto->nombre }}</td>
-
                             <td class="p-4">{{ $producto->categoria->nombre ?? '-' }}</td>
-
-                            <td class="p-4">{{ $producto->precio }}</td>
-
+                            <td class="p-4">Bs {{ number_format($producto->precio, 2) }}</td>
                             <td class="p-4">
-                                @if($producto->estado)
+                                @if($producto->estado == 1)
                                     <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-lg">
                                         Activo
                                     </span>
@@ -152,7 +137,6 @@
                                     </span>
                                 @endif
                             </td>
-
                         </tr>
                     @empty
                         <tr>
@@ -163,11 +147,8 @@
                         </tr>
                     @endforelse
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
 </x-layouts.app>

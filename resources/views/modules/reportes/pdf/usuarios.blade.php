@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <title>Reporte de Usuarios</title>
@@ -14,129 +14,121 @@
         .header {
             width: 100%;
             margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .header-left {
+            float: left;
+            width: 60%;
+        }
+
+        .header-right {
+            float: right;
+            width: 35%;
+            text-align: right;
+            font-size: 11px;
+            color: #555;
         }
 
         .header h1 {
             margin: 0;
-            font-size: 20px;
+            font-size: 24px;
             color: #2c3e50;
         }
 
         .header p {
-            margin: 2px 0;
-            font-size: 12px;
-            color: #666;
+            margin: 3px 0 0;
+            color: #777;
         }
 
-        .info {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f4f6f8;
-            border-radius: 6px;
+        .clearfix {
+            clear: both;
         }
 
-        .info span {
-            display: inline-block;
-            margin-right: 15px;
-        }
-
-        .summary {
-            margin-bottom: 15px;
-        }
-
-        .summary div {
-            display: inline-block;
-            width: 32%;
-            background: #f9fafb;
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .summary strong {
-            display: block;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        table {
+        .table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        th {
-            background: #2c3e50;
+        .table thead th {
+            padding: 10px;
+            background: #34495e;
             color: #fff;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .table tbody td {
             padding: 8px;
-            font-size: 11px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        td {
-            padding: 7px;
-            border-bottom: 1px solid #ddd;
-            font-size: 11px;
+        .table tbody tr:nth-child(even) {
+            background: #f8fafc;
         }
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
+        .text-right {
+            text-align: right;
         }
 
         .estado-ok {
-            color: green;
+            color: #16a34a;
             font-weight: bold;
         }
 
         .estado-bad {
-            color: red;
+            color: #dc2626;
             font-weight: bold;
         }
 
-        .footer {
+        .totales {
+            width: 260px;
+            margin-left: auto;
             margin-top: 20px;
-            font-size: 10px;
-            text-align: center;
-            color: #999;
+        }
+
+        .totales table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .totales td {
+            padding: 8px 10px;
+            border: 1px solid #dfe4ea;
+        }
+
+        .total-final {
+            background: #34495e;
+            color: #fff;
+            font-weight: bold;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Header -->
     <div class="header">
-        <h1>Reporte de Usuarios</h1>
-        <p>Fecha de generación: {{ $fecha }}</p>
-    </div>
-
-    <!-- Filtros -->
-    <div class="info">
-        <span><strong>Estado:</strong> 
-            @if(request('estado') === '1') Activos
-            @elseif(request('estado') === '0') Inactivos
-            @else Todos
-            @endif
-        </span>
-    </div>
-
-    <!-- Resumen -->
-    <div class="summary">
-        <div>
-            Total Usuarios
-            <strong>{{ $total }}</strong>
+        <div class="header-left">
+            <h1>Reporte de Usuarios</h1>
+            <p>Resumen de usuarios del sistema</p>
         </div>
 
-        <div>
-            Activos
-            <strong>{{ $activos }}</strong>
-        </div>
+        <div class="header-right">
+            <div>
+                <strong>Usuario:</strong>
+                {{ auth()->user()->name ?? 'N/D' }}
+            </div>
 
-        <div>
-            Inactivos
-            <strong>{{ $inactivos }}</strong>
+            <div>
+                <strong>Fecha:</strong>
+                {{ $fecha }}
+            </div>
         </div>
     </div>
 
-    <!-- Tabla -->
-    <table>
+    <div class="clearfix"></div>
+
+    <table class="table">
         <thead>
             <tr>
                 <th>#</th>
@@ -154,7 +146,6 @@
                     <td>{{ $u->name }}</td>
                     <td>{{ $u->email }}</td>
                     <td>{{ $u->created_at->format('d/m/Y') }}</td>
-
                     <td>
                         @if($u->estado == 1)
                             <span class="estado-ok">Activo</span>
@@ -166,16 +157,30 @@
             @empty
                 <tr>
                     <td colspan="5" style="text-align:center; padding:15px;">
-                        No existen registros
+                        No existen registros.
                     </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
-    <!-- Footer -->
-    <div class="footer">
-        Generado automáticamente por el sistema • {{ date('Y') }}
+    <div class="totales">
+        <table>
+            <tr>
+                <td>Total de Registros</td>
+                <td class="text-right">{{ $inactivos }}</td>
+            </tr>
+
+            <tr>
+                <td>Activos</td>
+                <td class="text-right">{{ $activos }}</td>
+            </tr>
+
+            <tr class="total-final">
+            <td>Total de Registros</td>
+                <td class="text-right">{{ $total }}</td>
+            </tr>
+        </table>
     </div>
 
 </body>

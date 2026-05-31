@@ -20,7 +20,7 @@ class ReporteController extends Controller
         $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
 
         if ($request->filled('desde') && $request->filled('hasta')) {
-            $query->whereBetween('fecha', [$request->desde, $request->hasta]);
+            $query->whereBetween('created_at', [$request->desde, $request->hasta]);
         }
 
         if ($request->filled('tipo_pago_id')) {
@@ -31,7 +31,7 @@ class ReporteController extends Controller
             $query->where('estado', $request->estado);
         }
 
-        $ventas = $query->orderBy('fecha', 'desc')->get();
+        $ventas = $query->orderBy('created_at', 'desc')->get();
 
         $total = $ventas->sum('total');
         $descuentos = $ventas->sum('descuento');
@@ -46,7 +46,7 @@ class ReporteController extends Controller
         $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
 
         if ($request->filled('desde') && $request->filled('hasta')) {
-            $query->whereBetween('fecha', [$request->desde, $request->hasta]);
+            $query->whereBetween('created_at', [$request->desde, $request->hasta]);
         }
 
         if ($request->filled('tipo_pago_id')) {
@@ -57,7 +57,7 @@ class ReporteController extends Controller
             $query->where('estado', $request->estado);
         }
 
-        $ventas = $query->orderBy('fecha', 'desc')->get();
+        $ventas = $query->orderBy('created_at', 'desc')->get();
 
         $total = $ventas->sum('total');
         $descuentos = $ventas->sum('descuento');

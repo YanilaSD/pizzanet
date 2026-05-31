@@ -2,84 +2,76 @@
 
     <div class="p-6">
 
-        <!-- Título -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
                 Reporte Ventas
             </h1>
-            <p class="text-gray-600">
+            <p class="text-gray-600 dark:text-gray-400">
                 Consulta y analiza las ventas del sistema.
             </p>
         </div>
 
-        <!-- Filtros -->
         <form method="GET"
               class="bg-white rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
 
-            <!-- Desde -->
             <div>
-                <label class="text-sm text-gray-600">Desde</label>
-                <input type="date"
-                       name="desde"
-                       value="{{ request('desde') }}"
-                       class="w-full rounded-lg border-gray-300">
+                <label class="text-sm text-gray-600 dark:text-gray-400">
+                    Desde
+                </label>
+
+                <input
+                    type="date"
+                    name="desde"
+                    value="{{ request('desde') }}"
+                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
             </div>
 
-            <!-- Hasta -->
             <div>
-                <label class="text-sm text-gray-600">Hasta</label>
+                <label class="text-sm text-gray-600 dark:text-gray-400">Hasta</label>
                 <input type="date"
                        name="hasta"
                        value="{{ request('hasta') }}"
-                       class="w-full rounded-lg border-gray-300">
+                       class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
             </div>
 
-            <!-- Tipo de Pago -->
             <div>
-                <label class="text-sm text-gray-600">Tipo de Pago</label>
-                <select name="tipo_pago_id"
-                        class="w-full rounded-lg border-gray-300">
-                    <option value="">Todos</option>
+                <label class="text-sm text-gray-600 dark:text-gray-400">Tipo de Pago</label>
+                <flux:select name="tipo_pago_id" class="dark" placeholder="Seleccionar tipo de pago...">
+                    <flux:select.option value="">Todos</flux:select.option>
                     @foreach($tipoPagos as $tp)
-                        <option value="{{ $tp->id }}"
-                            @selected(request('tipo_pago_id') == $tp->id)>
+                        <flux:select.option value="{{ $tp->id }}" :selected="request('tipo_pago_id') == $tp->id">
                             {{ $tp->nombre }}
-                        </option>
+                        </flux:select.option>
                     @endforeach
-                </select>
+                </flux:select>
             </div>
 
-            <!-- Estado -->
             <div>
-                <label class="text-sm text-gray-600">Estado</label>
-                <select name="estado"
-                        class="w-full rounded-lg border-gray-300">
-                    <option value="">Todos</option>
-                    <option value="1" @selected(request('estado')==='1')>
+                <label class="text-sm text-gray-600 dark:text-gray-400">Estado</label>
+                <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
+                    <flux:select.option value="">Todos</flux:select.option>
+                    <flux:select.option value="1" :selected="request('estado') === '1'">
                         Completada
-                    </option>
-                    <option value="0" @selected(request('estado')==='0')>
+                    </flux:select.option>
+                    <flux:select.option value="0" :selected="request('estado') === '0'">
                         Anulada
-                    </option>
-                </select>
+                    </flux:select.option>
+                </flux:select>
             </div>
 
-            <!-- Botones -->
             <div class="flex items-end gap-2">
 
-                <!-- Filtrar -->
                 <button 
                     type="submit"
-                    class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+                    class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
                 >
                     Filtrar
                 </button>
 
-                <!-- PDF -->
                 <button 
                     type="submit"
                     formaction="{{ route('reportes.ventas.pdf') }}"
-                    class="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                    class="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" 
                          class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,25 +85,24 @@
 
         </form>
 
-        <!-- Tarjetas resumen -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
             <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Total Vendido</p>
+                <p class="text-gray-600 text-sm dark:text-gray-400">Total Vendido</p>
                 <p class="text-2xl font-bold text-orange-600">
                     Bs {{ number_format($total ?? 0, 2) }}
                 </p>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Total Descuentos</p>
+                <p class="text-gray-600 text-sm dark:text-gray-400">Total Descuentos</p>
                 <p class="text-2xl font-bold text-red-600">
-                    - Bs {{ number_format($descuentos ?? 0, 2) }}
+                    {{ $descuentos > 0 ? '- ' : '' }}Bs {{ number_format($descuentos ?? 0, 2) }}
                 </p>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Cantidad de Ventas</p>
+                <p class="text-gray-600 text-sm dark:text-gray-400">Cantidad de Ventas</p>
                 <p class="text-2xl font-bold text-green-600">
                     {{ isset($ventas) ? $ventas->count() : 0 }}
                 </p>
@@ -119,12 +110,11 @@
 
         </div>
 
-        <!-- Tabla -->
         <div class="bg-white rounded-2xl shadow overflow-hidden">
 
             <table class="w-full text-sm">
                 <thead class="bg-gray-50">
-                    <tr class="text-left text-gray-600">
+                    <tr class="text-left text-gray-600 dark:text-gray-400">
                         <th class="p-4">#</th>
                         <th class="p-4">Cliente</th>
                         <th class="p-4">Fecha</th>
@@ -138,7 +128,7 @@
 
                 <tbody>
                     @forelse($ventas as $v)
-                        <tr class="border-t hover:bg-gray-50">
+                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400">
                             <td class="p-4">#{{ $v->id }}</td>
 
                             <td class="p-4">
@@ -153,8 +143,8 @@
                                 Bs {{ number_format($v->subtotal, 2) }}
                             </td>
 
-                            <td class="p-4 text-red-600">
-                                - Bs {{ number_format($v->descuento, 2) }}
+                            <td class="p-4 {{ $v->descuento > 0 ? 'text-red-600' : 'text-gray-400' }}">
+                            {{ $v->descuento > 0 ? '- ' : '' }}Bs {{ number_format($v->descuento ?? 0, 2) }}
                             </td>
 
                             <td class="p-4 font-semibold">
@@ -181,7 +171,7 @@
                     @empty
                         <tr>
                             <td colspan="8"
-                                class="p-6 text-center text-gray-500">
+                                class="p-6 text-center text-gray-500 dark:text-gray-400">
                                 No existen ventas para mostrar.
                             </td>
                         </tr>
