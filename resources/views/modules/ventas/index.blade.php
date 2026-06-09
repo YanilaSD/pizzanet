@@ -6,91 +6,106 @@
         :button-link="route('ventas.create')"
     />
 
-    <div class="mt-6 flex gap-6 overflow-x-auto py-2 scrollbar-hide">
-        {{-- Card 1 --}}
-        <x-module-card class="min-w-[320px]">
-            <div class="flex items-center gap-4">
-                <img
-                    src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
-                    alt="Pizza Ventas"
-                    loading="lazy"
-                />
+    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-4 xl:grid-cols-4">
 
-                <div class="min-w-0">
-                    <p class="module-card-label">Total Ventas</p>
-                    <p class="mt-1 truncate text-2xl font-extrabold text-orange-600">
-                        Bs {{ number_format($ventasTotal ?? 0, 2) }}
-                    </p>
-                    <p class="module-card-sublabel mt-1">
-                        {{ $ventasCompletadas ?? 0 }} ventas registradas
-                    </p>
-                </div>
+        <x-module-card class="relative h-48 overflow-hidden rounded-2xl border-0 shadow-lg group">
+            <img
+                src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2340&auto=format&fit=crop"
+                alt="Ventas"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            >
+
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20"></div>
+
+            <div class="relative z-10 flex h-full flex-col justify-end p-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
+                    Total Ventas
+                </p>
+
+                <p class="mt-2 text-3xl font-extrabold text-white">
+                    Bs {{ number_format($ventasTotal ?? 0, 2) }}
+                </p>
+
+                <p class="mt-1 text-sm text-gray-200">
+                    {{ $ventasCompletadas ?? 0 }} ventas registradas
+                </p>
             </div>
         </x-module-card>
 
-        {{-- Card 2 --}}
-        <x-module-card class="min-w-[320px]">
-            <div class="flex items-center gap-4">
-                <img
-                    src="https://images.unsplash.com/photo-1655673654158-9f7285b7d1ea?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
-                    alt="Descuentos"
-                    loading="lazy"
-                />
+        <x-module-card class="relative h-48 overflow-hidden rounded-2xl border-0 shadow-lg group">
+            <img
+                src="https://images.unsplash.com/photo-1655673654158-9f7285b7d1ea?q=80&w=1364&auto=format&fit=crop"
+                alt="Descuentos"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            >
 
-                <div class="min-w-0">
-                    <p class="module-card-label">Descuentos Aplicados</p>
-                    <p class="mt-1 truncate text-2xl font-extrabold text-red-600">
-                        Bs {{ number_format($descuentoTotal ?? 0, 2) }}
-                    </p>
-                    <p class="module-card-sublabel mt-1">En promociones</p>
-                </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20"></div>
+
+            <div class="relative z-10 flex h-full flex-col justify-end p-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-red-300">
+                    Descuentos Aplicados
+                </p>
+
+                <p class="mt-2 text-3xl font-extrabold text-white">
+                    Bs {{ number_format($descuentoTotal ?? 0, 2) }}
+                </p>
+
+                <p class="mt-1 text-sm text-gray-200">
+                    Promociones y ofertas
+                </p>
             </div>
         </x-module-card>
 
-        {{-- Card 3 --}}
-        <x-module-card class="min-w-[320px]">
-            <div class="flex items-center gap-4">
-                <img
-                    src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=300&q=60"
-                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
-                    alt="Ventas Completadas"
-                    loading="lazy"
-                />
+        <x-module-card class="relative h-48 overflow-hidden rounded-2xl border-0 shadow-lg group">
+            <img
+                src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=1200&q=80"
+                alt="Ventas completadas"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            >
 
-                <div class="min-w-0">
-                    <p class="module-card-label">Ventas Completadas</p>
-                    <p class="mt-1 truncate text-2xl font-extrabold text-green-600">
-                        {{ $ventasCompletadas ?? 0 }}
-                    </p>
-                    <p class="module-card-sublabel mt-1">Entregadas</p>
-                </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20"></div>
+
+            <div class="relative z-10 flex h-full flex-col justify-end p-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-green-300">
+                    Ventas Completadas
+                </p>
+
+                <p class="mt-2 text-3xl font-extrabold text-white">
+                    {{ $ventasCompletadas ?? 0 }}
+                </p>
+
+                <p class="mt-1 text-sm text-gray-200">
+                    Pedidos entregados
+                </p>
             </div>
         </x-module-card>
 
-        {{-- Card 4 --}}
-        <x-module-card class="min-w-[320px]">
-            <div class="flex items-center gap-4">
-                <img
-                    src="https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=868&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
-                    alt="Venta Promedio"
-                    loading="lazy"
-                />
+        <x-module-card class="relative h-48 overflow-hidden rounded-2xl border-0 shadow-lg group">
+            <img
+                src="https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=868&auto=format&fit=crop"
+                alt="Venta promedio"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            >
 
-                <div class="min-w-0">
-                    <p class="module-card-label">Venta Promedio</p>
-                    <p class="mt-1 truncate text-2xl font-extrabold text-blue-600">
-                        Bs {{ number_format($ventasPromedio ?? 0, 2) }}
-                    </p>
-                    <p class="module-card-sublabel mt-1">Por transacción</p>
-                </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/20"></div>
+
+            <div class="relative z-10 flex h-full flex-col justify-end p-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+                    Venta Promedio
+                </p>
+
+                <p class="mt-2 text-3xl font-extrabold text-white">
+                    Bs {{ number_format($ventasPromedio ?? 0, 2) }}
+                </p>
+
+                <p class="mt-1 text-sm text-gray-200">
+                    Por transacción
+                </p>
             </div>
         </x-module-card>
+
     </div>
 
-    {{-- Tabla --}}
     <x-data-table 
         title="Registro de Ventas"
         description="Historial de todas las ventas realizadas con promociones aplicadas."

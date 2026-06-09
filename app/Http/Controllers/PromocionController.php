@@ -29,12 +29,8 @@ class PromocionController extends Controller
         return view('modules.promociones.create', compact('festividades'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        dd(now()->toDateString());
         $request->validate([
             'nombre' => [
                 'required',
