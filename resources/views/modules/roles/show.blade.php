@@ -9,19 +9,19 @@
         </a>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 space-y-4">
+    <x-module-card-lg class="space-y-4">
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-white">Nombre</h2>
+            <h2 class="module-form-label text-lg">Nombre</h2>
             <p class="text-gray-900 dark:text-gray-300">{{ $rol->nombre }}</p>
         </div>
 
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-white">Descripción</h2>
+            <h2 class="module-form-label text-lg">Descripción</h2>
             <p class="text-gray-900 dark:text-gray-300">{{ $rol->descripcion ?? 'Sin descripción' }}</p>
         </div>
 
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-white mb-2">Privilegios asignados</h2>
+            <h2 class="module-form-label text-lg mb-2">Privilegios asignados</h2>
             @if($rol->privilegios->isEmpty())
                 <p class="text-gray-500 dark:text-gray-400">No hay privilegios asignados a este rol.</p>
             @else
@@ -32,5 +32,5 @@
                 </ul>
             @endif
         </div>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

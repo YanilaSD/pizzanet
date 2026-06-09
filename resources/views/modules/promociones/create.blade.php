@@ -28,7 +28,7 @@
     @endif
 
     {{-- Card --}}
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('promociones.store') }}" method="POST" class="space-y-6">
             @csrf
 
@@ -36,7 +36,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Nombre --}}
                 <div>
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -50,7 +50,7 @@
 
                 {{-- Descuento --}}
                 <div>
-                    <label for="descuento" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descuento" class="module-form-label">
                         Descuento (%)
                     </label>
                     <flux:input
@@ -67,7 +67,7 @@
 
                 {{-- Festividad --}}
                 <div>
-                    <label for="festividad_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="festividad_id" class="module-form-label">
                         Festividad
                     </label>
                     <select
@@ -91,7 +91,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Fecha inicio --}}
                 <div>
-                    <label for="fecha_inicio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="fecha_inicio" class="module-form-label">
                         Fecha de inicio
                     </label>
                     <flux:input
@@ -105,7 +105,7 @@
 
                 {{-- Fecha fin --}}
                 <div>
-                    <label for="fecha_fin" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="fecha_fin" class="module-form-label">
                         Fecha de fin
                     </label>
                     <flux:input
@@ -119,7 +119,7 @@
 
                 {{-- Compra mínima --}}
                 <div>
-                    <label for="compra_minima" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="compra_minima" class="module-form-label">
                         Compra mínima (Bs)
                     </label>
                     <flux:input
@@ -137,7 +137,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Límite de uso --}}
                 <div>
-                    <label for="limite_uso" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="limite_uso" class="module-form-label">
                         Límite de uso (por cliente)
                     </label>
                     <flux:input
@@ -164,5 +164,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

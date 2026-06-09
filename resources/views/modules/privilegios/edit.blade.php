@@ -19,7 +19,7 @@
     @endif
 
     {{-- Tarjeta del formulario --}}
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('privilegios.update', $privilegio) }}" method="POST">
             @csrf
             @method('PUT')
@@ -28,7 +28,7 @@
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
                 {{-- Nombre --}}
                 <div class="md:flex-[1]">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -42,7 +42,7 @@
 
                 {{-- Descripción --}}
                 <div class="md:flex-[2]">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descripcion" class="module-form-label">
                         Descripción
                     </label>
                     <flux:input
@@ -67,5 +67,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

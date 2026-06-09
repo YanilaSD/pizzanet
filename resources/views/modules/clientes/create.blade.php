@@ -19,13 +19,13 @@
         </div>
     @endif
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('clientes.store') }}" method="POST" class="space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -38,7 +38,7 @@
                 </div>
 
                 <div>
-                    <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="ci" class="module-form-label">
                         CI
                     </label>
                     <flux:input
@@ -55,7 +55,7 @@
                 </div>
 
                 <div>
-                    <label for="celular" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="celular" class="module-form-label">
                         Celular
                     </label>
                     <flux:input
@@ -69,7 +69,7 @@
                 </div>
 
                 <div>
-                    <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="correo" class="module-form-label">
                         Correo
                     </label>
                     <flux:input
@@ -95,5 +95,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

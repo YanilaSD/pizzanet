@@ -1,12 +1,12 @@
-<div class="flex items-center justify-between bg-white/80 backdrop-blur-sm border border-gray-100 p-6 rounded-2xl shadow-sm">
+<x-module-card-lg class="flex items-center justify-between">
 
     <div class="space-y-1">
-        <h1 class="text-xl font-semibold text-gray-900">
+        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
             {{ $title }}
         </h1>
 
         @if($description)
-            <p class="text-sm text-gray-500">
+            <p class="module-card-sublabel">
                 {{ $description }}
             </p>
         @endif
@@ -24,4 +24,4 @@
         </flux:button>
     @endif
 
-</div>
+</x-module-card-lg>

@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <div class="max-w-md mx-auto bg-white p-4 border border-gray-200 shadow-sm font-mono text-sm" id="recibo">
+    <x-module-card class="mx-auto max-w-md font-mono text-sm" id="recibo">
         
         <div class="text-center mb-2">
             <h2 class="text-lg font-bold">Pizzería Yuneth</h2>
@@ -50,9 +50,7 @@
             <p>¡Gracias por su compra!</p>
         </div>
 
-    </div>
-
-    <div class="max-w-md mx-auto mt-4 flex justify-center gap-3" wire:ignore>
+    </x-module-card>
 
         <flux:button
             type="button"

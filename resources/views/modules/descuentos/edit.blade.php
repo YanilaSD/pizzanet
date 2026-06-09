@@ -19,14 +19,14 @@
         </div>
     @endif
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('descuentos.update', $descuento) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -39,7 +39,7 @@
                 </div>
 
                 <div>
-                    <label for="puntos" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="puntos" class="module-form-label">
                         Puntos requeridos
                     </label>
                     <flux:input
@@ -55,7 +55,7 @@
                 </div>
 
                 <div>
-                    <label for="descuento" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descuento" class="module-form-label">
                         Monto de descuento (Bs)
                     </label>
                     <flux:input
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descripcion" class="module-form-label">
                         Descripción
                     </label>
                     <textarea
@@ -97,5 +97,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

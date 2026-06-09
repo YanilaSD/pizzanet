@@ -11,10 +11,10 @@
         </div>
 
         <form method="GET"
-            class="bg-white rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              class="module-card-lg mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
 
             <div>
-                <label class="text-sm text-gray-600">Estado</label>
+                <label class="module-form-label">Estado</label>
                 <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
                     <flux:select.option value="">Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
@@ -27,7 +27,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600">Nombre</label>
+                <label class="module-form-label">Nombre</label>
                 <input
                     type="text"
                     name="nombre"
@@ -38,7 +38,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600">Precio mínimo</label>
+                <label class="module-form-label">Precio mínimo</label>
                 <input
                     type="number"
                     name="precio_min"
@@ -49,7 +49,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600">Precio máximo</label>
+                <label class="module-form-label">Precio máximo</label>
                 <input
                     type="number"
                     name="precio_max"
@@ -86,29 +86,26 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Total Productos</p>
+            <x-module-card>
+                <p class="module-card-label">Total Productos</p>
                 <p class="text-2xl font-bold text-blue-600">
                     {{ $total ?? 0 }}
-                </p>
-            </div>
+                </p></x-module-card>
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Activos</p>
+            <x-module-card>
+                <p class="module-card-label">Activos</p>
                 <p class="text-2xl font-bold text-green-600">
                     {{ $activos ?? 0 }}
-                </p>
-            </div>
+                </p></x-module-card>
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm">Inactivos</p>
+            <x-module-card>
+                <p class="module-card-label">Inactivos</p>
                 <p class="text-2xl font-bold text-red-600">
                     {{ $inactivos ?? 0 }}
-                </p>
-            </div>
+                </p></x-module-card>
 
         </div>
-        <div class="bg-white rounded-2xl shadow overflow-hidden">
+        <x-module-card-lg class="overflow-hidden !p-0">
 
             <table class="w-full text-sm">
                 <thead class="bg-gray-50">
@@ -147,8 +144,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
-        </div>
+            </table></x-module-card-lg>
     </div>
 
 </x-layouts.app>

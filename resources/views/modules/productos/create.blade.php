@@ -19,13 +19,13 @@
         </div>
     @endif
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
@@ -38,7 +38,7 @@
                 </div>
 
                 <div>
-                    <label for="precio" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="precio" class="module-form-label">
                         Precio <span class="text-red-500">*</span>
                     </label>
                     <flux:input
@@ -56,7 +56,7 @@
                 </div>
 
                 <div>
-                    <label for="categoria_id" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="categoria_id" class="module-form-label">
                         Categoría <span class="text-red-500">*</span>
                     </label>
                     <select
@@ -78,7 +78,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-2">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descripcion" class="module-form-label">
                         Descripción <span class="text-red-500">*</span>
                     </label>
                     <textarea
@@ -93,7 +93,7 @@
                 </div>
 
                 <div>
-                    <label for="imagen" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="imagen" class="module-form-label">
                         Imagen <span class="text-red-500">*</span>
                     </label>
                     <input
@@ -130,5 +130,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

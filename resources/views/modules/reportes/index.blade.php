@@ -1,6 +1,29 @@
 <x-layouts.app>
     <div class="p-6">
 
+        @php
+            $reportes = [
+                [
+                    'titulo'      => 'Reporte de Ventas',
+                    'descripcion' => 'Filtra por fechas, tipo de pago y estado.',
+                    'url'         => route('reportes.ventas'),
+                    'icono'       => 'chart-bar',
+                ],
+                [
+                    'titulo'      => 'Reporte de Usuarios',
+                    'descripcion' => 'Filtra por estado.',
+                    'url'         => route('reportes.usuarios'),
+                    'icono'       => 'users',
+                ],
+                [
+                    'titulo'      => 'Reporte de Productos',
+                    'descripcion' => 'Filtra por fecha, precio y estado.',
+                    'url'         => route('reportes.productos'),
+                    'icono'       => 'archive-box',
+                ],
+            ];
+        @endphp
+
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2">
             <div>
@@ -16,121 +39,37 @@
         <!-- Grid responsive -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-            <!-- Card -->
-            <a href="{{ route('reportes.ventas') }}" class="group block">
-                <div class="h-full bg-white dark:bg-zinc-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-zinc-700 
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            @foreach ($reportes as $reporte)
+                <x-module-card>
+                    <a href="{{ $reporte['url'] }}" class="group flex flex-col justify-between h-full">
 
-                    <!-- Icon -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                             class="w-6 h-6 text-blue-600 dark:text-blue-300"
-                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M3 10h11M9 21V3m12 18V3m0 18H9" />
-                        </svg>
-                    </div>
+                        <!-- Icono + Título / Descripción -->
+                        <div class="flex items-start gap-4">
+                            <!-- Icono -->
+                            <div class="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-900">
+                                <flux:icon :name="$reporte['icono']" class="w-6 h-6 text-orange-500 dark:text-orange-300" />
+                            </div>
 
-                    <!-- Title -->
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-blue-600">
-                        Reporte de Ventas
-                    </h2>
+                            <!-- Título y descripción -->
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-orange-500">
+                                    {{ $reporte['titulo'] }}
+                                </h2>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    {{ $reporte['descripcion'] }}
+                                </p>
+                            </div>
+                        </div>
 
-                    <!-- Description -->
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Filtra por fechas, tipo de pago y estado.
-                    </p>
+                        <!-- Footer siempre abajo -->
+                        <div class="mt-4 flex items-center justify-end">
+                            <span class="text-sm text-orange-500 dark:text-orange-400 font-medium">Ver reporte</span>
+                            <!-- <span class="text-orange-500 dark:text-orange-400 font-medium group-hover:translate-x-1 transition">→</span> -->
+                        </div>
 
-                    <!-- Footer -->
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            Ver reporte
-                        </span>
-
-                        <span class="text-blue-600 dark:text-blue-400 font-medium group-hover:translate-x-1 transition">
-                            →
-                        </span>
-                    </div>
-                    
-                </div>
-            </a>
-
-            <a href="{{ route('reportes.usuarios') }}" class="group block">
-                <div class="h-full bg-white dark:bg-zinc-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-zinc-700 
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                    <!-- Icon -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                             class="w-6 h-6 text-blue-600 dark:text-blue-300"
-                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M3 10h11M9 21V3m12 18V3m0 18H9" />
-                        </svg>
-                    </div>
-
-                    <!-- Title -->
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-blue-600">
-                        Reporte de Usuarios
-                    </h2>
-
-                    <!-- Description -->
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Filtra por estado.
-                    </p>
-
-                    <!-- Footer -->
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            Ver reporte
-                        </span>
-
-                        <span class="text-blue-600 dark:text-blue-400 font-medium group-hover:translate-x-1 transition">
-                            →
-                        </span>
-                    </div>
-                    
-                </div>
-            </a>
-
-            <a href="{{ route('reportes.productos') }}" class="group block">
-                <div class="h-full bg-white dark:bg-zinc-800 rounded-2xl shadow-md p-6 border border-gray-200 dark:border-zinc-700 
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-
-                    <!-- Icon -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                             class="w-6 h-6 text-blue-600 dark:text-blue-300"
-                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M3 10h11M9 21V3m12 18V3m0 18H9" />
-                        </svg>
-                    </div>
-
-                    <!-- Title -->
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-blue-600">
-                        Reporte de Productos
-                    </h2>
-
-                    <!-- Description -->
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Filtra por fecha, precio y estado.
-                    </p>
-
-                    <!-- Footer -->
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            Ver reporte
-                        </span>
-
-                        <span class="text-blue-600 dark:text-blue-400 font-medium group-hover:translate-x-1 transition">
-                            →
-                        </span>
-                    </div>
-                    
-                </div>
-            </a>
-            <!-- Puedes duplicar este bloque para más reportes -->
+                    </a>
+                </x-module-card>
+            @endforeach
 
         </div>
 

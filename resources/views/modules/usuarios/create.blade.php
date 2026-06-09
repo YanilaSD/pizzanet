@@ -28,7 +28,7 @@
     </div>
 
     {{-- Tarjeta del formulario --}}
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('usuarios.store') }}" method="POST">
             @csrf
 
@@ -36,7 +36,7 @@
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
                 {{-- Nombre --}}
                 <div class="md:flex-[1]">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -50,7 +50,7 @@
 
                 {{-- Correo --}}
                 <div class="md:flex-[1]">
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="email" class="module-form-label">
                         Correo
                     </label>
                     <flux:input
@@ -67,7 +67,7 @@
             {{-- Roles --}}
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-white">
+                    <label class="module-form-label">
                         Asignar Roles
                     </label>
                     <span class="text-xs text-gray-500 dark:text-gray-400">
@@ -111,5 +111,5 @@
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

@@ -6,15 +6,15 @@
         :button-link="route('clientes.index')"
     />
 
-    <div class="mt-4 mb-6 rounded-xl border border-gray-200 bg-white p-4">
-        <p class="text-sm text-gray-500">Cliente</p>
-        <p class="text-lg font-semibold text-gray-900">
+    <x-module-card class="mt-4 mb-6">
+        <p class="module-card-label">Cliente</p>
+        <p class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ $cliente->nombre }}
         </p>
-        <p class="text-sm text-gray-600">
+        <p class="module-card-sublabel mt-1">
             CI: {{ $cliente->ci }}
         </p>
-    </div>
+    </x-module-card>
 
     @include('modules.clientes.partials.canjes-table', ['canjes' => $canjes])
 </x-layouts.app>

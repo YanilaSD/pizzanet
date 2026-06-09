@@ -42,7 +42,7 @@
 
         <div class="grid grid-cols-5 gap-6 my-4">
             <div class="col-span-3 ">
-                <label for="ci" class="block text-sm font-medium text-gray-700 dark:text-gray-400 ">Cliente</label>
+                <label for="ci" class="module-form-label">Cliente</label>
                 <flux:input.group>
                     <flux:input name="ci" placeholder="Ingresa CI del cliente" />
                     <flux:button type="submit" name="action" value="buscar" icon="magnifying-glass">
@@ -59,9 +59,9 @@
     {{-- Datos del cliente encontrado --}}
     @if(!is_null($cliente))
         <div class="my-4">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <x-module-card-lg class="overflow-hidden !p-0">
+                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
                         <tr>
                             <th class="px-6 py-3">Nombre</th>
                             <th class="px-6 py-3">CI</th>
@@ -76,7 +76,7 @@
                             $saldo = $clienteModel?->saldo_puntos ?? 0;
                             $puedeCanjer = $saldo >= 100;
                         @endphp
-                        <tr class="bg-white border-b">
+                        <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
                             <td class="px-6 py-4 font-medium text-gray-900">{{ $cliente['nombre'] }}</td>
                             <td class="px-6 py-4">{{ $cliente['ci'] }}</td>
                             <td class="px-6 py-4">{{ $cliente['celular'] }}</td>
@@ -97,7 +97,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </x-module-card-lg>
         </div>
     @endif
 

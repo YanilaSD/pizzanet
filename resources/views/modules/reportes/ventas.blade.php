@@ -12,10 +12,10 @@
         </div>
 
         <form method="GET"
-              class="bg-white rounded-2xl shadow p-6 grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+              class="module-card-lg mb-6 grid grid-cols-1 gap-4 md:grid-cols-5">
 
             <div>
-                <label class="text-sm text-gray-600 dark:text-gray-400">
+                <label class="module-form-label">
                     Desde
                 </label>
 
@@ -27,7 +27,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600 dark:text-gray-400">Hasta</label>
+                <label class="module-form-label">Hasta</label>
                 <input type="date"
                        name="hasta"
                        value="{{ request('hasta') }}"
@@ -35,7 +35,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600 dark:text-gray-400">Tipo de Pago</label>
+                <label class="module-form-label">Tipo de Pago</label>
                 <flux:select name="tipo_pago_id" class="dark" placeholder="Seleccionar tipo de pago...">
                     <flux:select.option value="">Todos</flux:select.option>
                     @foreach($tipoPagos as $tp)
@@ -47,7 +47,7 @@
             </div>
 
             <div>
-                <label class="text-sm text-gray-600 dark:text-gray-400">Estado</label>
+                <label class="module-form-label">Estado</label>
                 <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
                     <flux:select.option value="">Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
@@ -87,30 +87,27 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm dark:text-gray-400">Total Vendido</p>
+            <x-module-card>
+                <p class="module-card-label">Total Vendido</p>
                 <p class="text-2xl font-bold text-orange-600">
                     Bs {{ number_format($total ?? 0, 2) }}
-                </p>
-            </div>
+                </p></x-module-card>
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm dark:text-gray-400">Total Descuentos</p>
+            <x-module-card>
+                <p class="module-card-label">Total Descuentos</p>
                 <p class="text-2xl font-bold text-red-600">
                     {{ $descuentos > 0 ? '- ' : '' }}Bs {{ number_format($descuentos ?? 0, 2) }}
-                </p>
-            </div>
+                </p></x-module-card>
 
-            <div class="bg-white rounded-2xl shadow p-5">
-                <p class="text-gray-600 text-sm dark:text-gray-400">Cantidad de Ventas</p>
+            <x-module-card>
+                <p class="module-card-label">Cantidad de Ventas</p>
                 <p class="text-2xl font-bold text-green-600">
                     {{ isset($ventas) ? $ventas->count() : 0 }}
-                </p>
-            </div>
+                </p></x-module-card>
 
         </div>
 
-        <div class="bg-white rounded-2xl shadow overflow-hidden">
+        <x-module-card-lg class="overflow-hidden !p-0">
 
             <table class="w-full text-sm">
                 <thead class="bg-gray-50">
@@ -179,8 +176,7 @@
                 </tbody>
 
             </table>
-
-        </div>
+</x-module-card-lg>
 
     </div>
 

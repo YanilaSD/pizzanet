@@ -17,14 +17,14 @@
         </div>
     @endif
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <x-module-card-lg>
         <form action="{{ route('roles.update', $rol) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
                 <div class="md:flex-[2]">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="nombre" class="module-form-label">
                         Nombre
                     </label>
                     <flux:input
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="md:flex-[1]">
-                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-white mb-1">
+                    <label for="descripcion" class="module-form-label">
                         Descripción
                     </label>
                     <flux:input
@@ -50,9 +50,9 @@
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Privilegios</label>
+                <label class="module-form-label mb-2">Privilegios</label>
                 <div
-                    class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-auto border border-gray-300 dark:border-gray-600 rounded p-3 bg-white dark:bg-gray-800">
+                    class="module-card-nested grid max-h-48 grid-cols-1 gap-2 overflow-auto md:grid-cols-2">
                     @foreach ($privilegiosOptions as $option)
                         <label class="inline-flex items-center space-x-2 cursor-pointer">
                             <input
@@ -80,5 +80,5 @@
                 <flux:button variant="primary" color="orange" type="submit">Guardar</flux:button>
             </div>
         </form>
-    </div>
+    </x-module-card-lg>
 </x-layouts.app>

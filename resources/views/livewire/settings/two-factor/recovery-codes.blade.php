@@ -45,11 +45,7 @@ new class extends Component {
     }
 }; ?>
 
-<div
-    class="py-6 space-y-6 border shadow-sm rounded-xl border-zinc-200 dark:border-white/10"
-    wire:cloak
-    x-data="{ showRecoveryCodes: false }"
->
+<x-module-card-lg class="space-y-6" wire:cloak x-data="{ showRecoveryCodes: false }">
     <div class="px-6 space-y-2">
         <div class="flex items-center gap-2">
             <flux:icon.lock-closed variant="outline" class="size-4"/>
@@ -112,7 +108,7 @@ new class extends Component {
 
                 @if (filled($recoveryCodes))
                     <div
-                        class="grid gap-1 p-4 font-mono text-sm rounded-lg bg-zinc-100 dark:bg-white/5"
+                        class="module-card-nested grid gap-1 p-4 font-mono text-sm"
                         role="list"
                         aria-label="Recovery codes"
                     >
@@ -133,4 +129,4 @@ new class extends Component {
             </div>
         </div>
     </div>
-</div>
+</x-module-card-lg>

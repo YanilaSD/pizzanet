@@ -2,7 +2,7 @@
     {{-- Agregar producto --}}
     <div class="mt-4 flex gap-4 my-4">
         <div class="w-full">
-            <label for="producto_id" class="block text-sm font-medium text-gray-700">Producto</label>
+            <label for="producto_id" class="module-form-label">Producto</label>
             <flux:select
                 name="producto_id"
                 wire:model="producto_id"
@@ -18,7 +18,7 @@
         </div>
 
         <div class="w-full">
-            <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
+            <label for="cantidad" class="module-form-label">Cantidad</label>
             <flux:input
                 type="number"
                 name="cantidad"
@@ -43,9 +43,9 @@
     </div>
 
     {{-- Tabla del detalle --}}
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-        <table class="w-full text-sm text-left text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+    <x-module-card-lg class="mt-4 overflow-hidden !p-0">
+        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
+            <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
                 <tr>
                     <th class="px-6 py-3">Producto</th>
                     <th class="px-6 py-3">Cantidad</th>
@@ -54,9 +54,9 @@
                     <th class="px-6 py-3">Acción</th>
                 </tr>
             </thead>
-            <tbody class="bg-gray-100 border-b">
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                 @forelse($detalle as $p)
-                    <tr class="bg-white border-b">
+                    <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
                         <td class="px-6 py-4">{{ $p['nombre'] }}</td>
                         <td class="px-6 py-4">{{ $p['cantidad'] }}</td>
                         <td class="px-6 py-4">Bs {{ number_format($p['precio_unitario'], 2) }}</td>
@@ -77,7 +77,7 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
+    </x-module-card-lg>
 
     {{-- Total --}}
     <div class="mt-4 text-right text-lg font-semibold">
@@ -106,7 +106,7 @@
 
             {{-- Tipo de pago --}}
             <div class="w-full">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de pago</label>
+                <label class="module-form-label">Tipo de pago</label>
                 <flux:select
                     name="tipo_pago_id"
                     wire:model="tipo_pago_id"
@@ -121,7 +121,7 @@
             </div>
 
             <div class="w-full">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Promoción</label>
+                <label class="module-form-label">Promoción</label>
                 <flux:select
                     name="promocion_id"
                     wire:model="promocion_id"
@@ -139,10 +139,10 @@
             </div>
 
             @if($puede_canjear)
-                <div class="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                <div class="module-card-nested flex items-center justify-between border-green-200 bg-green-50 px-4 py-3 dark:border-green-800 dark:bg-green-950/30">
                     <div>
-                        <p class="text-sm font-medium text-green-800">Canje de puntos disponible</p>
-                        <p class="text-xs text-green-600 mt-0.5">
+                        <p class="module-card-label text-green-800 dark:text-green-300">Canje de puntos disponible</p>
+                        <p class="module-card-sublabel mt-0.5 text-green-600 dark:text-green-400">
                             El cliente tiene {{ $saldo_puntos }} puntos —
                             canjear 100 pts = Bs {{ number_format($descuento_canje, 2) }} de descuento
                         </p>
@@ -150,8 +150,8 @@
                     <flux:switch wire:model.live="usar_puntos" />
                 </div>
             @else
-                <div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-                    <p class="text-sm text-gray-500">
+                <div class="module-card-nested px-4 py-3">
+                    <p class="module-card-label">
                         @if(session('cliente'))
                             El cliente tiene {{ $saldo_puntos }} puntos —
                             necesita 100 para canjear Bs {{ number_format($descuento_canje, 2) }}
@@ -163,18 +163,18 @@
             @endif
 
             {{-- Resumen de totales --}}
-            <div class="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 space-y-1 text-sm">
-                <div class="flex justify-between text-gray-600">
-                    <span>Subtotal</span>
-                    <span>Bs {{ number_format(collect($detalle)->sum('subtotal'), 2) }}</span>
+            <div class="module-card-nested space-y-1 px-4 py-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="module-card-label">Subtotal</span>
+                    <span class="text-gray-800 dark:text-gray-200">Bs {{ number_format(collect($detalle)->sum('subtotal'), 2) }}</span>
                 </div>
                 @if($descuento > 0)
-                    <div class="flex justify-between text-green-600">
-                        <span>Descuento aplicado</span>
+                    <div class="flex justify-between text-green-600 dark:text-green-400">
+                        <span class="module-card-label">Descuento aplicado</span>
                         <span>- Bs {{ number_format($descuento, 2) }}</span>
                     </div>
                 @endif
-                <div class="flex justify-between font-semibold text-gray-900 border-t border-gray-200 pt-2 mt-1">
+                <div class="mt-1 flex justify-between border-t border-gray-200 pt-2 font-semibold text-gray-900 dark:border-gray-700 dark:text-white">
                     <span>Total a pagar</span>
                     <span>Bs {{ number_format($total, 2) }}</span>
                 </div>
