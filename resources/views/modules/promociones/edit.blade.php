@@ -77,20 +77,6 @@
                 </div>
             </div>
 
-            <div>
-                <label for="descripcion" class="module-form-label">
-                    Descripción
-                </label>
-                <textarea
-                    id="descripcion"
-                    name="descripcion"
-                    rows="3"
-                    class="block w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 py-2 text-sm
-                           focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    placeholder="Descripción de la promoción"
-                >{{ old('descripcion', $promocion->descripcion) }}</textarea>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="fecha_inicio" class="module-form-label">

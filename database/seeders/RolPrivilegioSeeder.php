@@ -10,6 +10,8 @@ class RolPrivilegioSeeder extends Seeder
     {
         DB::table('roles')->insert([
             ['nombre' => 'Administrador', 'descripcion' => 'Acceso total al sistema', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['nombre' => 'Cajero', 'descripcion' => 'Gestión de ventas y clientes', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['nombre' => 'Supervisor', 'descripcion' => 'Supervisión de festividades, clientes, reportes, promociones y categorías', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         $privilegios = [
@@ -116,6 +118,47 @@ class RolPrivilegioSeeder extends Seeder
                 'privilegio_id' => $i,
                 'created_at'   => now(),
                 'updated_at'   => now(),
+            ]);
+        }
+
+        $cajeroSlugs = [
+            'ventas.index', 'ventas.create', 'ventas.store', 'ventas.show', 'ventas.update',
+            'ventas.searchClient', 'ventas.addProducto', 'ventas.removeProducto',
+            'ventas.getTotalCompra', 'ventas.setPromocion', 'ventas.getPuntosCliente', 'ventas.setUsoPuntos',
+            'clientes.index', 'clientes.create', 'clientes.store', 'clientes.show',
+            'clientes.edit', 'clientes.update', 'clientes.canjear',
+            'promociones.index',
+        ];
+
+        $supervisorSlugs = [
+            'festividades.index', 'festividades.create', 'festividades.store',
+            'festividades.edit', 'festividades.update', 'festividades.destroy',
+            'clientes.index', 'clientes.create', 'clientes.store', 'clientes.show',
+            'clientes.edit', 'clientes.update', 'clientes.destroy', 'clientes.canjear',
+            'reportes.index', 'reportes.ventas', 'reportes.ventas.pdf',
+            'reportes.usuarios', 'reportes.usuarios.pdf', 'reportes.productos', 'reportes.productos.pdf',
+            'promociones.index', 'promociones.create', 'promociones.store', 'promociones.show',
+            'promociones.edit', 'promociones.update', 'promociones.destroy',
+            'categorias.index', 'categorias.create', 'categorias.store', 'categorias.show',
+            'categorias.edit', 'categorias.update', 'categorias.destroy',
+        ];
+
+        $this->asignarPrivilegiosPorSlug('Cajero', $cajeroSlugs);
+        $this->asignarPrivilegiosPorSlug('Supervisor', $supervisorSlugs);
+    }
+
+    private function asignarPrivilegiosPorSlug(string $rolNombre, array $slugs): void
+    {
+        $rolId = DB::table('roles')->where('nombre', $rolNombre)->value('id');
+
+        $privilegioIds = DB::table('privilegios')->whereIn('slug', $slugs)->pluck('id');
+
+        foreach ($privilegioIds as $privilegioId) {
+            DB::table('rol_privilegio')->insert([
+                'rol_id'        => $rolId,
+                'privilegio_id' => $privilegioId,
+                'created_at'    => now(),
+                'updated_at'    => now(),
             ]);
         }
     }

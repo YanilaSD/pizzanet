@@ -41,7 +41,7 @@
                     </td>
                     <td class="px-6 py-4">
                         @if($producto->imagen)
-                            <img src="{{ $producto->imagenUrl }}" alt="Imagen de {{ $producto->nombre }}" class="w-16 h-16 object-cover rounded-md">
+                            <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen de {{ $producto->nombre }}" class="w-16 h-16 object-cover rounded-md">
                         @else
                             <span class="text-gray-400">No disponible</span>
                         @endif

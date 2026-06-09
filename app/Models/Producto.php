@@ -16,19 +16,16 @@ class Producto extends Model
         'estado',
     ];
 
-    // Relación con la tabla Categorias
     public function categoria()
     {
         return $this->belongsTo(Categoria::class);
     }
 
-    // Accesor para obtener la URL de la imagen
     public function getImagenUrlAttribute()
     {
         return $this->imagen ? asset('storage/' . $this->imagen) : null;
     }
 
-    // Relación con la tabla DetalleVentas
     public function detalleVentas()
     {
         return $this->hasMany(DetalleVenta::class);

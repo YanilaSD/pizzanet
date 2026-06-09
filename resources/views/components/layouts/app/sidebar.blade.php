@@ -1,93 +1,123 @@
 @php
+    $user = auth()->user();
+
     $groups = [
         "Inicio" => [
             [
                 "name" => "Inicio",
                 "icon" => "home",
                 "route" => route("dashboard"),
-                "current" => request()->routeIs("dashboard")
-            ]
+                "current" => request()->routeIs("dashboard"),
+                "privilege" => null,
+            ],
         ],
         "Ventas" => [
             [
                 "name" => "Venta",
                 "icon" => "shopping-cart",
                 "route" => route("ventas.index"),
-                "current" => request()->routeIs("login")
+                "current" => request()->routeIs("ventas.*"),
+                "privilege" => "ventas.index",
             ],
-             [
+            [
                 "name" => "Cliente",
                 "icon" => "users",
                 "route" => route("clientes.index"),
-                "current" => request()->routeIs("login")
+                "current" => request()->routeIs("clientes.*"),
+                "privilege" => "clientes.index",
             ],
             [
                 "name" => "Festividades",
                 "icon" => "home",
                 "route" => route("festividades.index"),
-                "current" => request()->routeIs("festividades.index")
+                "current" => request()->routeIs("festividades.*"),
+                "privilege" => "festividades.index",
             ],
-
             [
                 "name" => "Promocion",
                 "icon" => "home",
                 "route" => route("promociones.index"),
-                "current" => request()->routeIs("promociones.index")
+                "current" => request()->routeIs("promociones.*"),
+                "privilege" => "promociones.index",
             ],
             [
                 "name" => "Descuentos",
                 "icon" => "home",
                 "route" => route("descuentos.index"),
-                "current" => request()->routeIs("descuentos.index")
+                "current" => request()->routeIs("descuentos.*"),
+                "privilege" => "productos.index",
             ],
             [
                 "name" => "Productos",
                 "icon" => "shopping-bag",
                 "route" => route("productos.index"),
-                "current" => request()->routeIs("productos.index")
+                "current" => request()->routeIs("productos.*"),
+                "privilege" => "productos.index",
             ],
-               [
+            [
                 "name" => "Categorias",
                 "icon" => "shopping-bag",
                 "route" => route("categorias.index"),
-                "current" => request()->routeIs("categorias.index")
+                "current" => request()->routeIs("categorias.*"),
+                "privilege" => "categorias.index",
             ],
             [
                 "name" => "Tipo de pagos",
                 "icon" => "shopping-bag",
                 "route" => route("tipo_pagos.index"),
-                "current" => request()->routeIs("tipo_pagos")
-            ]
+                "current" => request()->routeIs("tipo_pagos.*"),
+                "privilege" => "tipo_pagos.index",
+            ],
         ],
         "Configuraciones" => [
             [
                 "name" => "Usuarios",
                 "icon" => "user",
                 "route" => route("usuarios.index"),
-                "current" => request()->routeIs("usuarios.index")
+                "current" => request()->routeIs("usuarios.*"),
+                "privilege" => "usuarios.index",
             ],
             [
                 "name" => "Roles",
                 "icon" => "users",
                 "route" => route("roles.index"),
-                "current" => request()->routeIs("roles.index")
+                "current" => request()->routeIs("roles.*"),
+                "privilege" => "roles.index",
             ],
             [
                 "name" => "Privilegios",
                 "icon" => "adjustments-horizontal",
                 "route" => route("privilegios.index"),
-                "current" => request()->routeIs("privilegios.index")
-            ]
+                "current" => request()->routeIs("privilegios.*"),
+                "privilege" => "privilegios.index",
+            ],
         ],
         "Reporteria" => [
             [
                 "name" => "Reporte",
                 "icon" => "document-text",
                 "route" => route("reportes.index"),
-                "current" => request()->routeIs("reportes.index")
-            ]
-        ]
+                "current" => request()->routeIs("reportes.*"),
+                "privilege" => "reportes.index",
+            ],
+        ],
     ];
+
+    $groups = collect($groups)
+        ->map(function ($links) use ($user) {
+            return collect($links)
+                ->filter(function ($link) use ($user) {
+                    if ($link['privilege'] === null) {
+                        return true;
+                    }
+
+                    return $user->hasPrivilegeSlug($link['privilege']);
+                })
+                ->values()
+                ->all();
+        })
+        ->filter(fn ($links) => count($links) > 0)
+        ->all();
 @endphp
 
 <!DOCTYPE html>

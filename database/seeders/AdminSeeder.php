@@ -9,20 +9,45 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $userId = DB::table('users')->insertGetId([
-            'name'       => 'Administrador',
-            'email'      => 'admin@pizzeria.com',
-            'password'   => Hash::make('admin1234'),
-            'estado'     => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $usuarios = [
+            [
+                'name'      => 'Administrador',
+                'email'     => 'admin@pizzeria.com',
+                'password'  => Hash::make('admin1234'),
+                'rol_nombre' => 'Administrador',
+            ],
+            [
+                'name'      => 'Cajero',
+                'email'     => 'cajero@pizzeria.com',
+                'password'  => Hash::make('cajero1234'),
+                'rol_nombre' => 'Cajero',
+            ],
+            [
+                'name'      => 'Supervisor',
+                'email'     => 'supervisor@pizzeria.com',
+                'password'  => Hash::make('supervisor1234'),
+                'rol_nombre' => 'Supervisor',
+            ],
+        ];
 
-        DB::table('usuario_rol')->insert([
-            'usuario_id' => $userId,
-            'rol_id'     => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach ($usuarios as $usuario) {
+            $userId = DB::table('users')->insertGetId([
+                'name'       => $usuario['name'],
+                'email'      => $usuario['email'],
+                'password'   => $usuario['password'],
+                'estado'     => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $rolId = DB::table('roles')->where('nombre', $usuario['rol_nombre'])->value('id');
+
+            DB::table('usuario_rol')->insert([
+                'usuario_id' => $userId,
+                'rol_id'     => $rolId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

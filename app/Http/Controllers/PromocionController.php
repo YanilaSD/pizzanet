@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class PromocionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $promociones = Promocion::query()
@@ -26,9 +23,6 @@ class PromocionController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $festividades = Festividad::where('estado', 1)->get();
@@ -40,6 +34,7 @@ class PromocionController extends Controller
      */
     public function store(Request $request)
     {
+        dd(now()->toDateString());
         $request->validate([
             'nombre' => [
                 'required',
@@ -59,13 +54,13 @@ class PromocionController extends Controller
             'fecha_inicio' => [
                 'required',
                 'date',
-                'after_or_equal:today',
+                'after_or_equal:' . now()->toDateString(),
             ],
 
             'fecha_fin' => [
                 'required',
                 'date',
-                'after_or_equal:fecha_inicio',
+                'after_or_equal:' . $request->fecha_inicio,
             ],
 
             'compra_minima' => [
@@ -88,20 +83,17 @@ class PromocionController extends Controller
             ],
 
         ], [
-            // nombre
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
             'nombre.unique' => 'Ya existe una promoción con ese nombre.',
 
-            // descuento
             'descuento.required' => 'El descuento es obligatorio.',
             'descuento.numeric' => 'El descuento debe ser numérico.',
             'descuento.min' => 'El descuento no puede ser menor a 0.',
             'descuento.max' => 'El descuento no puede ser mayor a 100.',
             'descuento.regex' => 'El descuento debe tener máximo 2 decimales.',
 
-            // fechas
             'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
             'fecha_inicio.date' => 'Debe ser una fecha válida.',
             'fecha_inicio.after_or_equal' => 'La fecha de inicio no puede ser anterior a hoy.',
@@ -110,17 +102,14 @@ class PromocionController extends Controller
             'fecha_fin.date' => 'Debe ser una fecha válida.',
             'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
 
-            // compra mínima
             'compra_minima.numeric' => 'La compra mínima debe ser numérica.',
             'compra_minima.min' => 'La compra mínima no puede ser menor a 0.',
             'compra_minima.regex' => 'La compra mínima debe tener máximo 2 decimales.',
 
-            // límite uso
             'limite_uso.integer' => 'El límite de uso debe ser un número entero.',
             'limite_uso.min' => 'El límite de uso debe ser al menos 1.',
             'limite_uso.max' => 'El límite de uso no puede ser mayor a 10000.',
 
-            // FK
             'festividad_id.required' => 'La festividad es obligatoria.',
             'festividad_id.exists' => 'La festividad seleccionada no es válida.',
         ]);
@@ -139,17 +128,6 @@ class PromocionController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Promocion $promocion)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $promocion = Promocion::findOrFail($id);
@@ -157,9 +135,6 @@ class PromocionController extends Controller
         return view('modules.promociones.edit', compact('promocion', 'festividades'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -167,7 +142,7 @@ class PromocionController extends Controller
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('promociones', 'nombre')->ignore($promocion->id),
+                Rule::unique('promociones', 'nombre')->ignore($id),
             ],
 
             'descuento' => [
@@ -186,7 +161,7 @@ class PromocionController extends Controller
             'fecha_fin' => [
                 'required',
                 'date',
-                'after_or_equal:fecha_inicio',
+                'after_or_equal:' . $request->fecha_inicio,
             ],
 
             'compra_minima' => [
@@ -209,20 +184,17 @@ class PromocionController extends Controller
             ],
 
         ], [
-            // nombre
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
             'nombre.unique' => 'Ya existe otra promoción con ese nombre.',
 
-            // descuento
             'descuento.required' => 'El descuento es obligatorio.',
             'descuento.numeric' => 'El descuento debe ser numérico.',
             'descuento.min' => 'El descuento no puede ser menor a 0.',
             'descuento.max' => 'El descuento no puede ser mayor a 100.',
             'descuento.regex' => 'El descuento debe tener máximo 2 decimales.',
 
-            // fechas
             'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
             'fecha_inicio.date' => 'Debe ser una fecha válida.',
 
@@ -230,17 +202,14 @@ class PromocionController extends Controller
             'fecha_fin.date' => 'Debe ser una fecha válida.',
             'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
 
-            // compra mínima
             'compra_minima.numeric' => 'La compra mínima debe ser numérica.',
             'compra_minima.min' => 'La compra mínima no puede ser menor a 0.',
             'compra_minima.regex' => 'La compra mínima debe tener máximo 2 decimales.',
 
-            // límite uso
             'limite_uso.integer' => 'El límite de uso debe ser un número entero.',
             'limite_uso.min' => 'El límite de uso debe ser al menos 1.',
             'limite_uso.max' => 'El límite de uso no puede ser mayor a 10000.',
 
-            // FK
             'festividad_id.required' => 'La festividad es obligatoria.',
             'festividad_id.exists' => 'La festividad seleccionada no es válida.',
         ]);
@@ -248,7 +217,6 @@ class PromocionController extends Controller
         $promocion = Promocion::findOrFail($id);
         $promocion->update([
             'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
             'descuento' => $request->descuento,
             'fecha_inicio' => $request->fecha_inicio,
             'fecha_fin' => $request->fecha_fin,
@@ -260,9 +228,6 @@ class PromocionController extends Controller
         return redirect()->route('promociones.index')->with('success', 'Promoción actualizada con éxito');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Promocion $promocion)
     {
         $promocion->update(['estado' => 0]);

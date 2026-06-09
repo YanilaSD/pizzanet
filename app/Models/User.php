@@ -14,6 +14,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
+    protected ?array $privilegeSlugCache = null;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -76,6 +78,26 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+
+    public function hasPrivilegeSlug(string $slug): bool
+    {
+        return in_array($slug, $this->privilegeSlugs(), true);
+    }
+
+    public function privilegeSlugs(): array
+    {
+        if (! isset($this->privilegeSlugCache)) {
+            $this->privilegeSlugCache = $this->roles()
+                ->with('privilegios:id,slug')
+                ->get()
+                ->flatMap(fn ($rol) => $rol->privilegios->pluck('slug'))
+                ->unique()
+                ->values()
+                ->all();
+        }
+
+        return $this->privilegeSlugCache;
     }
 
 }
