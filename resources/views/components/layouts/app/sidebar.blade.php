@@ -40,13 +40,7 @@
                 "current" => request()->routeIs("promociones.*"),
                 "privilege" => "promociones.index",
             ],
-            [
-                "name" => "Descuentos",
-                "icon" => "home",
-                "route" => route("descuentos.index"),
-                "current" => request()->routeIs("descuentos.*"),
-                "privilege" => "productos.index",
-            ],
+        
             [
                 "name" => "Productos",
                 "icon" => "shopping-bag",
