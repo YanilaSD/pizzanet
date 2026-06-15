@@ -1,22 +1,36 @@
 <x-layouts.app>
-    <div class="grid grid-cols-4 gap-6">
-        <div class="col-span-3">
-            <div class="flex justify-between mb-6">
-                <div>
-                    <h1 class="text-2xl font-semibold">Gestión de Ventas</h1>
-                    <p>Registra y gestiona todas las ventas de la pizzería con promociones</p>
-                </div>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-4">
+
+        <div class="lg:col-span-3">
+            <div class="flex flex-col">
+                <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
+                    Gestión de Ventas
+                </h1>
+
+                <p class="mt-1 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                    Registra y gestiona todas las ventas de la pizzería con promociones
+                </p>
             </div>
         </div>
-        <div class="col-span-1">
-            <p>Usuario: {{ auth()->user()->name }}</p>
-            <p>Fecha: {{ \Carbon\Carbon::now()->setTimezone('America/La_Paz')->format('d/m/Y') }}</p>
+
+        <div class="lg:col-span-1">
+            <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 text-sm">
+                <p>
+                    <span class="font-medium">Usuario:</span>
+                    {{ auth()->user()->name }}
+                </p>
+
+                <p class="mt-1">
+                    <span class="font-medium">Fecha:</span>
+                    {{ \Carbon\Carbon::now()->setTimezone('America/La_Paz')->format('d/m/Y') }}
+                </p>
+            </div>
         </div>
+
     </div>
 
     <flux:separator />
 
-    {{-- Búsqueda de cliente --}}
     <form action="{{ route('ventas.searchClient') }}" method="post">
         @csrf
         <div class="flex-1 max-md:py-6 self-stretch my-4">
@@ -40,73 +54,99 @@
             </flux:callout>
         @endif
 
-        <div class="grid grid-cols-5 gap-6 my-4">
-            <div class="col-span-3 ">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 my-4">
+            <div class="lg:col-span-3">
                 <label for="ci" class="module-form-label">Cliente</label>
-                <flux:input.group>
-                    <flux:input name="ci" placeholder="Ingresa CI del cliente" />
-                    <flux:button type="submit" name="action" value="buscar" icon="magnifying-glass">
-                        Buscar
-                    </flux:button>
-                    <flux:button type="submit" name="action" value="sin_cliente" variant="primary" color="orange" icon="shopping-cart">
-                        Venta sin cliente
-                    </flux:button>
-                </flux:input.group>
+                <flux:input.group class="flex flex-col sm:flex-row gap-2">
+                <flux:input
+                    name="ci"
+                    placeholder="Ingresa CI del cliente"
+                />
+
+                <flux:button
+                    type="submit"
+                    name="action"
+                    value="buscar"
+                    icon="magnifying-glass"
+                >
+                    Buscar
+                </flux:button>
+
+                <flux:button
+                    type="submit"
+                    name="action"
+                    value="sin_cliente"
+                    variant="primary"
+                    color="orange"
+                    icon="shopping-cart"
+                >
+                    Venta sin cliente
+                </flux:button>
+            </flux:input.group>
             </div>
         </div>
     </form>
 
-    {{-- Datos del cliente encontrado --}}
     @if(!is_null($cliente))
         <div class="my-4">
-            <x-module-card-lg class="overflow-hidden !p-0">
-                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
-                        <tr>
-                            <th class="px-6 py-3">Nombre</th>
-                            <th class="px-6 py-3">CI</th>
-                            <th class="px-6 py-3">Celular</th>
-                            <th class="px-6 py-3">Puntos acumulados</th>
-                            <th class="px-6 py-3">Estado canje</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $clienteModel = \App\Models\Cliente::find($cliente['id']);
-                            $saldo = $clienteModel?->saldo_puntos ?? 0;
-                            $puedeCanjer = $saldo >= 100;
-                        @endphp
-                        <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ $cliente['nombre'] }}</td>
-                            <td class="px-6 py-4">{{ $cliente['ci'] }}</td>
-                            <td class="px-6 py-4">{{ $cliente['celular'] }}</td>
-                            <td class="px-6 py-4">
-                                <span class="font-semibold">{{ $saldo }}</span> pts
-                            </td>
-                            <td class="px-6 py-4">
-                                @if($puedeCanjer)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Puede canjear Bs 10
-                                    </span>
-                                @else
+           <x-module-card-lg class="!p-0">
+                <div class="overflow-x-auto">
+                    <table class="min-w-[800px] w-full text-left text-sm text-gray-600 dark:text-gray-300">
+                        <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
+                            <tr>
+                                <th class="px-6 py-3">Nombre</th>
+                                <th class="px-6 py-3">CI</th>
+                                <th class="px-6 py-3">Celular</th>
+                                <th class="px-6 py-3">Puntos acumulados</th>
+                                <th class="px-6 py-3">Estado canje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $clienteModel = \App\Models\Cliente::find($cliente['id']);
+                                $saldo = $clienteModel?->saldo_puntos ?? 0;
+                                $puedeCanjer = $saldo >= 100;
+                            @endphp
+                            <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
+                                <td class="px-6 py-4 font-medium text-gray-900">{{ $cliente['nombre'] }}</td>
+                                <td class="px-6 py-4">{{ $cliente['ci'] }}</td>
+                                <td class="px-6 py-4">{{ $cliente['celular'] }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="font-semibold">{{ $saldo }}</span> pts
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($clienteModel->id == 1)
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                        Necesita {{ 100 - $saldo }} pts más
+                                        No aplica
                                     </span>
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    @else
+                                        @if($puedeCanjer)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Puede canjear Bs 10
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                                Necesita {{ 100 - $saldo }} pts más
+                                            </span>
+                                        @endif
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </x-module-card-lg>
         </div>
     @endif
 
-    {{-- Productos --}}
     @if(!is_null($cliente))
         <flux:separator />
-        <div class="flex-1 max-md:py-6 self-stretch my-4">
-            <flux:heading size="xl" level="1">Productos</flux:heading>
-            <flux:text class="mb-6 mt-2 text-base">
+        <div class="my-4">
+            <flux:heading size="xl" level="1">
+                Productos
+            </flux:heading>
+
+            <flux:text class="mt-2 mb-6 text-sm sm:text-base">
                 Ingresa los productos para continuar con la venta.
             </flux:text>
         </div>

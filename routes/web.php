@@ -136,7 +136,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [VentaController::class, 'store'])->middleware('privilege:ventas.store')->name('ventas.store');
         Route::get('/{venta}/show', [VentaController::class, 'show'])->middleware('privilege:ventas.show')->name('ventas.show');
         Route::put('/{venta}', [VentaController::class, 'update'])->middleware('privilege:ventas.update')->name('ventas.update');
-        Route::get('/{venta}/destroy', [VentaController::class, 'destroy'])->middleware('privilege:ventas.destroy')->name('ventas.destroy');
+        Route::post('/{venta}/destroy', [VentaController::class, 'destroy'])->middleware('privilege:ventas.destroy')->name('ventas.destroy');
 
         Route::post('/cliente', [VentaController::class, 'searchClient'])->middleware('privilege:ventas.searchClient')->name('ventas.searchClient');
         Route::post('/add-producto', [VentaController::class, 'addProducto'])->middleware('privilege:ventas.addProducto')->name('ventas.addProducto');

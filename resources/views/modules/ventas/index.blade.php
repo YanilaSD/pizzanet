@@ -1,4 +1,9 @@
 <x-layouts.app>
+    @if(session('ventas'))
+        <flux:callout icon="check" class="mb-2" variant="success" inline>
+            <flux:callout.heading>{{ session('ventas') }}</flux:callout.heading>
+        </flux:callout>
+    @endif
     <x-card-header 
         title="Gestión de Ventas"
         description="Registra y gestiona todas las ventas de la pizzería con promociones."
@@ -111,13 +116,10 @@
         description="Historial de todas las ventas realizadas con promociones aplicadas."
     >
         <x-slot name="head">
-            <th>ID Venta</th>
+            <th>#</th>
             <th>Cliente</th>
-            <th>Fecha</th>
-            <th>Subtotal</th>
-            <th>Descuento</th>
-            <th>Total</th>
-            <th>Método de Pago</th>
+            <th>Importe</th>
+            <th>Tipo de Pago</th>
             <th>Estado</th>
             <th class="text-right">Acciones</th>
         </x-slot>
@@ -125,51 +127,59 @@
         <x-slot name="body">
             @forelse ($ventas as $venta)
                 <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition whitespace-nowrap">
-                        #{{ $venta->id }}
-                    </td>
-
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                        {{ $venta->cliente->nombre ?? 'Sin nombre' }}
-                    </td>
-
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
-                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
-                    </td>
-
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
-                        Bs {{ number_format($venta->subtotal, 2) }}
-                    </td>
 
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="font-medium text-red-600">
-                            - Bs {{ number_format($venta->descuento, 2) }}
+                        <span class="font-semibold text-gray-900">
+                            #{{ $venta->id }}
+                        </span>
+                        <p>
+                            <div>
+                            <p class="font-medium text-gray-800 text-xs">
+                                {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
+                            </p>
+
+                            <p class="text-xs text-gray-700">
+                                {{ \Carbon\Carbon::parse($venta->fecha)->format('H:i') }}
+                            </p>
+                        </div>
+                        </p>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <div>
+                            <p class="font-medium text-gray-800 text-xs uppercase">
+                                {{ $venta->cliente->nombre ?? 'SIN NOMBRE' }}
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <span>
+                            Bs {{ number_format($venta->total, 2) }}
                         </span>
                     </td>
 
-                    <td class="px-6 py-4 font-semibold text-gray-800 group-hover:text-gray-900 transition whitespace-nowrap">
-                        Bs {{ number_format($venta->total, 2) }}
-                    </td>
-
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <flux:badge color="lime">
+                        <flux:badge color="sky">
                             {{ $venta->tipoPago->nombre ?? 'N/D' }}
                         </flux:badge>
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <flux:badge color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}">
+                        <flux:badge
+                            color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}"
+                        >
                             {{ $venta->estado == '1' ? 'Completada' : 'Pendiente' }}
                         </flux:badge>
                     </td>
 
                     <td class="px-6 py-4">
-                        <div class="flex justify-end gap-2">
+                        <div class="flex justify-end gap-2 opacity-70 group-hover:opacity-100 transition">
+
                             <a
                                 href="{{ route('ventas.show', $venta) }}"
                                 class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition"
                                 title="Ver"
-                                aria-label="Ver venta #{{ $venta->id }}"
                             >
                                 <flux:icon name="eye" />
                             </a>
@@ -180,23 +190,24 @@
                                 onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
                             >
                                 @csrf
-                                @method('DELETE')
+                                @method('POST')
 
                                 <button
                                     type="submit"
                                     class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition"
                                     title="Eliminar"
-                                    aria-label="Eliminar venta #{{ $venta->id }}"
                                 >
-                                    <flux:icon name="trash" />
+                                    <flux:icon name="x-circle" />
                                 </button>
                             </form>
+
                         </div>
                     </td>
+
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center py-8 text-gray-400">
+                    <td colspan="7" class="py-10 text-center text-gray-400">
                         No se han registrado ventas aún.
                     </td>
                 </tr>

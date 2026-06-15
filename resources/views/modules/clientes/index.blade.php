@@ -35,8 +35,9 @@
             <x-slot name="head">
                 <th>#</th>
                 <th>Nombre</th>
+                <th>CI</th>
                 <th>Correo</th>
-                <th>Descuento</th>
+                <th>Puntos acumulados</th>
                 <th>Estado</th>
                 <th class="text-right">Acciones</th>
             </x-slot>
@@ -52,12 +53,16 @@
                             {{ $cliente->nombre ?? 'Sin nombre' }}
                         </td>
 
-                        <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                         <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                            {{ $cliente->ci ?? '-' }}
+                        </td>
+
+                         <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
                             {{ $cliente->correo ?? 'Sin correo' }}
                         </td>
 
                         <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                            Bs {{ $cliente->getSaldoPuntosAttribute() }}
+                            {{ $cliente->getSaldoPuntosAttribute() }} Pts.
                         </td>
 
                         <td class="px-6 py-4">

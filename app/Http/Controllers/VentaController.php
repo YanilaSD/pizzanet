@@ -30,6 +30,11 @@ class VentaController extends Controller
         $ci = $request->input('ci');
         $action = $request->input('action');
 
+        if (is_null($ci) && $action == 'buscar') {
+            session()->flash('cliente_no_encontrado', 'Ingrese un CI valido o registre uno nuevo.');
+            return redirect()->back();
+        }
+
         if ($action === 'sin_cliente') {
             $cliente = Cliente::where('ci', config('app.ci_anonimo'))->first();
 
@@ -194,5 +199,13 @@ class VentaController extends Controller
     {
         session(['usar_puntos' => $request->boolean('usar_puntos')]);
         return response()->json(['success' => true]);
+    }
+
+    public function destroy(Venta $venta){
+        $venta = Venta::findOrFail($venta->id);
+        $venta->estado = 0;
+        $venta->save();
+        session()->flash('ventas', "Se dio de baja la venta #$venta->id.");
+        return redirect()->route('ventas.index');
     }
 }
