@@ -95,7 +95,6 @@ class VentaDetalle extends Component
         $subtotal        = $this->calcularSubtotal();
         $this->descuento = 0;
 
-        // Descuento por promoción
         if ($this->promocion_id) {
             $promocion = Promocion::find($this->promocion_id);
             if ($promocion) {
@@ -103,7 +102,6 @@ class VentaDetalle extends Component
             }
         }
 
-        // Descuento por canje de puntos
         if ($this->usar_puntos) {
             $clienteSession = Session::get('cliente');
             if ($clienteSession) {
@@ -141,14 +139,12 @@ class VentaDetalle extends Component
         $subtotal       = $this->calcularSubtotal();
         $this->descuento = 0;
 
-        // Descuento por promoción
         $promocion = $this->promocion_id ? Promocion::find($this->promocion_id) : null;
         if ($promocion) {
             $this->descuento += ($subtotal * $promocion->descuento) / 100;
             $promocion->decrement('limite_uso');
         }
 
-        // Descuento por canje de puntos
         $descuentoCanje = null;
         if ($this->usar_puntos && $cliente) {
             $descuentoCanje = Descuento::where('estado', 1)->first();
@@ -209,7 +205,7 @@ class VentaDetalle extends Component
         $this->usar_puntos  = false;
         $this->total        = 0;
 
-        return redirect()->route('ventas.index')->with('success', 'Venta registrada correctamente.');
+        return redirect()->route('ventas.show', $venta->id);
     }
 
     private function buscarProducto($id)
@@ -234,6 +230,7 @@ class VentaDetalle extends Component
             'saldo_puntos'   => $cliente?->saldo_puntos ?? 0,
             'puede_canjear'  => $cliente && $descuentoCanje && $cliente->saldo_puntos >= $descuentoCanje->puntos,
             'descuento_canje'=> $descuentoCanje?->descuento ?? 0,
+            'cliente'        => $cliente,
         ]);
     }
 }
