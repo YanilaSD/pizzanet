@@ -13,6 +13,7 @@ use App\Models\HistorialCanje;
 use App\Models\TipoPago;
 use App\Mail\SaleDone;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class VentaDetalle extends Component
 {
@@ -226,7 +227,7 @@ class VentaDetalle extends Component
             'detalle'        => $this->detalle,
             'total'          => $this->total,
             'tipo_pagos'     => TipoPago::where('estado', 1)->get(),
-            'promociones'    => Promocion::where('estado', 1)->get(),
+            'promociones'    => Promocion::where('estado', 1)->where('fecha_inicio', '<=', Carbon::now()->format('Y-m-d'))->where('fecha_fin', '>=', Carbon::now()->format('Y-m-d'))->get(),
             'saldo_puntos'   => $cliente?->saldo_puntos ?? 0,
             'puede_canjear'  => $cliente && $descuentoCanje && $cliente->saldo_puntos >= $descuentoCanje->puntos,
             'descuento_canje'=> $descuentoCanje?->descuento ?? 0,
