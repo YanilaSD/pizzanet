@@ -1,12 +1,4 @@
-<!-- resources/views/categorias/create.blade.php -->
-
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Nuevo Categoria</h1>
-            <p>Completa el formulario para registrar una nueva categoria.</p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -19,13 +11,13 @@
         </div>
     @endif
 
-    <x-module-card-lg>
+    <x-module-card-lg title="Nuevo Categoria" description="Completa el formulario para registrar una nueva categoria.">
         <form action="{{ route('categorias.store') }}" method="POST">
             @csrf
 
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                <div class="md:w-1/3">
-                    <label for="nombre" class="module-form-label">Nombre</label>
+                <div class="md:flex-[2]">
+                    <label for="nombre" class="module-form-label">Nombre <span class="text-red-500">*</span></label>
                     <flux:input
                         id="nombre"
                         name="nombre"

@@ -1,12 +1,5 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Nuevo Privilegio</h1>
-            <p>Completa el formulario para registrar un nuevo privilegio en el sistema.</p>
-        </div>
-    </div>
 
-    {{-- Mensajes de error --}}
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             <strong class="font-bold">¡Ups!</strong>
@@ -18,16 +11,13 @@
         </div>
     @endif
 
-    {{-- Tarjeta del formulario --}}
-    <x-module-card-lg>
+    <x-module-card-lg title="Nuevo Privilegio" description="Completa el formulario para registrar un nuevo privilegio en el sistema.">
         <form action="{{ route('privilegios.store') }}" method="POST">
             @csrf
 
-            {{-- Inputs en una fila --}}
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
                 <div class="md:flex-[1]">
-                    <label for="nombre" class="module-form-label">Nombre</label>
+                    <label for="nombre" class="module-form-label">Nombre<span class="text-red-500">*</span></label>
                     <flux:input
                         id="nombre"
                         name="nombre"
@@ -37,14 +27,14 @@
                     />
                 </div>
 
-                {{-- Descripción --}}
                 <div class="md:flex-[2]">
-                    <label for="descripcion" class="module-form-label">Descripción</label>
+                    <label for="descripcion" class="module-form-label">Descripción <span class="text-red-500">*</span></label>
                     <flux:input
                         id="descripcion"
                         name="descripcion"
                         placeholder="Descripción breve"
                         value="{{ old('descripcion') }}"
+                        required
                     />
                 </div>
             </div>

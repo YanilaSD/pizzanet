@@ -40,7 +40,8 @@ class PrivilegioController extends Controller
      */
     public function store(Request $request)
     {
-
+        $slug = Str::slug($request->nombre);
+        $request->merge(['slug' => $slug]);
         $request->validate([
             'nombre' => [
                 'required',
@@ -75,10 +76,9 @@ class PrivilegioController extends Controller
             'descripcion.max' => 'La Descripción no debe exceder los 255 caracteres.',
         ]);
 
-        $slug = Str::slug($request->nombre);
         Privilegio::create([
             'nombre' => $request->nombre,
-            'slug' => $slug,
+            'slug' => $request->slug,
             'descripcion' => $request->descripcion,
             'estado' => 1,
         ]);

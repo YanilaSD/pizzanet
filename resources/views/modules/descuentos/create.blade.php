@@ -1,12 +1,4 @@
 <x-layouts.app>
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Nuevo Descuento</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Registra un descuento nuevo. Al guardar, este quedara como activo y los anteriores se desactivaran.
-            </p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -19,14 +11,21 @@
         </div>
     @endif
 
-    <x-module-card-lg>
-        <form action="{{ route('descuentos.store') }}" method="POST" class="space-y-6">
+    <x-module-card-lg title="Nuevo Descuento" description="Completa el formulario para registrar un nuevo descuento.">
+        <form action="{{ route('descuentos.store') }}" method="POST">
             @csrf
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+            <div class="text-xs bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded mb-6">
+                <strong class="font-bold">Atención:</strong>
+                <span class="block sm:inline">
+                    Al guardar, este quedara registro quedar[a] como activo y los anteriores se desactivaran.
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -37,9 +36,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="puntos" class="module-form-label">
-                        Puntos requeridos
+                        Puntos requeridos <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="puntos"
@@ -53,9 +52,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="descuento" class="module-form-label">
-                        Monto de descuento (Bs)
+                        Monto de descuento (Bs) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="descuento"
@@ -69,9 +68,9 @@
                     />
                 </div>
 
-                <div class="md:col-span-2">
+                <div class="md:col-span-4">
                     <label for="descripcion" class="module-form-label">
-                        Descripción
+                        Descripción <span class="text-red-500">*</span>
                     </label>
                     <textarea
                         id="descripcion"

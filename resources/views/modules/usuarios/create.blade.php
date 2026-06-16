@@ -1,12 +1,5 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Nuevo Usuario</h1>
-            <p>Completa el formulario para registrar un nuevo usuario en el sistema.</p>
-        </div>
-    </div>
 
-    {{-- Mensajes de error --}}
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             <strong class="font-bold">¡Ups!</strong>
@@ -18,7 +11,6 @@
         </div>
     @endif
 
-    {{-- Alerta contraseña por defecto --}}
     <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded mb-6">
         <strong class="font-bold">Atención:</strong>
         <span class="block sm:inline">
@@ -27,17 +19,14 @@
         </span>
     </div>
 
-    {{-- Tarjeta del formulario --}}
-    <x-module-card-lg>
+    <x-module-card-lg title="Nuevo Usuario" description="Completa el formulario para registrar un nuevo usuario en el sistema.">
         <form action="{{ route('usuarios.store') }}" method="POST">
             @csrf
 
-            {{-- Inputs en una fila --}}
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
                 <div class="md:flex-[1]">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -48,10 +37,9 @@
                     />
                 </div>
 
-                {{-- Correo --}}
                 <div class="md:flex-[1]">
                     <label for="email" class="module-form-label">
-                        Correo
+                        Correo <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="email"
@@ -64,12 +52,9 @@
                 </div>
             </div>
 
-            {{-- Roles --}}
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-2">
-                    <label class="module-form-label">
-                        Asignar Roles
-                    </label>
+                    <label class="module-form-label">Asignar Roles <span class="text-red-500">*</span></label>
                     <span class="text-xs text-gray-500 dark:text-gray-400">
                         Puedes seleccionar varios
                     </span>

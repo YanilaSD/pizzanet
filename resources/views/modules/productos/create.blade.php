@@ -1,12 +1,4 @@
 <x-layouts.app>
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Nuevo Producto</h1>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                Completa el formulario para registrar un nuevo producto.
-            </p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -19,7 +11,7 @@
         </div>
     @endif
 
-    <x-module-card-lg>
+    <x-module-card-lg title="Nuevo Producto" description="Completa el formulario para registrar un nuevo producto.">
         <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 

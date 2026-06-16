@@ -1,14 +1,4 @@
 <x-layouts.app>
-    {{-- Header --}}
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Editar Cliente</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Modifica los detalles del cliente.
-            </p>
-        </div>
-    </div>
-
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
             <strong class="font-semibold">Revisa los campos:</strong>
@@ -20,45 +10,42 @@
         </div>
     @endif
 
-    <x-module-card-lg>
-        <form action="{{ route('clientes.update', $cliente->id) }}" method="POST" class="space-y-6">
+    <x-module-card-lg title="Editar Cliente" description="Modifica los detalles del cliente.">
+        <form action="{{ route('clientes.update', $cliente->id) }}" class="space-y-3" method="POST">
             @csrf
             @method('PUT')
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                <div class="md:col-span-1">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
                         name="nombre"
-                        placeholder="Nombre del cliente"
+                        placeholder="Ej: Juan Perez"
                         value="{{ old('nombre', $cliente->nombre) }}"
                         required
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="ci" class="module-form-label">
-                        CI
+                        CI <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="ci"
                         name="ci"
-                        placeholder="CI del cliente"
+                        placeholder="Ej: 1234567890"
                         value="{{ old('ci', $cliente->ci) }}"
                         inputmode="numeric"
                         required
                     />
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        Solo números (sin espacios).
-                    </p>
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="celular" class="module-form-label">
-                        Celular
+                        Celular <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="celular"
@@ -72,7 +59,7 @@
 
                 <div>
                     <label for="correo" class="module-form-label">
-                        Correo
+                        Correo <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="correo"
@@ -88,7 +75,7 @@
             <div class="flex justify-end gap-2 pt-2">
                 <a href="{{ route('clientes.index') }}">
                     <flux:button variant="primary" color="gray">
-                        Cancelar
+                        Volver
                     </flux:button>
                 </a>
 

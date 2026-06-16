@@ -1,21 +1,4 @@
 <x-layouts.app>
-    {{-- Header --}}
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Nueva Promoción</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Completa el formulario para registrar una nueva promoción.
-            </p>
-        </div>
-
-        <a href="{{ route('promociones.index') }}">
-            <flux:button variant="outline" color="orange">
-                ← Volver
-            </flux:button>
-        </a>
-    </div>
-
-    {{-- Mensajes de error --}}
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
             <strong class="font-semibold">Revisa los campos:</strong>
@@ -27,17 +10,14 @@
         </div>
     @endif
 
-    {{-- Card --}}
-    <x-module-card-lg>
-        <form action="{{ route('promociones.store') }}" method="POST" class="space-y-6">
+    <x-module-card-lg title="Nueva Promoción" description="Completa el formulario para registrar una nueva promoción.">
+        <form action="{{ route('promociones.store') }}" class="space-y-3" method="POST">
             @csrf
 
-            {{-- Grid principal --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- Nombre --}}
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -48,10 +28,9 @@
                     />
                 </div>
 
-                {{-- Descuento --}}
-                <div>
+                <div class="md:col-span-1">
                     <label for="descuento" class="module-form-label">
-                        Descuento (%)
+                        Descuento (%) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="descuento"
@@ -65,10 +44,9 @@
                     />
                 </div>
 
-                {{-- Festividad --}}
-                <div>
+                <div class="md:col-span-2">
                     <label for="festividad_id" class="module-form-label">
-                        Festividad
+                        Festividad <span class="text-red-500">*</span>
                     </label>
                     <select
                         id="festividad_id"
@@ -87,12 +65,10 @@
                 </div>
             </div>
 
-            {{-- Fechas + reglas --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- Fecha inicio --}}
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2">
                     <label for="fecha_inicio" class="module-form-label">
-                        Fecha de inicio
+                        Fecha de inicio <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="fecha_inicio"
@@ -103,10 +79,9 @@
                     />
                 </div>
 
-                {{-- Fecha fin --}}
-                <div>
+                <div class="md:col-span-2">
                     <label for="fecha_fin" class="module-form-label">
-                        Fecha de fin
+                        Fecha de fin <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="fecha_fin"
@@ -117,10 +92,9 @@
                     />
                 </div>
 
-                {{-- Compra mínima --}}
-                <div>
+                <div class="md:col-span-1">
                     <label for="compra_minima" class="module-form-label">
-                        Compra mínima (Bs)
+                        Compra mínima (Bs) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="compra_minima"
@@ -135,10 +109,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- Límite de uso --}}
-                <div>
+                <div class="md:col-span-3">
                     <label for="limite_uso" class="module-form-label">
-                        Límite de uso (por cliente)
+                        Límite de uso (por cliente) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="limite_uso"
@@ -151,10 +124,9 @@
                 </div>
             </div>
 
-            {{-- Acciones --}}
             <div class="flex justify-end gap-2 pt-2">
                 <a href="{{ route('promociones.index') }}">
-                    <flux:button variant="outline" color="gray">
+                    <flux:button variant="primary" color="gray">
                         Cancelar
                     </flux:button>
                 </a>

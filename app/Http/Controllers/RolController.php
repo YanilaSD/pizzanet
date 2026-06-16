@@ -48,17 +48,19 @@ class RolController extends Controller
             'descripcion' => [
                 'nullable',
                 'string',
+                'max:255',
+                'required',
             ],
 
         ], [
-            // nombre
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
             'nombre.unique' => 'El nombre ya está registrado.',
 
-            // descripcion
             'descripcion.string' => 'La descripción debe ser texto.',
+            'descripcion.max' => 'La descripción no debe exceder los 255 caracteres.',
+            'descripcion.required' => 'La descripción es obligatoria.',
         ]);
 
         $rol = Rol::create([
@@ -104,17 +106,19 @@ class RolController extends Controller
             'descripcion' => [
                 'nullable',
                 'string',
+                'max:255',
+                'required',
             ],
 
         ], [
-            // nombre
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder los 255 caracteres.',
             'nombre.unique' => 'El nombre ya está registrado.',
 
-            // descripcion
             'descripcion.string' => 'La descripción debe ser texto.',
+            'descripcion.max' => 'La descripción no debe exceder los 255 caracteres.',
+            'descripcion.required' => 'La descripción es obligatoria.',
         ]);
 
         $rol->update([
@@ -122,7 +126,6 @@ class RolController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        // Sincroniza los privilegios seleccionados (puede ser un array vacío)
         $rol->privilegios()->sync($request->input('privilegios', []));
 
         return redirect()->route('roles.index')->with('success', 'Rol actualizado correctamente.');

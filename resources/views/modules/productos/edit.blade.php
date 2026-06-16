@@ -1,12 +1,4 @@
 <x-layouts.app>
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Editar Producto</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Modifica los detalles del producto.
-            </p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -19,7 +11,7 @@
         </div>
     @endif
 
-    <x-module-card-lg>
+    <x-module-card-lg title="Editar Producto" description="Modifica los detalles del producto.">
         <form
             action="{{ route('productos.update', $producto->id) }}"
             method="POST"
@@ -30,10 +22,9 @@
             @method('PUT')
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- Nombre --}}
                 <div>
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -46,7 +37,7 @@
 
                 <div>
                     <label for="precio" class="module-form-label">
-                        Precio
+                        Precio <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="precio"
@@ -60,7 +51,7 @@
 
                 <div>
                     <label for="categoria_id" class="module-form-label">
-                        Categoría
+                        Categoría <span class="text-red-500">*</span>
                     </label>
                     <select
                         id="categoria_id"
@@ -83,7 +74,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-2">
                     <label for="descripcion" class="module-form-label">
-                        Descripción
+                        Descripción <span class="text-red-500">*</span>
                     </label>
                     <textarea
                         id="descripcion"

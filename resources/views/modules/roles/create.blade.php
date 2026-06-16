@@ -1,10 +1,4 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Crear Nuevo Rol</h1>
-            <p>Registra un nuevo rol para el sistema.</p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -17,14 +11,14 @@
         </div>
     @endif
 
-    <x-module-card-lg>
+    <x-module-card-lg title="Nuevo Rol" description="Registra un nuevo rol para el sistema.">
         <form action="{{ route('roles.store') }}" method="POST">
             @csrf
 
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
                 <div class="md:flex-[1]">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -37,20 +31,21 @@
 
                 <div class="md:flex-[1]">
                     <label for="descripcion" class="module-form-label">
-                        Descripción
+                        Descripción <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="descripcion"
                         name="descripcion"
                         placeholder="Descripción breve"
                         value="{{ old('descripcion') }}"
+                        required
                     />
                 </div>
             </div>
 
             <div class="mb-6">
                 <label class="module-form-label mb-2">
-                    Privilegios
+                    Privilegios <span class="text-red-500">*</span>
                 </label>
                 <div
                     class="module-card-nested grid max-h-48 grid-cols-1 gap-2 overflow-auto md:grid-cols-2">
@@ -75,7 +70,6 @@
                 @enderror
             </div>
 
-            {{-- Botones --}}
             <div class="flex justify-end gap-2">
                 <a href="{{ route('roles.index') }}">
                     <flux:button variant="primary" color="gray">

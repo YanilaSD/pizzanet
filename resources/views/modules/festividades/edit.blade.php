@@ -1,11 +1,4 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Editar Festividad</h1>
-            <p>Completa el formulario para actualizar la festividad.</p>
-        </div>
-    </div>
-
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             <strong class="font-bold">¡Ups!</strong>
@@ -17,14 +10,14 @@
         </div>
     @endif
 
-    <x-module-card-lg>
-        <form action="{{ route('festividades.update', $festividad->id) }}" method="POST">
+    <x-module-card-lg title="Editar Festividad" description="Completa el formulario para actualizar la festividad.">
+        <form action="{{ route('festividades.update', $festividad->id) }}" class="space-y-3" method="POST">
             @csrf
             @method('PUT')
 
-            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                <div class="md:w-1/3">
-                    <label for="nombre" class="module-form-label">Nombre</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-1">
+                    <label for="nombre" class="module-form-label">Nombre <span class="text-red-500">*</span></label>
                     <flux:input
                         id="nombre"
                         name="nombre"
@@ -34,8 +27,8 @@
                     />
                 </div>
 
-                <div class="md:w-2/3">
-                    <label for="descripcion" class="module-form-label">Descripción</label>
+                <div class="md:col-span-1">
+                    <label for="descripcion" class="module-form-label">Descripción <span class="text-red-500">*</span></label>
                     <flux:input
                         id="descripcion"
                         name="descripcion"
@@ -47,7 +40,7 @@
 
             <div class="flex justify-end gap-2">
                 <a href="{{ route('festividades.index') }}">
-                    <flux:button variant="primary" color="gray">Cancelar</flux:button>
+                    <flux:button variant="primary" color="gray">Volver</flux:button>
                 </a>
                 <flux:button variant="primary" color="orange" type="submit">Actualizar</flux:button>
             </div>

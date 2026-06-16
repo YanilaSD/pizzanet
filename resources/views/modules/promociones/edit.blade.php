@@ -1,12 +1,5 @@
 <x-layouts.app>
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Editar Promoción</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Modifica los datos de la promoción seleccionada.
-            </p>
-        </div>
-    </div>
+
 
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -19,15 +12,15 @@
         </div>
     @endif
 
-    <x-module-card-lg>
-        <form action="{{ route('promociones.update', $promocion->id) }}" method="POST" class="space-y-6">
+    <x-module-card-lg title="Editar Promoción" description="Modifica los datos de la promoción seleccionada.">
+        <form action="{{ route('promociones.update', $promocion->id) }}" class="space-y-3" method="POST">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -38,9 +31,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="descuento" class="module-form-label">
-                        Descuento (%)
+                        Descuento (%) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="descuento"
@@ -55,9 +48,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-2">
                     <label for="festividad_id" class="module-form-label">
-                        Festividad
+                        Festividad <span class="text-red-500">*</span>
                     </label>
                     <select
                         id="festividad_id"
@@ -77,10 +70,10 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2">
                     <label for="fecha_inicio" class="module-form-label">
-                        Fecha de inicio
+                        Fecha de inicio <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="fecha_inicio"
@@ -91,9 +84,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-2">
                     <label for="fecha_fin" class="module-form-label">
-                        Fecha de fin
+                        Fecha de fin <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="fecha_fin"
@@ -104,9 +97,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="compra_minima" class="module-form-label">
-                        Compra mínima (Bs)
+                        Compra mínima (Bs) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="compra_minima"
@@ -120,10 +113,10 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-3">
                     <label for="limite_uso" class="module-form-label">
-                        Límite de uso (por cliente)
+                        Límite de uso (por cliente) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="limite_uso"
@@ -139,12 +132,12 @@
             <div class="flex justify-end gap-2 pt-2">
                 <a href="{{ route('promociones.index') }}">
                     <flux:button variant="primary" color="gray">
-                        Cancelar
+                        Volver
                     </flux:button>
                 </a>
 
                 <flux:button type="submit" variant="primary" color="orange">
-                    Guardar cambios
+                    Actualizar
                 </flux:button>
             </div>
         </form>

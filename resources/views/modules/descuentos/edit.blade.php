@@ -1,12 +1,4 @@
 <x-layouts.app>
-    <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold">Editar Descuento</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Modifica los datos del descuento seleccionado.
-            </p>
-        </div>
-    </div>
 
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -19,15 +11,15 @@
         </div>
     @endif
 
-    <x-module-card-lg>
-        <form action="{{ route('descuentos.update', $descuento) }}" method="POST" class="space-y-6">
+    <x-module-card-lg title="Editar Descuento" description="Modifica los datos del descuento seleccionado.">
+        <form action="{{ route('descuentos.update', $descuento) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -38,9 +30,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="puntos" class="module-form-label">
-                        Puntos requeridos
+                        Puntos requeridos <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="puntos"
@@ -54,9 +46,9 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="descuento" class="module-form-label">
-                        Monto de descuento (Bs)
+                        Monto de descuento (Bs) <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="descuento"
@@ -70,9 +62,9 @@
                     />
                 </div>
 
-                <div class="md:col-span-2">
+                <div class="md:col-span-4">
                     <label for="descripcion" class="module-form-label">
-                        Descripción
+                        Descripción <span class="text-red-500">*</span>
                     </label>
                     <textarea
                         id="descripcion"

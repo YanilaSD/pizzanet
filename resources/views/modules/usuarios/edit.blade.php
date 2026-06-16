@@ -1,12 +1,4 @@
 <x-layouts.app>
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl">Editar Usuario</h1>
-            <p>Actualiza la información del usuario y sus roles asignados.</p>
-        </div>
-    </div>
-
-    {{-- Mensajes de error --}}
     @if ($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             <strong class="font-bold">¡Ups!</strong>
@@ -18,17 +10,15 @@
         </div>
     @endif
 
-    <x-module-card-lg>
+    <x-module-card-lg title="Editar Usuario" description="Actualiza la información del usuario y sus roles asignados.">
         <form action="{{ route('usuarios.update', $usuario->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            {{-- Inputs --}}
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                {{-- Nombre --}}
                 <div class="md:flex-[1]">
                     <label for="nombre" class="module-form-label">
-                        Nombre
+                        Nombre <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="nombre"
@@ -39,10 +29,9 @@
                     />
                 </div>
 
-                {{-- Correo --}}
                 <div class="md:flex-[1]">
                     <label for="email" class="module-form-label">
-                        Correo
+                        Correo <span class="text-red-500">*</span>
                     </label>
                     <flux:input
                         id="email"
@@ -55,12 +44,9 @@
                 </div>
             </div>
 
-            {{-- Roles --}}
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-2">
-                    <label class="module-form-label">
-                        Asignar Roles
-                    </label>
+                    <label class="module-form-label">Asignar Roles <span class="text-red-500">*</span></label>
                     <span class="text-xs text-gray-500 dark:text-gray-400">
                         Puedes seleccionar varios
                     </span>
