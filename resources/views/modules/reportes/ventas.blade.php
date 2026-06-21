@@ -22,7 +22,7 @@
                 <input
                     type="date"
                     name="desde"
-                    value="{{ request('desde') }}"
+                    value="{{ request('desde') ?? now()->format('Y-m-d') }}"
                     class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
             </div>
 
@@ -30,14 +30,14 @@
                 <label class="module-form-label">Hasta</label>
                 <input type="date"
                        name="hasta"
-                       value="{{ request('hasta') }}"
+                       value="{{ request('hasta') ?? now()->format('Y-m-d') }}"
                        class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
             </div>
 
             <div>
                 <label class="module-form-label">Tipo de Pago</label>
-                <flux:select name="tipo_pago_id" class="dark" placeholder="Seleccionar tipo de pago...">
-                    <flux:select.option value="">Todos</flux:select.option>
+                <flux:select name="tipo_pago_id" class="dark">
+                    <flux:select.option value="" selected>Todos</flux:select.option>
                     @foreach($tipoPagos as $tp)
                         <flux:select.option value="{{ $tp->id }}" :selected="request('tipo_pago_id') == $tp->id">
                             {{ $tp->nombre }}
@@ -48,8 +48,8 @@
 
             <div>
                 <label class="module-form-label">Estado</label>
-                <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
-                    <flux:select.option value="">Todos</flux:select.option>
+                <flux:select name="estado" class="dark">
+                    <flux:select.option value="" selected>Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
                         Completada
                     </flux:select.option>

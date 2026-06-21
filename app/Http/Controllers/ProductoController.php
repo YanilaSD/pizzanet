@@ -61,7 +61,8 @@ class ProductoController extends Controller
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,gif',
-                'max:2048',
+                'max:10240',
+           
             ],
 
         ], [
@@ -83,7 +84,7 @@ class ProductoController extends Controller
 
             'imagen.image' => 'Debe ser una imagen.',
             'imagen.mimes' => 'Solo JPG, JPEG, PNG o GIF.',
-            'imagen.max' => 'Máximo 2MB.',
+            'imagen.max' => 'Máximo 10MB.',
         ]);
 
 
@@ -141,7 +142,7 @@ class ProductoController extends Controller
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,gif',
-                'max:2048',
+                'max:10240',
             ],
 
         ], [
@@ -163,7 +164,7 @@ class ProductoController extends Controller
 
             'imagen.image' => 'Debe ser una imagen.',
             'imagen.mimes' => 'Solo JPG, JPEG, PNG o GIF.',
-            'imagen.max' => 'Máximo 2MB.',
+            'imagen.max' => 'Máximo 10MB.',
         ]);
 
         $imagen = $producto->imagen;

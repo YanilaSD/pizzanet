@@ -59,8 +59,8 @@ class ReporteController extends Controller
 
         $ventas = $query->orderBy('created_at', 'desc')->get();
 
-        $total = $ventas->sum('total');
-        $descuentos = $ventas->sum('descuento');
+        $total = $ventas->where('estado', 1)->sum('total');
+        $descuentos = $ventas->where('estado', 1)->sum('descuento');
 
         $data = [
             'ventas' => $ventas,

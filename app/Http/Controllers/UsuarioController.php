@@ -10,13 +10,9 @@ use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $search = $request->input('search');
-
         $usuarios = User::query()
             ->when($search, fn($query) => $query->where('name', 'like', "%{$search}%"))
             ->orderBy('id', 'desc')
@@ -25,18 +21,12 @@ class UsuarioController extends Controller
         return view('modules.usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $roles = Rol::where('estado', 1)->get();
         return view('modules.usuarios.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -63,12 +53,11 @@ class UsuarioController extends Controller
 
         $usuario = User::create([
             'name' => Str::upper($request->nombre),
-            'email' => Str::lower($request->lower),
+            'email' => Str::lower($request->email),
             'password' => Hash::make(12345678),
             'estado' => 1,
         ]);
 
-        // Asignar roles si existen
         if ($request->filled('roles')) {
             $usuario->roles()->sync($request->roles);
         }
@@ -78,9 +67,6 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario creado correctamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $usuario = User::findOrFail($id);
@@ -90,9 +76,6 @@ class UsuarioController extends Controller
         return view('modules.usuarios.edit', compact('usuario', 'roles', 'rolesAsignados'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, User $usuario)
     {
         $request->validate([
