@@ -79,12 +79,14 @@
                         </a>
 
                         <a href="{{ route('usuarios.reset', $usuario->id) }}"
-                           class="p-2 rounded-lg hover:bg-yellow-100 text-gray-500 hover:text-yellow-600 transition">
+                        onclick="return confirm('¿Está seguro de restablecer la contraseña de este usuario?')"
+                        class="p-2 rounded-lg hover:bg-yellow-100 text-gray-500 hover:text-yellow-600 transition">
                             <flux:icon name="shield-exclamation" />
                         </a>
 
                         <a href="{{ route('usuarios.toggle', $usuario->id) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                        onclick="return confirm('¿Está seguro de {{ $usuario->estado == '1' ? 'desactivar' : 'activar' }} este usuario?')"
+                        class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
                             <flux:icon name="{{ $usuario->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
 
