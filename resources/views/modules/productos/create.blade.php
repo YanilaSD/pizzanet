@@ -99,7 +99,7 @@
                                focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                         required
                     />
-                    <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Formato sugerido: JPG/PNG. Máx recomendado: 2MB.</p>
+                    <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Formato sugerido: JPG/PNG. Máx recomendado: 10MB.</p>
                 </div>
             </div>
 
