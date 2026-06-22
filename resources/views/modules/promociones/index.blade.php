@@ -6,7 +6,6 @@
         :button-link="route('promociones.create')"
     />
 
-    {{-- Success --}}
     @if (session('success'))
         <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg my-4" role="alert">
             <div class="font-semibold">¡Éxito!</div>
@@ -34,8 +33,7 @@
             <th>Nombre</th>
             <th>Festividad</th>
             <th>Descuento</th>
-            <th>Inicio</th>
-            <th>Fin</th>
+            <th>Vigencia</th>
             <th>Compra mínima</th>
             <th>Límite de uso</th>
             <th>Estado</th>
@@ -61,12 +59,8 @@
                         {{ rtrim(rtrim(number_format($promocion->descuento, 2), '0'), '.') }}%
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
-                        {{ \Carbon\Carbon::parse($promocion->fecha_inicio)->format('d/m/Y') }}
-                    </td>
-
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
-                        {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }}
+                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap text-xs">
+                        {{ \Carbon\Carbon::parse($promocion->fecha_inicio)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }}
                     </td>
 
                     <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">

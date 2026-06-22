@@ -35,7 +35,7 @@
             ],
             [
                 "name" => "Promocion",
-                "icon" => "home",
+                "icon" => "light-bulb",
                 "route" => route("promociones.index"),
                 "current" => request()->routeIs("promociones.*"),
                 "privilege" => "promociones.index",
@@ -50,14 +50,14 @@
             ],
             [
                 "name" => "Categorias",
-                "icon" => "shopping-bag",
+                "icon" => "folder-arrow-down",
                 "route" => route("categorias.index"),
                 "current" => request()->routeIs("categorias.*"),
                 "privilege" => "categorias.index",
             ],
             [
                 "name" => "Tipo de pagos",
-                "icon" => "shopping-bag",
+                "icon" => "queue-list",
                 "route" => route("tipo_pagos.index"),
                 "current" => request()->routeIs("tipo_pagos.*"),
                 "privilege" => "tipo_pagos.index",
@@ -73,14 +73,14 @@
             ],
             [
                 "name" => "Roles",
-                "icon" => "users",
+                "icon" => "user-group",
                 "route" => route("roles.index"),
                 "current" => request()->routeIs("roles.*"),
                 "privilege" => "roles.index",
             ],
             [
                 "name" => "Privilegios",
-                "icon" => "adjustments-horizontal",
+                "icon" => "wrench-screwdriver",
                 "route" => route("privilegios.index"),
                 "current" => request()->routeIs("privilegios.*"),
                 "privilege" => "privilegios.index",
@@ -89,7 +89,7 @@
         "Reporteria" => [
             [
                 "name" => "Reporte",
-                "icon" => "document-text",
+                "icon" => "document-chart-bar",
                 "route" => route("reportes.index"),
                 "current" => request()->routeIs("reportes.*"),
                 "privilege" => "reportes.index",
