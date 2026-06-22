@@ -127,7 +127,7 @@ class UsuarioController extends Controller
         $usuario->password = Hash::make(12345678);
         $usuario->update();
 
-        return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente.');
+        return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente. Su nueva contraseña es: 12345678.');
     }
 
     public function reset_f2a(string $id)
