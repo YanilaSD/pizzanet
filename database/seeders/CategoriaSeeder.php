@@ -10,6 +10,9 @@ class CategoriaSeeder extends Seeder
     {
         DB::table('categorias')->insert([
             ['nombre' => 'Pizzas', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['nombre' => 'Gaseosas', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['nombre' => 'Extras', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['nombre' => 'Jugos', 'estado' => 1, 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

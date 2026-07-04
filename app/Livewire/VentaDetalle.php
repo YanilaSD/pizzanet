@@ -37,8 +37,22 @@ class VentaDetalle extends Component
         }
     }
 
-    public function updatedProductoId()   { $this->dispatch('validarBoton'); }
-    public function updatedCantidad()     { $this->dispatch('validarBoton'); }
+    public function updatedProductoId()
+    {
+        $this->resetErrorBag('cantidad');
+        $this->dispatch('validarBoton');
+    }
+
+    public function updatedCantidad()
+    {
+        $this->resetErrorBag('cantidad');
+
+        if ($this->producto_id && $this->cantidad >= 1) {
+            $this->validarStock(intval($this->producto_id), intval($this->cantidad));
+        }
+
+        $this->dispatch('validarBoton');
+    }
 
     public function agregarProducto()
     {
@@ -55,17 +69,24 @@ class VentaDetalle extends Component
         $productos  = Session::get('productos_venta');
         $producto   = $this->buscarProducto($productoId);
 
-        if (!$producto) return;
+        if (!$producto) {
+            $this->addError('producto_id', 'Producto no encontrado.');
+            return;
+        }
+
+        if (!$this->validarStock($productoId, intval($this->cantidad))) {
+            return;
+        }
 
         if (isset($productos[$productoId])) {
             $productos[$productoId]['cantidad'] += $this->cantidad;
         } else {
             $productos[$productoId] = [
-                'id'             => $producto->id,
-                'nombre'         => $producto->nombre,
+                'id'             => $producto['id'],
+                'nombre'         => $producto['nombre'],
                 'cantidad'       => $this->cantidad,
-                'precio_unitario'=> $producto->precio,
-                'subtotal'       => $producto->precio * $this->cantidad,
+                'precio_unitario'=> $producto['precio'],
+                'subtotal'       => $producto['precio'] * $this->cantidad,
             ];
         }
 
@@ -135,6 +156,18 @@ class VentaDetalle extends Component
 
     public function confirmarVenta()
     {
+        $this->detalle = Session::get('productos_venta', []);
+
+        foreach ($this->detalle as $item) {
+            $producto = Producto::with('inventario')->find($item['id']);
+            $stock    = $producto?->inventario?->cantidad ?? 0;
+
+            if ($item['cantidad'] > $stock) {
+                $this->addError('cantidad', "Stock insuficiente para {$item['nombre']}. Solo hay {$stock} disponible(s).");
+                return;
+            }
+        }
+
         $clienteSession = Session::get('cliente');
         $cliente        = $clienteSession ? Cliente::find($clienteSession['id']) : null;
         $subtotal       = $this->calcularSubtotal();
@@ -193,6 +226,8 @@ class VentaDetalle extends Component
                 'precio_unitario' => $producto['precio_unitario'],
                 'subtotal'        => $producto['subtotal'],
             ]);
+            $_producto = Producto::with('inventario')->find($producto['id']);
+            $_producto->inventario->decrementarCantidad(intval($producto['cantidad']));
         }
 
         if ($cliente && !empty($cliente->correo) && config('app.send_mail')) {
@@ -212,6 +247,38 @@ class VentaDetalle extends Component
     private function buscarProducto($id)
     {
         return collect($this->productosDisponibles)->firstWhere('id', $id);
+    }
+
+    private function validarStock(int $productoId, int $cantidad): bool
+    {
+        $producto = $this->buscarProducto($productoId);
+
+        if (!$producto) {
+            $this->addError('producto_id', 'Producto no encontrado.');
+            return false;
+        }
+
+        $stock             = (int) ($producto['stock'] ?? 0);
+        $productos         = Session::get('productos_venta', []);
+        $cantidadEnCarrito = (int) ($productos[$productoId]['cantidad'] ?? 0);
+        $cantidadTotal     = $cantidadEnCarrito + $cantidad;
+
+        if ($stock <= 0) {
+            $this->addError('cantidad', 'No hay stock disponible para este producto.');
+            return false;
+        }
+
+        if ($cantidadTotal > $stock) {
+            $disponible = max($stock - $cantidadEnCarrito, 0);
+            $mensaje    = $cantidadEnCarrito > 0
+                ? "Stock insuficiente. Hay {$stock} en inventario y ya tienes {$cantidadEnCarrito} en la venta. Puedes agregar {$disponible} más."
+                : "Stock insuficiente. Solo hay {$stock} disponible(s).";
+
+            $this->addError('cantidad', $mensaje);
+            return false;
+        }
+
+        return true;
     }
 
     public function render()

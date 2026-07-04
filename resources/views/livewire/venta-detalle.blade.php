@@ -1,44 +1,77 @@
 <div>
     <div class="mt-4 mb-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="md:col-span-1">
+        <div class="md:col-span-2">
             <label for="producto_id" class="module-form-label">Producto</label>
             <flux:select
                 name="producto_id"
-                wire:model="producto_id"
+                wire:model.live="producto_id"
                 :error="$errors->first('producto_id')"
             >
                 <option value="">Selecciona un producto</option>
-                @foreach ($productosDisponibles as $producto)
-                    <option value="{{ $producto->id }}">
-                        {{ $producto->nombre }} / {{ $producto->categoria->nombre }} / Bs {{ $producto->precio }}
-                    </option>
-                @endforeach
+                @forelse ($productosDisponibles as $producto)
+                    @if($producto['stock'] > 0)
+                        <option value="{{ $producto['id'] }}">
+                            {{ $producto['nombre'] }} / {{ $producto['categoria'] }} / Bs {{ $producto['precio'] }}
+                        </option>
+                    @endif
+                @empty
+                    <option value="">No hay productos disponibles</option>
+                @endforelse   
             </flux:select>
         </div>
 
-        <div class="md:col-span-2">
+        <div class="md:col-span-1">
             <label for="cantidad" class="module-form-label">Cantidad</label>
+
             <flux:input
                 type="number"
                 name="cantidad"
-                wire:model="cantidad"
+                wire:model.live="cantidad"
                 min="1"
+                :disabled="!$producto_id"
                 :error="$errors->first('cantidad')"
             />
+
+            <div class="min-h-5 mt-1">
+                @if ($producto_id)
+                    @php
+                        $productoSeleccionado = collect($productosDisponibles)->firstWhere('id', (int) $producto_id);
+                        $stockDisponible = $productoSeleccionado['stock'] ?? 0;
+                        $enCarrito = $detalle[$producto_id]['cantidad'] ?? 0;
+                    @endphp
+
+                    @if ($productoSeleccionado)
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            Stock disponible: {{ max($stockDisponible - $enCarrito, 0) }} de {{ $stockDisponible }}
+                        </p>
+                    @endif
+                @endif
+
+                @error('cantidad')
+                    <p class="text-xs text-red-500">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
-        <div class="flex items-end">
+        <div class="md:col-span-1 flex flex-col">
+            <label class="module-form-label">&nbsp;</label>
+
             <flux:button
-                variant="primary" color="orange"
+                variant="primary"
+                color="orange"
                 id="btn-agregar"
                 wire:click="agregarProducto"
                 wire:loading.attr="disabled"
                 wire:target="agregarProducto"
                 icon="plus"
-                class="w-full md:w-auto"
+                class="w-full"
             >
                 Agregar Producto
             </flux:button>
+
+            <div class="min-h-5 mt-1">
+                {{-- Espacio reservado para mantener la alineación --}}
+            </div>
         </div>
     </div>
 
@@ -204,9 +237,12 @@
 <script>
 document.addEventListener('livewire:init', () => {
     Livewire.on('validarBoton', () => {
-        const producto = document.querySelector('[wire\\:model="producto_id"]').value;
-        const cantidad = document.querySelector('[wire\\:model="cantidad"]').value;
-        document.getElementById('btn-agregar').disabled = !(producto && cantidad > 0);
+        const producto = document.querySelector('[wire\\:model="producto_id"], [wire\\:model\\.live="producto_id"]')?.value;
+        const cantidad = document.querySelector('[wire\\:model="cantidad"], [wire\\:model\\.live="cantidad"]')?.value;
+        const btn = document.getElementById('btn-agregar');
+        if (btn) {
+            btn.disabled = !(producto && cantidad > 0);
+        }
     });
 });
 </script>

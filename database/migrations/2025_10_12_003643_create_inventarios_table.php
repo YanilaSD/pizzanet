@@ -10,12 +10,12 @@ return new class extends Migration
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
-            $table->foreignId('tipo_movimiento_id')->constrained('tipo_movimientos')->onDelete('cascade');
             $table->unsignedInteger('cantidad');
-            $table->decimal('costo', 10, 2)->nullable();
-            $table->string('motivo');
             $table->tinyInteger('estado')->default('1');
             $table->timestamps();
+
+            $table->unique('producto_id');
+
         });
     }
 

@@ -30,4 +30,9 @@ class Producto extends Model
     {
         return $this->hasMany(DetalleVenta::class);
     }
+
+    public function inventario()
+    {
+        return $this->hasOne(Inventario::class, 'producto_id', 'id');
+    }
 }

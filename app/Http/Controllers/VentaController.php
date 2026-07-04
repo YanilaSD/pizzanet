@@ -64,11 +64,20 @@ class VentaController extends Controller
     {
         Session::forget(['productos', 'promocion_id', 'porcentaje_descuento', 'usar_puntos']);
 
-        $productos        = Producto::where('estado', 1)->get();
+        $_productos        = Producto::where('estado', 1)->with('inventario')->get();
         $cliente          = Session::get('cliente');
         $tipo_pagos       = TipoPago::where('estado', 1)->get();
         $productos_session = session('productos', []);
-
+        $productos = $_productos->map(function ($producto) {
+            return [
+                'id'        => $producto->id,
+                'nombre'    => $producto->nombre,
+                'categoria' => $producto->categoria->nombre,
+                'precio'    => $producto->precio,
+                'stock'  => $producto->inventario?->cantidad ?? 0,
+                'imagen'    => $producto->imagen_url,
+            ];
+        });
         return view('modules.ventas.create', compact(
             'productos', 'cliente', 'tipo_pagos', 'productos_session'
         ));

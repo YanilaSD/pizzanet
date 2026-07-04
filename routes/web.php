@@ -127,6 +127,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{producto}/show', [ProductoController::class, 'show'])->middleware('privilege:productos.show')->name('productos.show');
         Route::get('/{producto}/edit', [ProductoController::class, 'edit'])->middleware('privilege:productos.edit')->name('productos.edit');
         Route::put('/{producto}', [ProductoController::class, 'update'])->middleware('privilege:productos.update')->name('productos.update');
+        Route::put('/{producto}/inventario', [ProductoController::class, 'updateInventario'])->middleware('privilege:productos.update')->name('productos.inventario.update');
         Route::get('/{producto}/toggle', [ProductoController::class, 'toggle'])->middleware('privilege:productos.toggle')->name('productos.toggle');
     });
 

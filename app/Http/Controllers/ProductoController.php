@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Inventario;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ class ProductoController extends Controller
     public function index(Request $request)
     {
         $productos = Producto::query()
+            ->with(['categoria', 'inventario'])
             ->when($request->search, function ($query) use ($request) {
                 return $query->where('nombre', 'like', '%' . $request->search . '%')
                              ->orWhere('descripcion', 'like', '%' . $request->search . '%');
@@ -184,6 +186,28 @@ class ProductoController extends Controller
         ]);
 
         return redirect()->route('productos.index')->with('success', 'Producto actualizado exitosamente.');
+    }
+
+    public function updateInventario(Request $request, Producto $producto)
+    {
+        $request->validate([
+            'cantidad' => [
+                'required',
+                'integer',
+                'min:0',
+            ],
+        ], [
+            'cantidad.required' => 'La cantidad es obligatoria.',
+            'cantidad.integer' => 'La cantidad debe ser un número entero.',
+            'cantidad.min' => 'La cantidad no puede ser negativa.',
+        ]);
+
+        Inventario::updateOrCreate(
+            ['producto_id' => $producto->id],
+            ['cantidad' => $request->cantidad, 'estado' => 1]
+        );
+
+        return redirect()->route('productos.index')->with('success', 'Inventario actualizado exitosamente.');
     }
 
     public function toggle(Producto $producto)
