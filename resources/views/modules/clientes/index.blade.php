@@ -76,8 +76,10 @@
                                 <span class="text-gray-400">No disponible</span>
                             @else
                                 <a href="{{ route('clientes.canjes', $cliente) }}"
-                                   class="p-2 rounded-lg hover:bg-green-100 text-gray-500 hover:text-green-600 transition">
-                                    <flux:icon name="clock" />
+                                    class="p-2 rounded-lg hover:bg-green-100 text-gray-500 hover:text-green-600 transition"
+                                    title="Ver historial de canjes"
+                                    aria-label="Ver historial de canjes">
+                                    <flux:icon name="document-text" />
                                 </a>
 
                                 <a href="{{ route('clientes.edit', $cliente->id) }}"

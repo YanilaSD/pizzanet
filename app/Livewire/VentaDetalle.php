@@ -271,7 +271,7 @@ class VentaDetalle extends Component
             return false;
         }
 
-        $stock             = (int) ($producto['stock'] ?? 0);
+        $stock             = (int) ($producto->inventario?->cantidad ?? 0);
         $productos         = Session::get('productos_venta', []);
         $cantidadEnCarrito = (int) ($productos[$productoId]['cantidad'] ?? 0);
         $cantidadTotal     = $cantidadEnCarrito + $cantidad;
