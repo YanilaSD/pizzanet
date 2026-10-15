@@ -40,11 +40,10 @@ class DashboardController extends Controller
         // BUSCAR CLIENTE POR CI
         // ================================
         $cliente = Cliente::where('ci', $request->ci)->first();
-
         if (!$cliente) {
             return back()->withErrors(['ci' => 'No existe un cliente registrado con ese número de CI.']);
         }
-
+            
         // ================================
         // ESTADÍSTICAS DEL CLIENTE
         // ================================
@@ -64,20 +63,20 @@ class DashboardController extends Controller
         // ================================
         // LISTAS DE PRODUCTOS Y PROMOS
         // ================================
-        $promociones = Promocion::where('estado', 1)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // $promociones = Promocion::where('estado', 1)
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(10);
 
-        $productos = Producto::where('estado', 1)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // $productos = Producto::where('estado', 1)
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(10);
 
-        $canjes = HistorialCanje::with(['descuento', 'venta'])
-            ->where('cliente_id', $cliente->id)
-            ->orderByDesc('fecha')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->withQueryString();
+        // $canjes = HistorialCanje::with(['descuento', 'venta'])
+        //     ->where('cliente_id', $cliente->id)
+        //     ->orderByDesc('fecha')
+        //     ->orderByDesc('id')
+        //     ->paginate(10)
+        //     ->withQueryString();
 
         // ================================
         // RESPUESTA

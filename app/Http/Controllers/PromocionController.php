@@ -127,7 +127,7 @@ class PromocionController extends Controller
     public function edit($id)
     {
         $promocion = Promocion::findOrFail($id);
-        $festividades = Festividad::all();
+        $festividades = Festividad::where('estado', 1)->get();
         return view('modules.promociones.edit', compact('promocion', 'festividades'));
     }
 
