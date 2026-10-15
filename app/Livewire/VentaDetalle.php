@@ -227,7 +227,20 @@ class VentaDetalle extends Component
                 'subtotal'        => $producto['subtotal'],
             ]);
             $_producto = Producto::with('inventario')->find($producto['id']);
-            $_producto->inventario->decrementarCantidad(intval($producto['cantidad']));
+            if ($_producto->inventario) {
+                // Descontar la cantidad vendida
+                $_producto->inventario->decrementarCantidad(
+                    (int) $producto['cantidad']
+                );
+
+                // Obtener la cantidad actualizada de la base de datos
+                $_producto->inventario->refresh();
+
+                // Desactivar el producto si el stock llegó a cero
+                if ((int) $_producto->inventario->cantidad <= 0) {
+                    $_producto->update(['estado' => 0]);
+                }
+            }
         }
 
         if ($cliente && !empty($cliente->correo) && config('app.send_mail')) {
@@ -246,7 +259,7 @@ class VentaDetalle extends Component
 
     private function buscarProducto($id)
     {
-        return collect($this->productosDisponibles)->firstWhere('id', $id);
+        return Producto::with('inventario')->find($id);
     }
 
     private function validarStock(int $productoId, int $cantidad): bool

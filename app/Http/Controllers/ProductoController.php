@@ -206,6 +206,10 @@ class ProductoController extends Controller
             ['producto_id' => $producto->id],
             ['cantidad' => $request->cantidad, 'estado' => 1]
         );
+        Producto::find($producto->id)->update(['estado' => 1]);
+        if ((int) Producto::find($producto->id)->inventario->cantidad <= 0) {
+            Producto::find($producto->id)->update(['estado' => 0]);
+        }
 
         return redirect()->route('productos.index')->with('success', 'Inventario actualizado exitosamente.');
     }

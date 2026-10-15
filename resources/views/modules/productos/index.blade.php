@@ -79,8 +79,8 @@
                             {{ $producto->inventario?->cantidad ?? 0 }}
                         </td>
                         <td class="px-6 py-4">
-                            <flux:badge color="{{ $producto->estado == 1 ? 'green' : 'red' }}">
-                                {{ $producto->estado == 1 ? 'Activo' : 'Inactivo' }}
+                            <flux:badge color="{{ $producto->inventario?->cantidad > 0 ? 'green' : 'red' }}">
+                                {{ $producto->inventario?->cantidad > '0' ? 'Disponible' : 'Agotado' }}
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 flex justify-end gap-2">
