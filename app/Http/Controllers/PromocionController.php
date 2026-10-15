@@ -11,13 +11,23 @@ class PromocionController extends Controller
 {
     public function index(Request $request)
     {
+        
+        Promocion::where('estado', 1)
+        ->whereDate('fecha_fin', '<', now()->toDateString())
+        ->update(['estado' => 0]);
+
         $promociones = Promocion::query()
-            ->when($request->search, function ($query) use ($request) {
-                return $query->where('nombre', 'like', '%' . $request->search . '%')
-                            ->orWhere('descuento', 'like', '%' . $request->search . '%');
-            })
-            ->where('estado', 1)
-            ->paginate(10);
+        // ->where('estado', 1)
+        ->when($request->search, function ($query) use ($request) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                ->orWhere('descuento', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(10)
+        ->withQueryString();
 
         return view('modules.promociones.index', compact('promociones'));
     }
@@ -157,7 +167,7 @@ class PromocionController extends Controller
             'fecha_fin' => [
                 'required',
                 'date',
-                'after_or_equal:' . $request->fecha_inicio,
+                'after_or_equal:' . now()->toDateString('Y-m-d'),
             ],
 
             'compra_minima' => [
@@ -196,7 +206,7 @@ class PromocionController extends Controller
 
             'fecha_fin.required' => 'La fecha de fin es obligatoria.',
             'fecha_fin.date' => 'Debe ser una fecha válida.',
-            'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+            'fecha_fin.after_or_equal' => 'La fecha de fin debe ser igual o posterior a hoy.',
 
             'compra_minima.numeric' => 'La compra mínima debe ser numérica.',
             'compra_minima.min' => 'La compra mínima no puede ser menor a 0.',
@@ -210,16 +220,27 @@ class PromocionController extends Controller
             'festividad_id.exists' => 'La festividad seleccionada no es válida.',
         ]);
 
+        
         $promocion = Promocion::findOrFail($id);
+
+        $fechaHoy = now()->toDateString();
+
+        $estado = $request->fecha_inicio <= $fechaHoy
+            && $request->fecha_fin >= $fechaHoy
+                ? 1
+                : 0;
+
         $promocion->update([
-            'nombre' => $request->nombre,
-            'descuento' => $request->descuento,
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
+            'nombre'        => $request->nombre,
+            'descuento'     => $request->descuento,
+            'fecha_inicio'  => $request->fecha_inicio,
+            'fecha_fin'     => $request->fecha_fin,
             'compra_minima' => $request->compra_minima,
-            'limite_uso' => $request->limite_uso,
+            'limite_uso'    => $request->limite_uso,
             'festividad_id' => $request->festividad_id,
+            'estado'        => $estado,
         ]);
+
 
         return redirect()->route('promociones.index')->with('success', 'Promoción actualizada con éxito');
     }
