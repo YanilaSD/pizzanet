@@ -32,7 +32,6 @@ class ReporteController extends Controller
         }
 
         $ventas = $query->orderBy('created_at', 'desc')->get();
-
         $total = $ventas->sum('total');
         $descuentos = $ventas->sum('descuento');
 
@@ -41,12 +40,16 @@ class ReporteController extends Controller
         return view('modules.reportes.ventas', compact('ventas','total','descuentos','tipoPagos'));
     }
 
+    
     public function ventasPDF(Request $request)
     {
         $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
 
         if ($request->filled('desde') && $request->filled('hasta')) {
-            $query->whereBetween('created_at', [$request->desde, $request->hasta]);
+            $desde = \Carbon\Carbon::parse($request->desde)->startOfDay();
+            $hasta = \Carbon\Carbon::parse($request->hasta)->endOfDay();
+
+            $query->whereBetween('created_at', [$desde, $hasta]);
         }
 
         if ($request->filled('tipo_pago_id')) {
