@@ -16,6 +16,7 @@ class TipoPagoController extends Controller
         $query = TipoPago::query();
 
         $tipo_pagos = $query->orderBy('estado', 'desc')
+                    ->where('estado', 1)
                     ->orderBy('id', 'desc')
                     ->paginate(10)
                     ->withQueryString();
@@ -41,7 +42,7 @@ class TipoPagoController extends Controller
                 'required',
                 'string',
                 'max:255',
-                'unique:tipo_pagos,nombre',
+                Rule::unique('tipo_pagos', 'nombre'),
                 'regex:/\S/',
             ],
         ], [
@@ -71,7 +72,7 @@ class TipoPagoController extends Controller
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('tipo_pagos', 'nombre')->ignore($tipoPago->id),
+                Rule::unique('tipo_pagos', 'nombre')->ignore($tipo_pago->id),
                 'regex:/\S/',
             ],
         ], [
@@ -91,10 +92,16 @@ class TipoPagoController extends Controller
      */
     public function toggle(TipoPago $tipo_pago)
     {
-        $tipo_pago->estado = $tipo_pago->estado == 1 ? 0 : 1;
+        $tipo_pago->activo = $tipo_pago->activo == 1 ? 0 : 1;
         $tipo_pago->save();
-        $mensaje = $tipo_pago->estado == 1 ? 'Tipo de pago activado' : 'Tipo de pago desactivado';
+        $mensaje = $tipo_pago->activo == 1 ? 'Tipo de pago activado' : 'Tipo de pago desactivado';
 
         return redirect()->route('tipo_pagos.index')->with('success', $mensaje);
+    }
+    public function destroy(TipoPago $tipo_pago)
+    {
+        $tipo_pago->update(['estado' => 0]);
+
+        return redirect()->route('tipo_pagos.index')->with('success', 'tipo de pago eliminado.');
     }
 }

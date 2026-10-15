@@ -23,10 +23,10 @@ class AdminSeeder extends Seeder
                 'rol_nombre' => 'Cajero',
             ],
             [
-                'name'      => 'Supervisor',
-                'email'     => 'supervisor@pizzeria.com',
-                'password'  => Hash::make('supervisor1234'),
-                'rol_nombre' => 'Supervisor',
+                'name'      => 'Encargado del negocio',
+                'email'     => 'encargado@pizzeria.com',
+                'password'  => Hash::make('encargado1234'),
+                'rol_nombre' => 'Encargado del negocio',
             ],
         ];
 

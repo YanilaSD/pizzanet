@@ -11,107 +11,108 @@
                 "privilege" => null,
             ],
         ],
+
         "Ventas" => [
             [
                 "name" => "Venta",
                 "icon" => "shopping-cart",
                 "route" => route("ventas.index"),
                 "current" => request()->routeIs("ventas.*"),
-                "privilege" => "ventas.index",
+                "privilege" => "ver-ventas",
             ],
             [
                 "name" => "Cliente",
                 "icon" => "users",
                 "route" => route("clientes.index"),
                 "current" => request()->routeIs("clientes.*"),
-                "privilege" => "clientes.index",
+                "privilege" => "ver-clientes",
             ],
             [
                 "name" => "Festividades",
                 "icon" => "home",
                 "route" => route("festividades.index"),
                 "current" => request()->routeIs("festividades.*"),
-                "privilege" => "festividades.index",
+                "privilege" => "ver-festividades",
             ],
             [
                 "name" => "Promocion",
                 "icon" => "light-bulb",
                 "route" => route("promociones.index"),
                 "current" => request()->routeIs("promociones.*"),
-                "privilege" => "promociones.index",
+                "privilege" => "ver-promociones",
             ],
-        
             [
                 "name" => "Productos",
                 "icon" => "shopping-bag",
                 "route" => route("productos.index"),
                 "current" => request()->routeIs("productos.*"),
-                "privilege" => "productos.index",
+                "privilege" => "ver-productos",
             ],
             [
                 "name" => "Categorias",
                 "icon" => "folder-arrow-down",
                 "route" => route("categorias.index"),
                 "current" => request()->routeIs("categorias.*"),
-                "privilege" => "categorias.index",
+                "privilege" => "ver-categorias",
             ],
             [
                 "name" => "Tipo de pagos",
                 "icon" => "queue-list",
                 "route" => route("tipo_pagos.index"),
                 "current" => request()->routeIs("tipo_pagos.*"),
-                "privilege" => "tipo_pagos.index",
+                "privilege" => "ver-tipos-de-pago",
             ],
         ],
+
         "Configuraciones" => [
             [
                 "name" => "Usuarios",
                 "icon" => "user",
                 "route" => route("usuarios.index"),
                 "current" => request()->routeIs("usuarios.*"),
-                "privilege" => "usuarios.index",
+                "privilege" => "ver-usuarios",
             ],
             [
                 "name" => "Roles",
                 "icon" => "user-group",
                 "route" => route("roles.index"),
                 "current" => request()->routeIs("roles.*"),
-                "privilege" => "roles.index",
+                "privilege" => "ver-roles",
             ],
             [
                 "name" => "Privilegios",
                 "icon" => "wrench-screwdriver",
                 "route" => route("privilegios.index"),
                 "current" => request()->routeIs("privilegios.*"),
-                "privilege" => "privilegios.index",
+                "privilege" => "ver-privilegios",
             ],
         ],
+
         "Reporteria" => [
             [
                 "name" => "Reporte",
                 "icon" => "document-chart-bar",
                 "route" => route("reportes.index"),
                 "current" => request()->routeIs("reportes.*"),
-                "privilege" => "reportes.index",
+                "privilege" => "ver-reportes",
             ],
         ],
     ];
 
-    $groups = collect($groups)
-        ->map(function ($links) use ($user) {
-            return collect($links)
-                ->filter(function ($link) use ($user) {
-                    if ($link['privilege'] === null) {
-                        return true;
-                    }
+   
+$groups = collect($groups)
+    ->map(function ($links) use ($user) {
+        return collect($links)
+            ->filter(function ($link) use ($user) {
+                return $link['privilege'] === null
+                    || $user->hasPrivilegeSlug($link['privilege']);
+            })
+            ->values()
+            ->all();
+    })
+    ->filter(fn ($links) => !empty($links))
+    ->all();
 
-                    return $user->hasPrivilegeSlug($link['privilege']);
-                })
-                ->values()
-                ->all();
-        })
-        ->filter(fn ($links) => count($links) > 0)
-        ->all();
 @endphp
 
 <!DOCTYPE html>

@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('tipo_pagos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
+            $table->tinyInteger('activo')->default(1);
             $table->tinyInteger('estado')->default(1);
             $table->timestamps();
+        
         });
     }
 

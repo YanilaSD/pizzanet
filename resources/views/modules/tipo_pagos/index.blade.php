@@ -20,7 +20,7 @@
         <x-slot name="head">
             <th>#</th>
             <th>Nombre</th>
-            <th>Estado</th>
+            <th>pago habilitado</th>
             <th class="text-right">Acciones</th>
         </x-slot>
 
@@ -36,8 +36,8 @@
                     </td>
 
                     <td class="px-6 py-4">
-                        <flux:badge color="{{ $tipo_pago->estado == 1 ? 'green' : 'red' }}">
-                            {{ $tipo_pago->estado == '1' ? 'Activo' : 'Inactivo' }}
+                        <flux:badge color="{{ $tipo_pago->activo == 1 ? 'green' : 'red' }}">
+                            {{ $tipo_pago->activo == '1' ? 'Activo' : 'Inactivo' }}
                         </flux:badge>
                     </td>
 
@@ -46,10 +46,15 @@
                            class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
                             <flux:icon name="pencil-square" />
                         </a>
+                            
+                         <a href="{{ route('tipo_pagos.destroy', $tipo_pago) }}"
+                               class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                                <flux:icon name="trash" />
+                         </a>
 
                         <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
                            class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
-                            <flux:icon name="{{ $tipo_pago->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
+                            <flux:icon name="{{ $tipo_pago->activo == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
                     </td>
                 </tr>
