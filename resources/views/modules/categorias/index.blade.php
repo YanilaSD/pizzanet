@@ -20,7 +20,7 @@
         <x-slot name="head">
             <th>#</th>
             <th>Nombre</th>
-            <th>Estado</th>
+            <th>Descripción</th>
             <th class="text-right">Acciones</th>
         </x-slot>
 
@@ -35,10 +35,8 @@
                         {{ $categoria->nombre }}
                     </td>
 
-                    <td class="px-6 py-4">
-                        <flux:badge color="{{ $categoria->estado == 1 ? 'green' : 'red' }}">
-                            {{ $categoria->estado == '1' ? 'Activo' : 'Inactivo' }}
-                        </flux:badge>
+                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        {{ $categoria->descripcion ?? 'Sin descripción' }}
                     </td>
 
                     <td class="px-6 py-4 flex justify-end gap-2">

@@ -17,7 +17,7 @@
             @method('PUT')
 
             <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
-                <div class="md:flex-[2]">
+                <div class="md:flex-[1]">
                     <label for="nombre" class="module-form-label">Nombre <span class="text-red-500">*</span></label>
                     <flux:input
                         id="nombre"
@@ -25,6 +25,16 @@
                         placeholder="Nombre de la categoria"
                         value="{{ old('nombre', $categoria->nombre) }}"
                         required
+                    />
+                </div>
+
+                <div class="md:flex-[2]">
+                    <label for="descripcion" class="module-form-label">Descripción</label>
+                    <flux:input
+                        id="descripcion"
+                        name="descripcion"
+                        placeholder="Descripción de la categoria"
+                        value="{{ old('descripcion', $categoria->descripcion) }}"
                     />
                 </div>
             </div>

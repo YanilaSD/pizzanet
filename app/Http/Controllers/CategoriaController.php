@@ -44,7 +44,7 @@ class CategoriaController extends Controller
             'nombre.unique' => 'Ya se registro una categoría con ese nombre antes. Contactese con el administrador de sistema',
         ]);
 
-        Categoria::create($request->only('nombre'));
+        Categoria::create($request->only('nombre', 'descripcion'));
         return redirect()->route('categorias.index')->with('success', 'Categoria creada exitosamente');
     }
     /**
@@ -74,7 +74,7 @@ class CategoriaController extends Controller
             'nombre.unique' => 'Ya existe otra categoría con ese nombre.',
         ]);
 
-        $categoria->update($request->only('nombre'));
+        $categoria->update($request->only('nombre', 'descripcion'));
         return redirect()->route('categorias.index')->with('success', 'Categoria actualizada exitosamente');
     }
 
