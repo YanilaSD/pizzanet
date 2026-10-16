@@ -10,8 +10,8 @@ class DescuentoSeeder extends Seeder
     {
         DB::table('descuentos')->insert([
             [
-                'nombre' => 'Descuento por innaguracion',
-                'descripcion' => 'Canjea 100 puntos y obtiene Bs. 10 de descuento',
+                'nombre' => 'Descuento por fidelización',
+                'descripcion' => 'Canjea 100 puntos y obtiene Bs. 10 de descuento en tu próxima compra',
                 'puntos' => 100,
                 'descuento' => 10,
                 'created_at' => now(),

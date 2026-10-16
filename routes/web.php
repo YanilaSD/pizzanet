@@ -149,6 +149,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->middleware('privilege:usar-puntos-cliente')->name('ventas.setUsoPuntos');
     });
 
+    Route::prefix('descuentos')->group(function () {
+        Route::get('/', [DescuentoController::class, 'index'])->middleware('privilege:ver-descuentos')->name('descuentos.index');
+        Route::get('/create', [DescuentoController::class, 'create'])->middleware('privilege:crear-descuento')->name('descuentos.create');
+        Route::post('/', [DescuentoController::class, 'store'])->middleware('privilege:guardar-descuento')->name('descuentos.store');
+        Route::get('/{descuento}/edit', [DescuentoController::class, 'edit'])->middleware('privilege:editar-descuento')->name('descuentos.edit');
+        Route::put('/{descuento}', [DescuentoController::class, 'update'])->middleware('privilege:actualizar-descuento')->name('descuentos.update');
+        Route::get('/{descuento}/destroy', [DescuentoController::class, 'destroy'])->middleware('privilege:eliminar-descuento')->name('descuentos.destroy');
+    });
+
     Route::prefix('reportes')->group(function () {
         Route::get('/', [ReporteController::class, 'index'])->middleware('privilege:ver-reportes')->name('reportes.index');
         Route::get('/ventas', [ReporteController::class, 'ventas'])->middleware('privilege:reporte-ventas')->name('reportes.ventas');

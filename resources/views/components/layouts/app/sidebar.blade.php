@@ -42,6 +42,13 @@
                 "privilege" => "ver-promociones",
             ],
             [
+                "name" => "Descuentos",
+                "icon" => "light-bulb",
+                "route" => route("descuentos.index"),
+                "current" => request()->routeIs("descuentos.*"),
+                "privilege" => "ver-descuentos",
+            ],
+            [
                 "name" => "Productos",
                 "icon" => "shopping-bag",
                 "route" => route("productos.index"),

@@ -57,6 +57,7 @@ class RolPrivilegioSeeder extends Seeder
             ['nombre' => 'Guardar producto', 'slug' => 'guardar-producto', 'descripcion' => 'Registrar nuevo producto'],
             ['nombre' => 'Ver detalle producto', 'slug' => 'ver-detalle-producto', 'descripcion' => 'Ver detalle de producto'],
             ['nombre' => 'Editar producto', 'slug' => 'editar-producto', 'descripcion' => 'Formulario para editar producto'],
+            ['nombre' => 'Eliminar producto', 'slug' => 'eliminar-producto', 'descripcion' => 'Eliminar producto'],
             ['nombre' => 'Actualizar producto', 'slug' => 'actualizar-producto', 'descripcion' => 'Actualizar producto'],
             ['nombre' => 'Activar/Desactivar producto', 'slug' => 'activar-desactivar-producto', 'descripcion' => 'Cambiar estado del producto'],
             ['nombre' => 'Ver tipos de pago', 'slug' => 'ver-tipos-de-pago', 'descripcion' => 'Ver listado de tipos de pago'],
@@ -99,6 +100,13 @@ class RolPrivilegioSeeder extends Seeder
             ['nombre' => 'Exportar usuarios PDF', 'slug' => 'exportar-usuarios-pdf', 'descripcion' => 'Exportar reporte de usuarios en PDF'],
             ['nombre' => 'Reporte productos', 'slug' => 'reporte-productos', 'descripcion' => 'Ver reporte de productos'],
             ['nombre' => 'Exportar productos PDF', 'slug' => 'exportar-productos-pdf', 'descripcion' => 'Exportar reporte de productos en PDF'],
+            ['nombre' => 'Ver descuentos', 'slug' => 'ver-descuentos', 'descripcion' => 'Ver listado de descuentos'],
+            ['nombre' => 'Crear descuento', 'slug' => 'crear-descuento', 'descripcion' => 'Formulario para crear descuento'],
+            ['nombre' => 'Guardar descuento', 'slug' => 'guardar-descuento', 'descripcion' => 'Registrar nuevo descuento'],
+            ['nombre' => 'Ver detalle descuento', 'slug' => 'ver-detalle-descuento', 'descripcion' => 'Ver detalle de descuento'],
+            ['nombre' => 'Editar descuento', 'slug' => 'editar-descuento', 'descripcion' => 'Formulario para editar descuento'],
+            ['nombre' => 'Actualizar descuento', 'slug' => 'actualizar-descuento', 'descripcion' => 'Actualizar descuento'],
+            ['nombre' => 'Eliminar descuento', 'slug' => 'eliminar-descuento', 'descripcion' => 'Eliminar descuento'],
         ];
 
         foreach ($privilegios as $privilegio) {
