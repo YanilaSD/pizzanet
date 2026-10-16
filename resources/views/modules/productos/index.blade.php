@@ -97,10 +97,10 @@
                                 <flux:icon name="pencil-square" />
                             </a>
 
-                            <a href="{{ route('productos.toggle', $producto) }}"
-                               class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
-                                <flux:icon name="{{ $producto->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
-                            </a>
+                             <a href="{{ route('productos.destroy', $producto) }}"
+                                   class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                                    <flux:icon name="trash" />
+                                </a>
                         </td>
                     </tr>
                 @empty

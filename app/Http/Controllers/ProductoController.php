@@ -21,6 +21,7 @@ class ProductoController extends Controller
             })
             ->orderBy('estado', 'desc')
             ->orderBy('id', 'desc')
+            ->where('estado', 1)
             ->paginate(10);
 
         return view('modules.productos.index', compact('productos'));
@@ -214,15 +215,12 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')->with('success', 'Inventario actualizado exitosamente.');
     }
 
-    public function toggle(Producto $producto)
+      public function destroy(Producto $producto)
     {
-        // if ($producto->imagen) {
-        //     Storage::disk('public')->delete($producto->imagen);
-        // }
-        $producto->estado = $producto->estado == 1 ? 0 : 1;
-        $producto->save();
-        $mensaje = $producto->estado == 1 ? 'Producto habilitado' : 'Producto inhabilitado';
+        $producto->update([
+            'estado' => 0,
+        ]);
 
-        return redirect()->route('productos.index')->with('success', $mensaje);
+        return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente.');
     }
 }

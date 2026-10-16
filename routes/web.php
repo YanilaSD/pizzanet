@@ -129,7 +129,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{producto}/edit', [ProductoController::class, 'edit'])->middleware('privilege:editar-producto')->name('productos.edit');
         Route::put('/{producto}', [ProductoController::class, 'update'])->middleware('privilege:actualizar-producto')->name('productos.update');
         Route::put('/{producto}/inventario', [ProductoController::class, 'updateInventario'])->middleware('privilege:actualizar-producto')->name('productos.inventario.update');
-        Route::get('/{producto}/toggle', [ProductoController::class, 'toggle'])->middleware('privilege:activar-desactivar-producto')->name('productos.toggle');
+        Route::get('/{producto}/destroy', [ProductoController::class, 'destroy'])->middleware('privilege:eliminar-producto')->name('productos.destroy');
     });
 
     Route::prefix('ventas')->group(function () {
