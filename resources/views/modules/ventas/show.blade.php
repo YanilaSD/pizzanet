@@ -41,6 +41,11 @@
         </p>
     @endif
 
+          {{-- NOMBRE DEL CAJERO --}}
+    <p class="mt-1 text-xs">
+        Atendido por: {{ auth()->user()->name ?? 'No identificado' }}
+    </p>
+
 </div>
 
 
@@ -141,7 +146,7 @@
 
         <p class="mt-1 text-xs">
             ¡Una porción de felicidad en cada mordida,
-            así sabe Yuneth! 🍕
+            así sabe Yuneth!
         </p>
 
          
