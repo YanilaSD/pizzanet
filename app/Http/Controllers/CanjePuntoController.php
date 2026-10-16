@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Descuento;
+use App\Models\CanjePunto;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
-class DescuentoController extends Controller
+class CanjePuntoController extends Controller
 {
     public function index(Request $request)
     {
-        $descuentos = Descuento::query()
-            ->where('estado', 1)
+        $canjes = CanjePunto::query()
+            ->orderBy('estado', 'desc')
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($subQuery) use ($request) {
                     $subQuery->where('nombre', 'like', '%' . $request->search . '%')
@@ -24,12 +25,12 @@ class DescuentoController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('modules.descuentos.index', compact('descuentos'));
+        return view('modules.canjes.index', compact('canjes'));
     }
 
     public function create()
     {
-        return view('modules.descuentos.create');
+        return view('modules.canjes.create');
     }
 
     public function store(Request $request)
@@ -39,7 +40,7 @@ class DescuentoController extends Controller
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('descuentos', 'nombre'),
+                Rule::unique('canje_puntos', 'nombre'),
                 'regex:/\S/',
             ],
             'descripcion' => [
@@ -65,7 +66,7 @@ class DescuentoController extends Controller
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder 255 caracteres.',
-            'nombre.unique' => 'Ya existe un descuento con ese nombre.',
+            'nombre.unique' => 'Ya existe un canje con ese nombre.',
             'nombre.regex' => 'El nombre no puede estar vacío o solo contener espacios.',
             'descripcion.required' => 'La descripción es obligatoria.',
             'descripcion.string' => 'La descripción debe ser texto.',
@@ -82,9 +83,9 @@ class DescuentoController extends Controller
             'descuento.regex' => 'El monto de descuento debe tener hasta 2 decimales.',
         ]);
 
-        Descuento::where('estado', 1)->update(['estado' => 0]);
+        CanjePunto::where('estado', 1)->update(['estado' => 0]);
 
-        Descuento::create([
+        CanjePunto::create([
             'nombre' => $validated['nombre'],
             'descripcion' => $validated['descripcion'],
             'puntos' => $validated['puntos'],
@@ -92,22 +93,22 @@ class DescuentoController extends Controller
             'estado' => 1,
         ]);
 
-        return redirect()->route('descuentos.index')->with('success', 'Descuento creado y activado exitosamente.');
+        return redirect()->route('canjes.index')->with('success', 'Canje creado y activado exitosamente.');
     }
 
-    public function edit(Descuento $descuento)
+    public function edit(CanjePunto $canje)
     {
-        return view('modules.descuentos.edit', compact('descuento'));
+        return view('modules.canjes.edit', compact('canje'));
     }
 
-    public function update(Request $request, Descuento $descuento)
+    public function update(Request $request, CanjePunto $canje)
     {
         $validated = $request->validate([
             'nombre' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('descuentos', 'nombre')->ignore($descuento->id),
+                Rule::unique('canje_puntos', 'nombre')->ignore($canje->id),
                 'regex:/\S/',
             ],
             'descripcion' => [
@@ -133,7 +134,7 @@ class DescuentoController extends Controller
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre debe ser texto.',
             'nombre.max' => 'El nombre no debe exceder 255 caracteres.',
-            'nombre.unique' => 'Ya existe otro descuento con ese nombre.',
+            'nombre.unique' => 'Ya existe otro canje con ese nombre.',
             'nombre.regex' => 'El nombre no puede estar vacío o solo contener espacios.',
             'descripcion.required' => 'La descripción es obligatoria.',
             'descripcion.string' => 'La descripción debe ser texto.',
@@ -150,15 +151,32 @@ class DescuentoController extends Controller
             'descuento.regex' => 'El monto de descuento debe tener hasta 2 decimales.',
         ]);
 
-        $descuento->update($validated);
+        $canje->update($validated);
 
-        return redirect()->route('descuentos.index')->with('success', 'Descuento actualizado correctamente.');
+        return redirect()->route('canjes.index')->with('success', 'Canje actualizado correctamente.');
     }
 
-    public function destroy(Descuento $descuento)
+    public function toggle(CanjePunto $canje)
     {
-        $descuento->update(['estado' => 0]);
+        if ($canje->estado == 1) {
+            if (CanjePunto::where('estado', 1)->count() <= 1) {
+                return redirect()
+                    ->route('canjes.index')
+                    ->with('error', 'Debe existir al menos un canje activo.');
+            }
 
-        return redirect()->route('descuentos.index')->with('success', 'Descuento dado de baja correctamente.');
+            $canje->update(['estado' => 0]);
+        } else {
+            DB::transaction(function () use ($canje) {
+                CanjePunto::where('estado', 1)
+                    ->update(['estado' => 0]);
+
+                $canje->update(['estado' => 1]);
+            });
+        }
+
+        return redirect()
+            ->route('canjes.index')
+            ->with('success', 'Canje actualizado correctamente.');
     }
 }

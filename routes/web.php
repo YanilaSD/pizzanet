@@ -16,7 +16,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\DescuentoController;
+use App\Http\Controllers\CanjePuntoController;
 use App\Http\Controllers\HistorialController;
 
 Route::view('dashboard', 'dashboard')
@@ -102,13 +102,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{cliente}/destroy', [ClienteController::class, 'destroy'])->middleware('privilege:eliminar-cliente')->name('clientes.destroy');
     });
 
-    Route::prefix('descuentos')->group(function () {
-        Route::get('/', [DescuentoController::class, 'index'])->name('descuentos.index');
-        Route::get('/create', [DescuentoController::class, 'create'])->name('descuentos.create');
-        Route::post('/', [DescuentoController::class, 'store'])->name('descuentos.store');
-        Route::get('/{descuento}/edit', [DescuentoController::class, 'edit'])->name('descuentos.edit');
-        Route::put('/{descuento}', [DescuentoController::class, 'update'])->name('descuentos.update');
-        Route::get('/{descuento}/destroy', [DescuentoController::class, 'destroy'])->name('descuentos.destroy');
+    Route::prefix('canjes')->group(function () {
+        Route::get('/', [CanjePuntoController::class, 'index'])->middleware('privilege:ver-canjes')->name('canjes.index');
+        Route::get('/create', [CanjePuntoController::class, 'create'])->middleware('privilege:crear-canje')->name('canjes.create');
+        Route::post('/', [CanjePuntoController::class, 'store'])->middleware('privilege:guardar-canje')->name('canjes.store');
+        Route::get('/{canje}/edit', [CanjePuntoController::class, 'edit'])->middleware('privilege:editar-canje')->name('canjes.edit');
+        Route::put('/{canje}', [CanjePuntoController::class, 'update'])->middleware('privilege:actualizar-canje')->name('canjes.update');
+        Route::get('/{canje}/toggle', [CanjePuntoController::class, 'toggle'])->middleware('privilege:activar-desactivar-canje')->name('canjes.toggle');
     });
 
     Route::prefix('categorias')->group(function () {
@@ -147,15 +147,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/setPromocion', [VentaController::class, 'setPromocion'])->middleware('privilege:aplicar-promocion')->name('ventas.setPromocion');
         Route::post('/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->middleware('privilege:obtener-puntos-cliente')->name('ventas.getPuntosCliente');
         Route::post('/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->middleware('privilege:usar-puntos-cliente')->name('ventas.setUsoPuntos');
-    });
-
-    Route::prefix('descuentos')->group(function () {
-        Route::get('/', [DescuentoController::class, 'index'])->middleware('privilege:ver-descuentos')->name('descuentos.index');
-        Route::get('/create', [DescuentoController::class, 'create'])->middleware('privilege:crear-descuento')->name('descuentos.create');
-        Route::post('/', [DescuentoController::class, 'store'])->middleware('privilege:guardar-descuento')->name('descuentos.store');
-        Route::get('/{descuento}/edit', [DescuentoController::class, 'edit'])->middleware('privilege:editar-descuento')->name('descuentos.edit');
-        Route::put('/{descuento}', [DescuentoController::class, 'update'])->middleware('privilege:actualizar-descuento')->name('descuentos.update');
-        Route::get('/{descuento}/destroy', [DescuentoController::class, 'destroy'])->middleware('privilege:eliminar-descuento')->name('descuentos.destroy');
     });
 
     Route::prefix('reportes')->group(function () {

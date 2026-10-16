@@ -4,11 +4,11 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DescuentoSeeder extends Seeder
+class CanjePuntoSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('descuentos')->insert([
+        DB::table('canje_puntos')->insert([
             [
                 'nombre' => 'Descuento por fidelización',
                 'descripcion' => 'Canjea 100 puntos y obtiene Bs. 10 de descuento en tu próxima compra',

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('historial_canjes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
-            $table->foreignId('descuento_id')->constrained('descuentos')->onDelete('cascade');
+            $table->foreignId('canje_punto_id')->constrained('canje_puntos')->onDelete('cascade');
             $table->foreignId('venta_id')->nullable()->constrained('ventas')->nullOnDelete();
             $table->integer('puntos');
             $table->date('fecha');

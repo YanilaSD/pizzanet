@@ -11,8 +11,8 @@
         </div>
     @endif
 
-    <x-module-card-lg title="Editar Descuento" description="Modifica los datos del descuento seleccionado.">
-        <form action="{{ route('descuentos.update', $descuento) }}" method="POST">
+    <x-module-card-lg title="Editar Canje" description="Modifica los datos del canje seleccionado.">
+        <form action="{{ route('canjes.update', $canje) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -24,8 +24,8 @@
                     <flux:input
                         id="nombre"
                         name="nombre"
-                        placeholder="Nombre del descuento"
-                        value="{{ old('nombre', $descuento->nombre) }}"
+                        placeholder="Nombre del canje"
+                        value="{{ old('nombre', $canje->nombre) }}"
                         required
                     />
                 </div>
@@ -41,7 +41,7 @@
                         min="1"
                         step="1"
                         placeholder="Ej: 100"
-                        value="{{ old('puntos', $descuento->puntos) }}"
+                        value="{{ old('puntos', $canje->puntos) }}"
                         required
                     />
                 </div>
@@ -57,7 +57,7 @@
                         min="0.01"
                         step="0.01"
                         placeholder="Ej: 10.00"
-                        value="{{ old('descuento', $descuento->descuento) }}"
+                        value="{{ old('descuento', $canje->descuento) }}"
                         required
                     />
                 </div>
@@ -71,14 +71,14 @@
                         name="descripcion"
                         rows="3"
                         class="block w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                        placeholder="Describe el descuento"
+                        placeholder="Describe el canje"
                         required
-                    >{{ old('descripcion', $descuento->descripcion) }}</textarea>
+                    >{{ old('descripcion', $canje->descripcion) }}</textarea>
                 </div>
             </div>
 
             <div class="flex justify-end gap-2 pt-2">
-                <a href="{{ route('descuentos.index') }}">
+                <a href="{{ route('canjes.index') }}">
                     <flux:button variant="primary" color="gray">
                         Cancelar
                     </flux:button>

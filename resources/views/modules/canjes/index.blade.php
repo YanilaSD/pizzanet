@@ -1,9 +1,9 @@
 <x-layouts.app>
     <x-card-header 
-        title="Gestión de Descuentos"
-        description="Administra los descuentos por puntos del sistema"
-        button-text="Nuevo descuento"
-        :button-link="route('descuentos.create')"
+        title="Gestión de Canjes"
+        description="Administra los canjes por puntos del sistema"
+        button-text="Nuevo canje"
+        :button-link="route('canjes.create')"
     />
 
     @if (session('success'))
@@ -14,15 +14,15 @@
     @endif
 
     <x-data-table 
-        title="Descuentos Activos"
-        description="Solo debe existir un descuento activo a la vez"
+        title="Canjes Activos"
+        description="Solo debe existir un canje activo a la vez"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('descuentos.index') }}">
+            <form method="GET" action="{{ route('canjes.index') }}">
                 <flux:input
                     name="search"
                     icon="magnifying-glass"
-                    placeholder="Buscar descuento"
+                    placeholder="Buscar canje"
                     value="{{ request('search') }}"
                 />
             </form>
@@ -39,57 +39,57 @@
         </x-slot>
 
         <x-slot name="body">
-            @forelse ($descuentos as $descuento)
+            @forelse ($canjes as $canje)
                 <tr class="group hover:bg-orange-50/40 transition-all duration-200">
                     <td class="px-6 py-4 text-gray-500">
                         {{ $loop->iteration }}
                     </td>
 
                     <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
-                        {{ $descuento->nombre }}
+                        {{ $canje->nombre }}
                     </td>
 
                     <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                        {{ $descuento->descripcion }}
+                        {{ $canje->descripcion }}
                     </td>
 
                     <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                        {{ $descuento->puntos }}
+                        {{ $canje->puntos }}
                     </td>
 
                     <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                        Bs {{ number_format($descuento->descuento, 2) }}
+                        Bs {{ number_format($canje->descuento, 2) }}
                     </td>
 
                     <td class="px-6 py-4">
-                        <flux:badge color="{{ $descuento->estado == 1 ? 'green' : 'red' }}">
-                            {{ $descuento->estado == 1 ? 'Activo' : 'Inactivo' }}
+                        <flux:badge color="{{ $canje->estado == 1 ? 'green' : 'red' }}">
+                            {{ $canje->estado == 1 ? 'Activo' : 'Inactivo' }}
                         </flux:badge>
                     </td>
 
                     <td class="px-6 py-4 flex justify-end gap-2">
-                        <a href="{{ route('descuentos.edit', $descuento) }}"
+                        <a href="{{ route('canjes.edit', $canje) }}"
                            class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
                             <flux:icon name="pencil-square" />
                         </a>
 
-                        <a href="{{ route('descuentos.destroy', $descuento) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
-                            <flux:icon name="trash" />
+                        <a href="{{ route('canjes.toggle', $canje->id) }}"
+                           class="p-2 rounded-lg {{ $canje->estado == 1 ? 'hover:bg-red-100 text-gray-500 hover:text-red-600 transition' : 'hover:bg-green-100 text-gray-500 hover:text-green-600 transition' }} ">
+                            <flux:icon name="{{ $canje->estado == 1 ? 'no-symbol' : 'check-circle' }}" />
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td colspan="7" class="text-center py-8 text-gray-400">
-                        No se encontraron descuentos activos.
+                        No se encontraron canjes activos.
                     </td>
                 </tr>
             @endforelse
         </x-slot>
 
         <x-slot name="pagination">
-            {{ $descuentos->links() }}
+            {{ $canjes->links() }}
         </x-slot>
     </x-data-table>
 </x-layouts.app>

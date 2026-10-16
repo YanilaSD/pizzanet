@@ -100,13 +100,13 @@ class RolPrivilegioSeeder extends Seeder
             ['nombre' => 'Exportar usuarios PDF', 'slug' => 'exportar-usuarios-pdf', 'descripcion' => 'Exportar reporte de usuarios en PDF'],
             ['nombre' => 'Reporte productos', 'slug' => 'reporte-productos', 'descripcion' => 'Ver reporte de productos'],
             ['nombre' => 'Exportar productos PDF', 'slug' => 'exportar-productos-pdf', 'descripcion' => 'Exportar reporte de productos en PDF'],
-            ['nombre' => 'Ver descuentos', 'slug' => 'ver-descuentos', 'descripcion' => 'Ver listado de descuentos'],
-            ['nombre' => 'Crear descuento', 'slug' => 'crear-descuento', 'descripcion' => 'Formulario para crear descuento'],
-            ['nombre' => 'Guardar descuento', 'slug' => 'guardar-descuento', 'descripcion' => 'Registrar nuevo descuento'],
-            ['nombre' => 'Ver detalle descuento', 'slug' => 'ver-detalle-descuento', 'descripcion' => 'Ver detalle de descuento'],
-            ['nombre' => 'Editar descuento', 'slug' => 'editar-descuento', 'descripcion' => 'Formulario para editar descuento'],
-            ['nombre' => 'Actualizar descuento', 'slug' => 'actualizar-descuento', 'descripcion' => 'Actualizar descuento'],
-            ['nombre' => 'Eliminar descuento', 'slug' => 'eliminar-descuento', 'descripcion' => 'Eliminar descuento'],
+            ['nombre' => 'Ver canjes', 'slug' => 'ver-canjes', 'descripcion' => 'Ver listado de canjes'],
+            ['nombre' => 'Crear canje', 'slug' => 'crear-canje', 'descripcion' => 'Formulario para crear canje'],
+            ['nombre' => 'Guardar canje', 'slug' => 'guardar-canje', 'descripcion' => 'Registrar nuevo canje'],
+            ['nombre' => 'Ver detalle canje', 'slug' => 'ver-detalle-canje', 'descripcion' => 'Ver detalle de canje'],
+            ['nombre' => 'Editar canje', 'slug' => 'editar-canje', 'descripcion' => 'Formulario para editar canje'],
+            ['nombre' => 'Actualizar canje', 'slug' => 'actualizar-canje', 'descripcion' => 'Actualizar canje'],
+            ['nombre' => 'Activar/Desactivar canje', 'slug' => 'activar-desactivar-canje', 'descripcion' => 'Cambiar estado del canje'],
         ];
 
         foreach ($privilegios as $privilegio) {

@@ -42,11 +42,11 @@
                 "privilege" => "ver-promociones",
             ],
             [
-                "name" => "Descuentos",
+                "name" => "Canjes de puntos",
                 "icon" => "light-bulb",
-                "route" => route("descuentos.index"),
-                "current" => request()->routeIs("descuentos.*"),
-                "privilege" => "ver-descuentos",
+                "route" => route("canjes.index"),
+                "current" => request()->routeIs("canjes.*"),
+                "privilege" => "ver-canjes",
             ],
             [
                 "name" => "Productos",

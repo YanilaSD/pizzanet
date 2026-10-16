@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
             RolPrivilegioSeeder::class,
             ClienteSeeder::class,
             AdminSeeder::class,
-            DescuentoSeeder::class,
+            CanjePuntoSeeder::class,
             ProductoSeeder::class
         ]);
     }
