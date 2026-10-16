@@ -2,8 +2,8 @@
     <x-card-header
         title="Historial de Canjes"
         description="Consulta los canjes del cliente seleccionado"
-        button-text="Volver a clientes"
-        :button-link="route('clientes.index')"
+        button-text-secondary="Volver"
+        :button-link-secondary="route('clientes.index')"
     />
 
     <x-module-card class="mt-4 mb-6">

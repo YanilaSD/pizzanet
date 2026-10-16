@@ -24,4 +24,11 @@
         </flux:button>
     @endif
 
+    @if($buttonTextSecondary && $buttonLinkSecondary)
+        <a href="{{ $buttonLinkSecondary }}">
+            <flux:button variant="primary" color="gray">
+                {{ $buttonTextSecondary }}
+            </flux:button>
+        </a>
+    @endif
 </x-module-card-lg>
