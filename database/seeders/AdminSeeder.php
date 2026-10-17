@@ -11,7 +11,7 @@ class AdminSeeder extends Seeder
     {
         $usuarios = [
             [
-                'name'      => 'Administrador',
+                'name'      => 'Encargado del negocio',
                 'email'     => 'admin@pizzeria.com',
                 'password'  => Hash::make('admin1234'),
                 'rol_nombre' => 'Administrador',

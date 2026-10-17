@@ -12,12 +12,11 @@ class PromocionController extends Controller
     public function index(Request $request)
     {
         
-        Promocion::where('estado', 1)
-        ->whereDate('fecha_fin', '<', now()->toDateString())
-        ->update(['estado' => 0]);
+        Promocion::sincronizarCompletadas();
 
         $promociones = Promocion::query()
-        // ->where('estado', 1)
+        ->with('festividad')
+        ->conFestividadActiva()
         ->when($request->search, function ($query) use ($request) {
             $search = $request->search;
 
@@ -128,6 +127,10 @@ class PromocionController extends Controller
             'compra_minima' => $request->compra_minima,
             'limite_uso' => $request->limite_uso,
             'festividad_id' => $request->festividad_id,
+            'estado' => Promocion::resolverEstado(
+                $request->fecha_fin,
+                $request->filled('limite_uso') ? (int) $request->limite_uso : null
+            ),
         ]);
 
         return redirect()->route('promociones.index')->with('success', 'Promoción creada exitosamente');
@@ -223,12 +226,12 @@ class PromocionController extends Controller
         
         $promocion = Promocion::findOrFail($id);
 
-        $fechaHoy = now()->toDateString();
-
-        $estado = $request->fecha_inicio <= $fechaHoy
-            && $request->fecha_fin >= $fechaHoy
-                ? 1
-                : 0;
+        $estado = (int) $promocion->estado === Promocion::ESTADO_BAJA
+            ? Promocion::ESTADO_BAJA
+            : Promocion::resolverEstado(
+                $request->fecha_fin,
+                $request->filled('limite_uso') ? (int) $request->limite_uso : null
+            );
 
         $promocion->update([
             'nombre'        => $request->nombre,
@@ -247,7 +250,7 @@ class PromocionController extends Controller
 
     public function destroy(Promocion $promocion)
     {
-        $promocion->update(['estado' => 0]);
+        $promocion->update(['estado' => Promocion::ESTADO_BAJA]);
         return redirect()->route('promociones.index')->with('success', 'Promocion eliminada');
     }
 }

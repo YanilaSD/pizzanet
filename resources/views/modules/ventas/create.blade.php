@@ -104,8 +104,11 @@
                         <tbody>
                             @php
                                 $clienteModel = \App\Models\Cliente::find($cliente['id']);
-                                $saldo = $clienteModel?->saldo_puntos ?? 0;
-                                $puedeCanjer = $saldo >= 100;
+                                $saldo = (int) ($clienteModel?->saldo_puntos ?? 0);
+                                $canje = \App\Models\CanjePunto::where('estado', 1)->first();
+                                $disponible = $canje?->canjeDisponible($saldo) ?? ['bloques' => 0, 'puntos' => 0, 'descuento' => 0];
+                                $puntosRequeridos = (int) ($canje?->puntos ?? 0);
+                                $puedeCanjer = ! $clienteModel?->esAnonimo() && $disponible['bloques'] >= 1;
                             @endphp
                             <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
                                 <td class="px-6 py-4 font-medium text-gray-900">{{ $cliente['nombre'] }}</td>
@@ -115,18 +118,18 @@
                                     <span class="font-semibold">{{ $saldo }}</span> pts
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if($clienteModel->id == 1)
+                                    @if($clienteModel?->esAnonimo())
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
                                         No aplica
                                     </span>
                                     @else
                                         @if($puedeCanjer)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Puede canjear Bs 10
+                                                Puede canjear Bs {{ number_format($disponible['descuento'], 2) }} ({{ $disponible['puntos'] }} pts)
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                                Necesita {{ 100 - $saldo }} pts más
+                                                Necesita {{ max($puntosRequeridos - $saldo, 0) }} pts más
                                             </span>
                                         @endif
                                     @endif

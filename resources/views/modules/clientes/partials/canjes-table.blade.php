@@ -32,7 +32,7 @@
                 </td>
 
                 <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
-                    Bs {{ number_format($canje->descuento->descuento ?? 0, 2) }}
+                    Bs {{ number_format($canje->montoDescuento(), 2) }}
                 </td>
 
                 <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">

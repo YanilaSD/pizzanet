@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Producto;
-use App\Models\TipoPago;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -44,13 +43,12 @@ class VentaController extends Controller
             return redirect()->back();
         }
 
-        if ($action === 'sin_cliente') {
-            $cliente = Cliente::where(
-                'ci',
-                config('app.ci_anonimo')
-            )->first();
+        Session::forget('productos_venta');
 
-            if (!$cliente) {
+        if ($action === 'sin_cliente') {
+            $cliente = Cliente::where('ci', config('app.ci_anonimo'))->first();
+
+            if (! $cliente) {
                 session()->flash(
                     'cliente_no_encontrado',
                     'No existe un cliente genérico en la base de datos.'
@@ -66,7 +64,7 @@ class VentaController extends Controller
 
         $cliente = Cliente::where('ci', $ci)->first();
 
-        if (!$cliente) {
+        if (! $cliente) {
             session()->flash(
                 'cliente_no_encontrado',
                 'No se encontró un cliente con esa CI. ¿Desea registrar este cliente?'
@@ -82,44 +80,30 @@ class VentaController extends Controller
 
     public function create()
     {
-        Session::forget([
-            'productos',
-            'promocion_id',
-            'porcentaje_descuento',
-            'usar_puntos',
-        ]);
-
         $productos = Producto::where('estado', 1)
-            ->with('inventario')
+            ->with(['inventario', 'categoria'])
+            ->orderBy('nombre')
             ->get()
             ->map(function ($producto) {
                 return [
                     'id' => $producto->id,
                     'nombre' => $producto->nombre,
-                    'categoria' => $producto->categoria->nombre,
+                    'categoria' => $producto->categoria?->nombre ?? 'Sin categoría',
                     'precio' => $producto->precio,
-                    'stock' => $producto->inventario?->cantidad ?? 0,
+                    'stock' => (int) ($producto->inventario?->cantidad ?? 0),
                     'imagen' => $producto->imagen_url,
                 ];
             });
 
         $cliente = Session::get('cliente');
-        $tipo_pagos = TipoPago::where('estado', 1)->get();
-        $productos_session = session('productos', []);
 
-        return view(
-            'modules.ventas.create',
-            compact(
-                'productos',
-                'cliente',
-                'tipo_pagos',
-                'productos_session'
-            )
-        );
+        return view('modules.ventas.create', compact('productos', 'cliente'));
     }
 
     public function show(Venta $venta)
     {
+        $venta->load(['cliente', 'tipoPago', 'promocion', 'detalleVentas.producto']);
+
         return view('modules.ventas.show', compact('venta'));
     }
 

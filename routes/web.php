@@ -135,18 +135,9 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('ventas')->group(function () {
         Route::get('/', [VentaController::class, 'index'])->middleware('privilege:ver-ventas')->name('ventas.index');
         Route::get('/create', [VentaController::class, 'create'])->middleware('privilege:crear-venta')->name('ventas.create');
-        Route::post('/', [VentaController::class, 'store'])->middleware('privilege:guardar-venta')->name('ventas.store');
         Route::get('/{venta}/show', [VentaController::class, 'show'])->middleware('privilege:ver-detalle-venta')->name('ventas.show');
-        Route::put('/{venta}', [VentaController::class, 'update'])->middleware('privilege:actualizar-venta')->name('ventas.update');
         Route::post('/{venta}/destroy', [VentaController::class, 'destroy'])->middleware('privilege:eliminar-venta')->name('ventas.destroy');
-
         Route::post('/cliente', [VentaController::class, 'searchClient'])->middleware('privilege:buscar-cliente-en-venta')->name('ventas.searchClient');
-        Route::post('/add-producto', [VentaController::class, 'addProducto'])->middleware('privilege:agregar-producto-a-venta')->name('ventas.addProducto');
-        Route::delete('/remove-producto', [VentaController::class, 'removeProducto'])->middleware('privilege:eliminar-producto-de-venta')->name('ventas.removeProducto');
-        Route::get('/getTotalCompra', [VentaController::class, 'getTotalCompra'])->middleware('privilege:calcular-total-venta')->name('ventas.getTotalCompra');
-        Route::post('/setPromocion', [VentaController::class, 'setPromocion'])->middleware('privilege:aplicar-promocion')->name('ventas.setPromocion');
-        Route::post('/getPuntosCliente', [VentaController::class, 'getPuntosCliente'])->middleware('privilege:obtener-puntos-cliente')->name('ventas.getPuntosCliente');
-        Route::post('/setUsoPuntos', [VentaController::class, 'setUsoPuntos'])->middleware('privilege:usar-puntos-cliente')->name('ventas.setUsoPuntos');
     });
 
     Route::prefix('reportes')->group(function () {

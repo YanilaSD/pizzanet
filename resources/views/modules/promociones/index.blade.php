@@ -72,8 +72,8 @@
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <flux:badge color="{{ $promocion->estado == '1' ? 'green' : 'red' }}">
-                            {{ $promocion->estado == '1' ? 'Activo' : 'Inactivo' }}
+                        <flux:badge color="{{ $promocion->colorEstado() }}">
+                            {{ $promocion->etiquetaEstado() }}
                         </flux:badge>
                     </td>
 

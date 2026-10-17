@@ -11,9 +11,7 @@ class Cliente extends Model
         'ci',
         'celular',
         'correo',
-        'puntos',
-        'descuento',
-        'estado'
+        'estado',
     ];
 
     protected $table = 'clientes';
@@ -40,8 +38,13 @@ class Cliente extends Model
         return (int) floor($total / 10);
     }
 
+    public function esAnonimo(): bool
+    {
+        return $this->ci === config('app.ci_anonimo');
+    }
+
     public static function validateClienteAnonimo($cliente): bool
     {
-        return $cliente->ci === config('app.ci_anonimo');
+        return $cliente instanceof self && $cliente->esAnonimo();
     }
 }

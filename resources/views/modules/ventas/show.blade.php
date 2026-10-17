@@ -45,6 +45,9 @@
     <p class="mt-1 text-xs">
         Atendido por: {{ auth()->user()->name ?? 'No identificado' }}
     </p>
+    <p class="mt-1 text-xs">
+        Tipo de pago: {{ $venta->tipoPago->nombre ?? 'No especificado' }}
+    </p>
 
 </div>
 
