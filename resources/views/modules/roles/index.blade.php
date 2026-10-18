@@ -69,7 +69,7 @@
                            data-confirm-title="{{ $rol->estado == '1' ? 'Desactivar rol' : 'Activar rol' }}"
                            data-confirm-variant="question"
                            data-confirm-confirm="Sí, {{ $rol->estado == '1' ? 'desactivar' : 'activar' }}"
-                           class="module-icon-btn-red">
+                           class="{{ $rol->estado == '1' ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
                     </td>

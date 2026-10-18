@@ -92,7 +92,7 @@
                         data-confirm-title="{{ $usuario->estado == '1' ? 'Desactivar usuario' : 'Activar usuario' }}"
                         data-confirm-variant="question"
                         data-confirm-confirm="Sí, {{ $usuario->estado == '1' ? 'desactivar' : 'activar' }}"
-                        class="module-icon-btn-red">
+                        class="{{ $usuario->estado == '1' ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $usuario->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
 
