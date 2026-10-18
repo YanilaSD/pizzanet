@@ -15,7 +15,7 @@
 
     <div>
         <label class="module-form-label">Estado</label>
-        <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
+        <flux:select name="estado" placeholder="Seleccionar estado...">
             <flux:select.option value="">Todos</flux:select.option>
             <flux:select.option value="1" :selected="request('estado') === '1'">
                 Activo

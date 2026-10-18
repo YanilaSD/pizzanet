@@ -36,7 +36,7 @@
 
             <div>
                 <label class="module-form-label">Tipo de Pago</label>
-                <flux:select name="tipo_pago_id" class="dark">
+                <flux:select name="tipo_pago_id">
                     <flux:select.option value="" selected>Todos</flux:select.option>
                     @foreach($tipoPagos as $tp)
                         <flux:select.option value="{{ $tp->id }}" :selected="request('tipo_pago_id') == $tp->id">
@@ -48,7 +48,7 @@
 
             <div>
                 <label class="module-form-label">Estado</label>
-                <flux:select name="estado" class="dark">
+                <flux:select name="estado">
                     <flux:select.option value="" selected>Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
                         Completada
