@@ -30,9 +30,14 @@
                 </flux:button>
             @endif
 
-            {{-- Sin color="orange": toma --color-accent (orange-700 en light, orange-500 en dark) --}}
+            {{-- Light: accent orange-700. Dark: .module-header-primary (estilo sidebar) --}}
             @if($buttonText && $buttonLink)
-                <flux:button variant="primary" icon="plus" :href="$buttonLink">
+                <flux:button
+                    variant="primary"
+                    icon="plus"
+                    :href="$buttonLink"
+                    class="module-header-primary"
+                >
                     {{ $buttonText }}
                 </flux:button>
             @endif

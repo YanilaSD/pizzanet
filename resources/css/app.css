@@ -85,6 +85,13 @@
     --nav-active: color-mix(in oklab, var(--color-orange-500) 18%, transparent);
     --nav-active-fg: var(--color-orange-300);
     --avatar-bg: var(--color-orange-800);
+
+    /* CTA de cabeceras de módulo (card-header): mismo criterio que ítem activo del sidebar */
+    --module-cta-bg: color-mix(in oklab, var(--color-orange-500) 18%, var(--color-zinc-800));
+    --module-cta-bg-hover: color-mix(in oklab, var(--color-orange-500) 28%, var(--color-zinc-800));
+    --module-cta-fg: var(--color-orange-300);
+    --module-cta-fg-hover: var(--color-orange-200);
+    --module-cta-border: color-mix(in oklab, var(--color-orange-500) 28%, var(--color-zinc-700));
 }
 
 @layer base {
@@ -141,6 +148,24 @@
     color: #fff;
 }
 
+/* Primary del card-header: en dark, tono sidebar (zinc + acento naranja suave).
+   Fuera de @layer para ganar a utilidades de Flux en el botón. */
+.dark .module-header-primary {
+    background-color: var(--module-cta-bg) !important;
+    border-color: var(--module-cta-border) !important;
+    color: var(--module-cta-fg) !important;
+    box-shadow: none !important;
+}
+
+.dark .module-header-primary:hover {
+    background-color: var(--module-cta-bg-hover) !important;
+    color: var(--module-cta-fg-hover) !important;
+}
+
+.dark .module-header-primary :is(svg, [data-flux-icon]) {
+    color: var(--module-cta-fg) !important;
+}
+
 /* ---------- Componentes ---------- */
 @layer components {
     .module-card {
@@ -158,6 +183,7 @@
         @apply rounded-lg border border-zinc-200 bg-surface-nested p-3
                dark:border-zinc-800;
     }
+
 
     .module-page-title {
         @apply text-xl font-semibold text-zinc-900 dark:text-white;
