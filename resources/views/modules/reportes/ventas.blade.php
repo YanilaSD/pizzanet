@@ -133,7 +133,7 @@
                             </td>
 
                             <td class="p-4">
-                                {{ \Carbon\Carbon::parse($v->fecha)->format('d/m/Y') }}
+                                {{ $v->created_at->format('d/m/Y') }}
                             </td>
 
                             <td class="p-4">

@@ -181,12 +181,12 @@ class RolPrivilegioSeeder extends Seeder
             'canjear-puntos-cliente',
 
             'ver-reportes',
-            'reporte-de-ventas',
-            'exportar-ventas-en-pdf',
-            'reporte-de-usuarios',
-            'exportar-usuarios-en-pdf',
-            'reporte-de-productos',
-            'exportar-productos-en-pdf',
+            'reporte-ventas',
+            'exportar-ventas-pdf',
+            'reporte-usuarios',
+            'exportar-usuarios-pdf',
+            'reporte-productos',
+            'exportar-productos-pdf',
 
             'ver-promociones',
             'crear-promocion',

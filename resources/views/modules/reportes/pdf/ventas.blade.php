@@ -151,27 +151,27 @@
             <tr>
                 <td>
                     <strong>Desde:</strong>
-                    {{ request('desde') ?? 'Todos' }}
+                    {{ $filtroDesde ? \Carbon\Carbon::parse($filtroDesde)->format('d/m/Y') : 'Todos' }}
                 </td>
 
                 <td>
                     <strong>Hasta:</strong>
-                    {{ request('hasta') ?? 'Todos' }}
+                    {{ $filtroHasta ? \Carbon\Carbon::parse($filtroHasta)->format('d/m/Y') : 'Todos' }}
                 </td>
             </tr>
 
             <tr>
                 <td>
                     <strong>Tipo Pago:</strong>
-                    {{ request('tipo_pago_id') ?? 'Todos' }}
+                    {{ $filtroTipoPago }}
                 </td>
 
                 <td>
                     <strong>Estado:</strong>
 
-                    @if(request('estado') === '1')
+                    @if($filtroEstado === '1')
                         Completada
-                    @elseif(request('estado') === '0')
+                    @elseif($filtroEstado === '0')
                         Anulada
                     @else
                         Todos
@@ -209,7 +209,7 @@
                     </td>
 
                     <td>
-                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
+                        {{ $venta->created_at->format('d/m/Y') }}
                     </td>
 
                     <td class="text-right">

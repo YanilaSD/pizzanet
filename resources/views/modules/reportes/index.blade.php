@@ -17,7 +17,7 @@
                 ],
                 [
                     'titulo'      => 'Reporte de Productos',
-                    'descripcion' => 'Filtra por fecha, precio y estado.',
+                    'descripcion' => 'Filtra por nombre, precio y estado.',
                     'url'         => route('reportes.productos'),
                     'icono'       => 'archive-box',
                 ],
