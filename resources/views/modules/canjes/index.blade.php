@@ -18,14 +18,11 @@
         description="Solo debe existir un canje activo a la vez"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('canjes.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar canje"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('canjes.index')"
+                placeholder="Buscar canje"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">

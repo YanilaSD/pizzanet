@@ -138,9 +138,80 @@
     border: none;
 }
 
+/* ---------- Settings (nav en contenido claro) ---------- */
+:root {
+    --settings-nav-fg: var(--color-zinc-700);
+    --settings-nav-hover-bg: color-mix(in oklab, var(--color-orange-500) 14%, var(--color-white));
+    --settings-nav-hover-fg: var(--color-orange-800);
+    --settings-nav-active-bg: var(--color-orange-700);
+    --settings-nav-active-fg: var(--color-white);
+}
+
+.dark {
+    --settings-nav-fg: var(--color-zinc-300);
+    --settings-nav-hover-bg: var(--nav-hover);
+    --settings-nav-hover-fg: var(--color-zinc-100);
+    --settings-nav-active-bg: var(--module-cta-bg);
+    --settings-nav-active-fg: var(--module-cta-fg);
+    --settings-nav-active-border: var(--module-cta-border);
+}
+
+.settings-nav [data-flux-navlist-item] {
+    color: var(--settings-nav-fg);
+    border-radius: 0.5rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.settings-nav [data-flux-navlist-item]:hover:not([data-current]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
+.settings-nav [data-flux-navlist-item][data-current] {
+    background-color: var(--settings-nav-active-bg);
+    color: var(--settings-nav-active-fg);
+    border: none;
+}
+
+.dark .settings-nav [data-flux-navlist-item][data-current] {
+    border: 1px solid var(--settings-nav-active-border);
+}
+
+/* Selector de tema (Appearance): mismo contraste que el nav de settings */
+.settings-appearance ui-radio[data-flux-radio-segmented] {
+    color: var(--settings-nav-fg);
+}
+
+.settings-appearance ui-radio[data-flux-radio-segmented][data-checked] {
+    color: var(--settings-nav-active-fg);
+}
+
+.settings-appearance ui-radio[data-flux-radio-segmented]:hover:not([data-checked]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
+.dark .settings-appearance ui-radio[data-flux-radio-segmented]:hover:not([data-checked]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
 .app-sidebar button[data-flux-profile] span,
 .app-sidebar button[data-flux-profile] svg {
     color: var(--nav-fg);
+}
+
+.app-sidebar button[data-flux-sidebar-toggle] {
+    color: var(--nav-fg) !important;
+}
+
+.app-sidebar button[data-flux-sidebar-toggle]:hover {
+    background-color: var(--nav-hover) !important;
+    color: var(--nav-fg) !important;
+}
+
+.app-sidebar button[data-flux-sidebar-toggle] svg {
+    color: var(--nav-fg) !important;
 }
 
 [data-slot="avatar"] {
@@ -278,6 +349,14 @@
         @apply text-zinc-600 dark:text-zinc-300;
     }
 
+    .module-table-scroll {
+        @apply max-h-[min(70vh,42rem)] overflow-x-auto overflow-y-auto;
+    }
+
+    .module-index-search {
+        @apply flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:items-stretch;
+    }
+
     .module-report-table {
         @apply w-full border-collapse text-left text-sm text-zinc-600 dark:text-white;
     }
@@ -288,7 +367,8 @@
     }
 
     .module-report-table thead th {
-        @apply p-4 text-left font-medium;
+        @apply sticky top-0 z-10 bg-zinc-50 p-4 text-left font-medium
+               dark:bg-zinc-950;
     }
 
     .module-report-table tbody tr {

@@ -15,7 +15,7 @@
 
             <div>
                 <label class="module-form-label">Estado</label>
-                <flux:select name="estado" class="dark" placeholder="Seleccionar estado...">
+                <flux:select name="estado" placeholder="Seleccionar estado...">
                     <flux:select.option value="">Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
                         Activo
@@ -37,7 +37,7 @@
                 >
             </div>
 
-            <div class="md:col-span-2 flex justify-end gap-2">
+            <div class="flex flex-col gap-2 sm:flex-row sm:justify-end md:col-span-2">
 
                 <button
                     type="submit"
@@ -85,6 +85,7 @@
         </div>
         <x-module-card-lg class="overflow-hidden !p-0">
 
+            <div class="module-table-scroll">
             <table class="module-report-table">
                 <thead>
                     <tr>
@@ -122,7 +123,8 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table></x-module-card-lg>
+            </table>
+            </div></x-module-card-lg>
     </div>
 
 </x-layouts.app>

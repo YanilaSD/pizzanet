@@ -19,14 +19,11 @@
         description="Listado de los roles registrados"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('roles.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar rol"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('roles.index')"
+                placeholder="Buscar rol"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">
@@ -69,7 +66,7 @@
                            data-confirm-title="{{ $rol->estado == '1' ? 'Desactivar rol' : 'Activar rol' }}"
                            data-confirm-variant="question"
                            data-confirm-confirm="Sí, {{ $rol->estado == '1' ? 'desactivar' : 'activar' }}"
-                           class="module-icon-btn-red">
+                           class="{{ $rol->estado == '1' ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
                     </td>

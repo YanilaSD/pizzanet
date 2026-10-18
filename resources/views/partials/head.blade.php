@@ -23,13 +23,13 @@
     ];
 
     window.Apex = {
+        chart: {
+            background: 'transparent',
+            fontFamily: 'Instrument Sans, ui-sans-serif, system-ui, sans-serif',
+            toolbar: { show: false }
+        },
         grid: {
             padding: { top: 10, right: 12, bottom: 10, left: 12 }
-        },
-        theme: {
-            mode: 'light',
-            palette: 'palette1',
-            monochrome: { enabled: false }
         }
     };
 </script>

@@ -192,7 +192,7 @@
                                     class="module-icon-btn-red"
                                     title="Eliminar"
                                 >
-                                    <flux:icon name="x-circle" />
+                                    <flux:icon name="trash" />
                                 </button>
                             </form>
 

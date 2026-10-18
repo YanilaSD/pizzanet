@@ -18,14 +18,11 @@
         description="Listado de promociones registradas"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('promociones.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar promoción"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('promociones.index')"
+                placeholder="Buscar promoción"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">

@@ -60,7 +60,7 @@
                            data-confirm-title="{{ $tipo_pago->activo == '1' ? 'Desactivar tipo de pago' : 'Activar tipo de pago' }}"
                            data-confirm-variant="question"
                            data-confirm-confirm="Sí, {{ $tipo_pago->activo == '1' ? 'desactivar' : 'activar' }}"
-                           class="module-icon-btn-red">
+                           class="{{ $tipo_pago->activo == '1' ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $tipo_pago->activo == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
                     </td>

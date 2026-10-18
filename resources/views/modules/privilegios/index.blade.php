@@ -20,14 +20,11 @@
     >
 
         <x-slot name="actions">
-            <form method="GET" action="{{ route('privilegios.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar privilegio"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('privilegios.index')"
+                placeholder="Buscar privilegio"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">
@@ -72,7 +69,7 @@
                            data-confirm-title="{{ $privilegio->estado == '1' ? 'Desactivar privilegio' : 'Activar privilegio' }}"
                            data-confirm-variant="question"
                            data-confirm-confirm="Sí, {{ $privilegio->estado == '1' ? 'desactivar' : 'activar' }}"
-                           class="module-icon-btn-red">
+                           class="{{ $privilegio->estado == '1' ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $privilegio->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
 

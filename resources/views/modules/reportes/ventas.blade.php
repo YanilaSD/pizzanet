@@ -36,7 +36,7 @@
 
             <div>
                 <label class="module-form-label">Tipo de Pago</label>
-                <flux:select name="tipo_pago_id" class="dark">
+                <flux:select name="tipo_pago_id">
                     <flux:select.option value="" selected>Todos</flux:select.option>
                     @foreach($tipoPagos as $tp)
                         <flux:select.option value="{{ $tp->id }}" :selected="request('tipo_pago_id') == $tp->id">
@@ -48,7 +48,7 @@
 
             <div>
                 <label class="module-form-label">Estado</label>
-                <flux:select name="estado" class="dark">
+                <flux:select name="estado">
                     <flux:select.option value="" selected>Todos</flux:select.option>
                     <flux:select.option value="1" :selected="request('estado') === '1'">
                         Completada
@@ -59,7 +59,7 @@
                 </flux:select>
             </div>
 
-            <div class="flex items-end gap-2">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-end md:col-span-5">
 
                 <button 
                     type="submit"
@@ -109,6 +109,7 @@
 
         <x-module-card-lg class="overflow-hidden !p-0">
 
+            <div class="module-table-scroll">
             <table class="module-report-table">
                 <thead>
                     <tr>
@@ -176,6 +177,7 @@
                 </tbody>
 
             </table>
+            </div>
 </x-module-card-lg>
 
     </div>

@@ -27,9 +27,11 @@
             description="Listado de clientes registrados"
         >
             <x-slot name="actions">
-                <form method="GET" action="{{ route('clientes.index') }}">
-                    <flux:input name="search" icon="magnifying-glass" placeholder="Buscar cliente" value="{{ request('search') }}" />
-                </form>
+                <x-module-search-form
+                    :action="route('clientes.index')"
+                    placeholder="Buscar cliente"
+                    :value="request('search')"
+                />
             </x-slot>
 
             <x-slot name="head">
