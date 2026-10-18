@@ -27,6 +27,10 @@ class DashboardStats extends Component
     public $clientesMes = [];
     public $clientesCantidad = [];
 
+    public $variacionSemanal = null;
+    public $variacionIngresos = null;
+    public $clientesNuevosMes = 0;
+
     public function mount()
     {
         $this->loadStats();
@@ -47,7 +51,7 @@ class DashboardStats extends Component
             $inicio = Carbon::now()->subWeeks($i)->startOfWeek();
             $fin    = Carbon::now()->subWeeks($i)->endOfWeek();
             $this->semanas[]         = $inicio->format('d M');
-            $this->ventasSemanales[] = Venta::where('estado', 1)
+            $this->ventasSemanales[] = (float) Venta::where('estado', 1)
                 ->whereBetween('created_at', [$inicio, $fin])
                 ->sum('total');
         }
@@ -63,7 +67,7 @@ class DashboardStats extends Component
             ->get();
 
         $this->topProductos  = $productos->pluck('nombre')->values();
-        $this->topCantidades = $productos->pluck('vendidos')->values();
+        $this->topCantidades = $productos->pluck('vendidos')->map(fn ($cantidad) => (float) $cantidad)->values();
 
         // 4. Ingresos últimos 6 meses
         $this->meses = [];
@@ -71,7 +75,7 @@ class DashboardStats extends Component
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
             $this->meses[]             = $mes->format('M');
-            $this->ingresosMensuales[] = Venta::where('estado', 1)
+            $this->ingresosMensuales[] = (float) Venta::where('estado', 1)
                 ->whereYear('created_at', $mes->year)
                 ->whereMonth('created_at', $mes->month)
                 ->sum('total');
@@ -83,16 +87,52 @@ class DashboardStats extends Component
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
             $this->clientesMes[]      = $mes->format('M');
-            $this->clientesCantidad[] = Cliente::whereYear('created_at', $mes->year)
+            $this->clientesCantidad[] = (int) Cliente::whereYear('created_at', $mes->year)
                 ->whereMonth('created_at', $mes->month)
                 ->count();
         }
+
+        $this->variacionSemanal = $this->variacionPorcentual($this->ventasSemanales);
+        $this->variacionIngresos = $this->variacionPorcentual($this->ingresosMensuales);
+        $this->clientesNuevosMes = (int) (end($this->clientesCantidad) ?: 0);
+    }
+
+    private function variacionPorcentual(array $serie): ?float
+    {
+        $total = count($serie);
+
+        if ($total < 2) {
+            return null;
+        }
+
+        $actual = (float) $serie[$total - 1];
+        $anterior = (float) $serie[$total - 2];
+
+        if ($anterior == 0.0) {
+            return null;
+        }
+
+        return round((($actual - $anterior) / $anterior) * 100, 1);
     }
 
     public function refreshCharts()
     {
         $this->loadStats();
-        $this->dispatch('refreshCharts');
+        $this->dispatch('refresh-charts', data: $this->chartPayload());
+    }
+
+    public function chartPayload(): array
+    {
+        return [
+            'semanas' => $this->semanas,
+            'ventasSemanales' => $this->ventasSemanales,
+            'topProductos' => collect($this->topProductos)->values()->all(),
+            'topCantidades' => collect($this->topCantidades)->values()->all(),
+            'meses' => $this->meses,
+            'ingresosMensuales' => $this->ingresosMensuales,
+            'clientesMes' => $this->clientesMes,
+            'clientesCantidad' => $this->clientesCantidad,
+        ];
     }
 
     public function render()
