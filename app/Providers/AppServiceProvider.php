@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Livewire\Volt\Volt;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        view()->addNamespace('layouts', resource_path('views/components/layouts'));
+        Volt::mount([
+            resource_path('views/livewire'),
+            resource_path('views/pages'),
+        ]);
     }
 }

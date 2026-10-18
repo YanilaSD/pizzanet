@@ -1,5 +1,5 @@
 <x-layouts.auth>
-    <div class="flex flex-col gap-6">
+    <div class="dark flex flex-col gap-6">
         <div
             class="relative w-full h-auto"
             x-cloak
@@ -79,6 +79,7 @@
 
                     <flux:button
                         variant="primary"
+                        color="orange"
                         type="submit"
                         class="w-full"
                     >
@@ -86,7 +87,7 @@
                     </flux:button>
                 </div>
 
-                <div class="mt-5 space-x-0.5 text-sm leading-5 text-center">
+                <div class="mt-5 space-x-0.5 text-sm leading-5 text-center text-white">
                     <span class="opacity-50">{{ __('or you can') }}</span>
                     <div class="inline font-medium underline cursor-pointer opacity-80">
                         <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('login using a recovery code') }}</span>
