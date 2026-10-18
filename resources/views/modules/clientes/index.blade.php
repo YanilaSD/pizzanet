@@ -88,6 +88,9 @@
                                 </a>
 
                                 <a href="{{ route('clientes.destroy', $cliente) }}"
+                                   data-confirm=""
+                                   data-confirm-title="¿Eliminar al cliente {{ $cliente->nombre }}?"
+                                   data-confirm-variant="danger"
                                    class="module-icon-btn-red">
                                     <flux:icon name="trash" />
                                 </a>

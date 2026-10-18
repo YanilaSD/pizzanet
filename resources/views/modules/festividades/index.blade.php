@@ -54,6 +54,9 @@
                             <flux:icon name="pencil-square" />
                         </a>
                         <a href="{{ route('festividades.destroy', $festividad->id) }}"
+                           data-confirm=""
+                           data-confirm-title="¿Eliminar la festividad {{ $festividad->nombre }}?"
+                           data-confirm-variant="danger"
                            class="module-icon-btn-red">
                             <flux:icon name="trash" />
                         </a>

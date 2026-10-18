@@ -79,19 +79,29 @@
                         </a>
 
                         <a href="{{ route('usuarios.reset', $usuario->id) }}"
-                        onclick="return confirm('¿Está seguro de restablecer la contraseña de este usuario?')"
+                        data-confirm="Se generará una nueva contraseña para este usuario."
+                        data-confirm-title="Restablecer contraseña"
+                        data-confirm-variant="warning"
+                        data-confirm-confirm="Sí, restablecer"
                         class="module-icon-btn-yellow">
                             <flux:icon name="shield-exclamation" />
                         </a>
 
                         <a href="{{ route('usuarios.toggle', $usuario->id) }}"
-                        onclick="return confirm('¿Está seguro de {{ $usuario->estado == '1' ? 'desactivar' : 'activar' }} este usuario?')"
+                        data-confirm="¿Desea {{ $usuario->estado == '1' ? 'desactivar' : 'activar' }} este usuario?"
+                        data-confirm-title="{{ $usuario->estado == '1' ? 'Desactivar usuario' : 'Activar usuario' }}"
+                        data-confirm-variant="question"
+                        data-confirm-confirm="Sí, {{ $usuario->estado == '1' ? 'desactivar' : 'activar' }}"
                         class="module-icon-btn-red">
                             <flux:icon name="{{ $usuario->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
 
                         @if($usuario->two_factor_secret != null)
-                            <form method="POST" action="{{ route('usuarios.reset_f2a', $usuario->id) }}">
+                            <form method="POST" action="{{ route('usuarios.reset_f2a', $usuario->id) }}"
+                                data-confirm="Se desactivará la autenticación de dos factores para este usuario."
+                                data-confirm-title="Restablecer 2FA"
+                                data-confirm-variant="warning"
+                                data-confirm-confirm="Sí, restablecer 2FA">
                                 @csrf
                                 <button type="submit" class="module-icon-btn-purple cursor-pointer">
                                     <flux:icon name="qr-code" />

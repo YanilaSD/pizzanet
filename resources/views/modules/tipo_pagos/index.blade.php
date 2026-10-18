@@ -48,11 +48,18 @@
                         </a>
                             
                          <a href="{{ route('tipo_pagos.destroy', $tipo_pago) }}"
+                               data-confirm=""
+                               data-confirm-title="¿Desea dar de baja el tipo de pago {{ $tipo_pago->nombre }}?"
+                               data-confirm-variant="danger"
                                class="module-icon-btn-red">
                                 <flux:icon name="trash" />
                          </a>
 
                         <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
+                           data-confirm="¿Desea {{ $tipo_pago->activo == '1' ? 'desactivar' : 'activar' }} este tipo de pago?"
+                           data-confirm-title="{{ $tipo_pago->activo == '1' ? 'Desactivar tipo de pago' : 'Activar tipo de pago' }}"
+                           data-confirm-variant="question"
+                           data-confirm-confirm="Sí, {{ $tipo_pago->activo == '1' ? 'desactivar' : 'activar' }}"
                            class="module-icon-btn-red">
                             <flux:icon name="{{ $tipo_pago->activo == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>

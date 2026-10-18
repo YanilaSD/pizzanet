@@ -65,6 +65,10 @@
                         </a>
 
                         <a href="{{ route('roles.toggle', $rol->id) }}"
+                           data-confirm="¿Desea {{ $rol->estado == '1' ? 'desactivar' : 'activar' }} el rol {{ $rol->nombre }}?"
+                           data-confirm-title="{{ $rol->estado == '1' ? 'Desactivar rol' : 'Activar rol' }}"
+                           data-confirm-variant="question"
+                           data-confirm-confirm="Sí, {{ $rol->estado == '1' ? 'desactivar' : 'activar' }}"
                            class="module-icon-btn-red">
                             <flux:icon name="{{ $rol->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>

@@ -68,6 +68,10 @@
                         </a>
 
                         <a href="{{ route('privilegios.toggle', $privilegio->id) }}"
+                           data-confirm="¿Desea {{ $privilegio->estado == '1' ? 'desactivar' : 'activar' }} el privilegio {{ $privilegio->nombre }}?"
+                           data-confirm-title="{{ $privilegio->estado == '1' ? 'Desactivar privilegio' : 'Activar privilegio' }}"
+                           data-confirm-variant="question"
+                           data-confirm-confirm="Sí, {{ $privilegio->estado == '1' ? 'desactivar' : 'activar' }}"
                            class="module-icon-btn-red">
                             <flux:icon name="{{ $privilegio->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>

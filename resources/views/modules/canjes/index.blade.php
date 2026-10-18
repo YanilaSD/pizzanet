@@ -74,6 +74,10 @@
                         </a>
 
                         <a href="{{ route('canjes.toggle', $canje->id) }}"
+                           data-confirm="¿Desea {{ $canje->estado == 1 ? 'desactivar' : 'activar' }} este canje?"
+                           data-confirm-title="{{ $canje->estado == 1 ? 'Desactivar canje' : 'Activar canje' }}"
+                           data-confirm-variant="question"
+                           data-confirm-confirm="Sí, {{ $canje->estado == 1 ? 'desactivar' : 'activar' }}"
                            class="{{ $canje->estado == 1 ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $canje->estado == 1 ? 'no-symbol' : 'check-circle' }}" />
                         </a>

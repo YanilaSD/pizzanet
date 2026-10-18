@@ -180,7 +180,9 @@
                             <form
                                 action="{{ route('ventas.destroy', $venta) }}"
                                 method="POST"
-                                onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
+                                data-confirm=""
+                                data-confirm-title="¿Desea dar de baja a la venta #{{ $venta->id }}?"
+                                data-confirm-variant="danger"
                             >
                                 @csrf
                                 @method('POST')

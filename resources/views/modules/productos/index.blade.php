@@ -98,6 +98,9 @@
                             </a>
 
                              <a href="{{ route('productos.destroy', $producto) }}"
+                                   data-confirm=""
+                                   data-confirm-title="¿Eliminar el producto {{ $producto->nombre }}?"
+                                   data-confirm-variant="danger"
                                    class="module-icon-btn-red">
                                     <flux:icon name="trash" />
                                 </a>

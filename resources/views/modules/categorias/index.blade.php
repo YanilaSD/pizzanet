@@ -46,6 +46,9 @@
                         </a>
                         @if($categoria->estado == '1')
                             <a href="{{ route('categorias.destroy', $categoria) }}"
+                               data-confirm=""
+                               data-confirm-title="¿Eliminar la categoría {{ $categoria->nombre }}?"
+                               data-confirm-variant="danger"
                                class="module-icon-btn-red">
                                 <flux:icon name="trash" />
                             </a>
