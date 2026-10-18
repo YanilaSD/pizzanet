@@ -101,7 +101,7 @@
 
                     @if ($producto->imagen)
                         <div class="mt-3">
-                            <p class="text-xs text-gray-500 mb-1">Imagen actual:</p>
+                            <p class="module-card-sublabel mb-1">Imagen actual:</p>
                             <img
                                 src="{{ asset('storage/' . $producto->imagen) }}"
                                 alt="Imagen del producto"

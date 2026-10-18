@@ -7,7 +7,7 @@
     />
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
+        <div class="module-alert-success" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
@@ -44,24 +44,24 @@
 
             <x-slot name="body">
                 @forelse ($clientes as $cliente)
-                    <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                        <td class="px-6 py-4 text-gray-500">
+                    <tr class="module-table-tr">
+                        <td class="module-table-td-index">
                             {{ $loop->iteration }}
                         </td>
 
-                        <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        <td class="module-table-td-primary">
                             {{ $cliente->nombre ?? 'Sin nombre' }}
                         </td>
 
-                         <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                         <td class="module-table-td">
                             {{ $cliente->ci ?? '-' }}
                         </td>
 
-                         <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                         <td class="module-table-td">
                             {{ $cliente->correo ?? 'Sin correo' }}
                         </td>
 
-                        <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        <td class="module-table-td">
                             {{ $cliente->getSaldoPuntosAttribute() }} Pts.
                         </td>
 
@@ -71,24 +71,24 @@
                             </flux:badge>
                         </td>
 
-                        <td class="px-6 py-4 flex justify-end gap-2">
+                        <td class="module-table-td-actions">
                             @if ($cliente->ci == config("app.ci_anonimo"))
-                                <span class="text-gray-400">No disponible</span>
+                                <span class="module-muted">No disponible</span>
                             @else
                                 <a href="{{ route('clientes.canjes', $cliente) }}"
-                                    class="p-2 rounded-lg hover:bg-green-100 text-gray-500 hover:text-green-600 transition"
+                                    class="module-icon-btn-green"
                                     title="Ver historial de canjes"
                                     aria-label="Ver historial de canjes">
                                     <flux:icon name="document-text" />
                                 </a>
 
                                 <a href="{{ route('clientes.edit', $cliente->id) }}"
-                                   class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                                   class="module-icon-btn-blue">
                                     <flux:icon name="pencil-square" />
                                 </a>
 
                                 <a href="{{ route('clientes.destroy', $cliente) }}"
-                                   class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                                   class="module-icon-btn-red">
                                     <flux:icon name="trash" />
                                 </a>
                             @endif
@@ -96,7 +96,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-8 text-gray-400">
+                        <td colspan="7" class="module-table-empty">
                             No se encontraron clientes registrados.
                         </td>
                     </tr>

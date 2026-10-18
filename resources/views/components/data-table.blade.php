@@ -1,13 +1,13 @@
 @props([
     'title' => null,
-    'description' => null
+    'description' => null,
 ])
 
-<x-module-card-lg class="mt-8 overflow-hidden !p-0">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 p-6 dark:border-gray-700">
+<x-module-card-lg class="mt-8 overflow-hidden p-0">
+    <div class="flex flex-col gap-4 border-b border-zinc-200 p-6 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
         <div>
             @if($title)
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                <h2 class="module-card-title">
                     {{ $title }}
                 </h2>
             @endif
@@ -20,33 +20,30 @@
         </div>
 
         @isset($actions)
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3">
                 {{ $actions }}
             </div>
         @endisset
-
     </div>
 
     <div class="overflow-x-auto">
-        <table class="w-full border-separate border-spacing-0 text-left text-sm text-gray-600 dark:text-gray-300">
-            
-            <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
+        {{-- border-collapse: con border-separate los bordes de <tr> (divide-y) no se dibujan --}}
+        <table class="w-full border-collapse text-left text-sm text-zinc-600 dark:text-white">
+            <thead class="bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-950/50 dark:text-zinc-300">
                 <tr class="[&>th]:px-6 [&>th]:py-3 [&>th]:font-medium">
                     {{ $head }}
                 </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800 [&>tr]:transition-colors [&>tr:hover]:bg-zinc-50 dark:[&>tr:hover]:bg-zinc-800/50">
                 {{ $body }}
             </tbody>
-
         </table>
     </div>
 
     @isset($pagination)
-        <div class="border-t border-gray-200 bg-gray-50/50 p-4 dark:border-gray-700 dark:bg-gray-900/20">
+        <div class="border-t border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-950/30">
             {{ $pagination }}
         </div>
     @endisset
-
 </x-module-card-lg>

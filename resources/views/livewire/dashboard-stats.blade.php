@@ -42,22 +42,22 @@
    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <x-module-card-lg>
-            <h3 class="module-card-label mb-4 font-semibold text-gray-900 dark:text-white">Ventas últimas 7 semanas</h3>
+            <h3 class="module-card-title mb-4 text-base">Ventas últimas 7 semanas</h3>
             <div id="chartSemanal"></div>
         </x-module-card-lg>
 
         <x-module-card-lg>
-            <h3 class="module-card-label mb-4 font-semibold text-gray-900 dark:text-white">Top 5 productos más vendidos</h3>
+            <h3 class="module-card-title mb-4 text-base">Top 5 productos más vendidos</h3>
             <div id="chartProductos"></div>
         </x-module-card-lg>
 
         <x-module-card-lg>
-            <h3 class="module-card-label mb-4 font-semibold text-gray-900 dark:text-white">Ingresos últimos 6 meses</h3>
+            <h3 class="module-card-title mb-4 text-base">Ingresos últimos 6 meses</h3>
             <div id="chartIngresos"></div>
         </x-module-card-lg>
 
         <x-module-card-lg>
-            <h3 class="module-card-label mb-4 font-semibold text-gray-900 dark:text-white">Nuevos clientes por mes</h3>
+            <h3 class="module-card-title mb-4 text-base">Nuevos clientes por mes</h3>
             <div id="chartClientes"></div>
         </x-module-card-lg>
 

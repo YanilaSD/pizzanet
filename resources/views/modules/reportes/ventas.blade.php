@@ -3,10 +3,10 @@
     <div class="p-6">
 
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 class="module-page-title text-2xl">
                 Reporte Ventas
             </h1>
-            <p class="text-gray-600 dark:text-gray-400">
+            <p class="module-body-text">
                 Consulta y analiza las ventas del sistema.
             </p>
         </div>
@@ -23,7 +23,7 @@
                     type="date"
                     name="desde"
                     value="{{ request('desde') ?? now()->format('Y-m-d') }}"
-                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
+                    class="module-input-native px-2 py-1">
             </div>
 
             <div>
@@ -31,7 +31,7 @@
                 <input type="date"
                        name="hasta"
                        value="{{ request('hasta') ?? now()->format('Y-m-d') }}"
-                       class="w-full rounded-lg border border-gray-300 bg-white text-gray-700 dark:border-gray-500 px-2 py-1 dark:text-gray-500">
+                       class="module-input-native px-2 py-1">
             </div>
 
             <div>
@@ -109,9 +109,9 @@
 
         <x-module-card-lg class="overflow-hidden !p-0">
 
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr class="text-left text-gray-600 dark:text-gray-400">
+            <table class="module-report-table">
+                <thead>
+                    <tr>
                         <th class="p-4">#</th>
                         <th class="p-4">Cliente</th>
                         <th class="p-4">Fecha</th>
@@ -125,7 +125,7 @@
 
                 <tbody>
                     @forelse($ventas as $v)
-                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400">
+                        <tr>
                             <td class="p-4">#{{ $v->id }}</td>
 
                             <td class="p-4">
@@ -140,7 +140,7 @@
                                 Bs {{ number_format($v->subtotal, 2) }}
                             </td>
 
-                            <td class="p-4 {{ $v->descuento > 0 ? 'text-red-600' : 'text-gray-400' }}">
+                            <td class="p-4 {{ $v->descuento > 0 ? 'text-red-600 dark:text-red-400' : 'module-muted' }}">
                             {{ $v->descuento > 0 ? '- ' : '' }}Bs {{ number_format($v->descuento ?? 0, 2) }}
                             </td>
 
@@ -154,11 +154,11 @@
 
                             <td class="p-4">
                                 @if($v->estado == 1)
-                                    <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-lg">
+                                    <span class="module-status-badge-green">
                                         Completada
                                     </span>
                                 @else
-                                    <span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-lg">
+                                    <span class="module-status-badge-red">
                                         Anulada
                                     </span>
                                 @endif
@@ -168,7 +168,7 @@
                     @empty
                         <tr>
                             <td colspan="8"
-                                class="p-6 text-center text-gray-500 dark:text-gray-400">
+                                class="module-table-empty p-6">
                                 No existen ventas para mostrar.
                             </td>
                         </tr>

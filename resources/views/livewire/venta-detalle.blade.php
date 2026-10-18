@@ -109,37 +109,37 @@
     {{-- Detalle de la venta --}}
     <x-module-card-lg class="mt-4 !p-0">
         <div class="overflow-x-auto">
-            <table class="min-w-[700px] w-full text-left text-sm text-gray-600 dark:text-gray-300">
-                <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
+            <table class="module-report-table min-w-[700px]">
+                <thead>
                     <tr>
-                        <th class="px-6 py-3">Producto</th>
-                        <th class="px-6 py-3">Cantidad</th>
-                        <th class="px-6 py-3">Precio Unitario</th>
-                        <th class="px-6 py-3">Subtotal</th>
-                        <th class="px-6 py-3">Acción</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
 
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                <tbody>
                     @forelse ($detalle as $p)
-                        <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
-                            <td class="px-6 py-4">
+                        <tr class="module-table-tr">
+                            <td class="module-table-td !px-4">
                                 {{ $p['nombre'] }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="module-table-td !px-4">
                                 {{ $p['cantidad'] }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="module-table-td !px-4">
                                 Bs {{ number_format($p['precio_unitario'], 2) }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="module-table-td !px-4">
                                 Bs {{ number_format($p['subtotal'], 2) }}
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="module-table-td !px-4">
                                 <button
                                     type="button"
                                     wire:click="eliminarProducto({{ $p['id'] }})"
@@ -152,7 +152,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-gray-500">
+                            <td colspan="5" class="module-table-empty py-4">
                                 Agrega productos a esta venta.
                             </td>
                         </tr>

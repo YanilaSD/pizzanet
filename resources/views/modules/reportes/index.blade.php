@@ -27,10 +27,10 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+                <h1 class="module-page-title text-2xl">
                     Gestión de Reportes
                 </h1>
-                <p class="text-gray-600 dark:text-gray-400">
+                <p class="module-body-text">
                     Selecciona el reporte que deseas generar.
                 </p>
             </div>
@@ -52,10 +52,10 @@
 
                             <!-- Título y descripción -->
                             <div>
-                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white group-hover:text-orange-500">
+                                <h2 class="module-card-title group-hover:text-orange-500 dark:group-hover:text-orange-400">
                                     {{ $reporte['titulo'] }}
                                 </h2>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <p class="module-card-sublabel mt-1">
                                     {{ $reporte['descripcion'] }}
                                 </p>
                             </div>

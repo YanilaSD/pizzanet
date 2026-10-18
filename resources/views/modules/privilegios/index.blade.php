@@ -40,17 +40,17 @@
 
         <x-slot name="body">
             @forelse ($privilegios as $privilegio)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                <tr class="module-table-tr">
 
-                    <td class="px-6 py-4 text-gray-500">
+                    <td class="module-table-td-index">
                         {{ $loop->iteration }}
                     </td>
 
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                    <td class="module-table-td-primary">
                         {{ $privilegio->nombre }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                    <td class="module-table-td">
                         {{ $privilegio->descripcion }}
                     </td>
 
@@ -60,15 +60,15 @@
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4 flex justify-end gap-2">
+                    <td class="module-table-td-actions">
 
                         <a href="{{ route('privilegios.edit', $privilegio) }}"
-                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                           class="module-icon-btn-blue">
                             <flux:icon name="pencil-square" />
                         </a>
 
                         <a href="{{ route('privilegios.toggle', $privilegio->id) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                           class="module-icon-btn-red">
                             <flux:icon name="{{ $privilegio->estado == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
 
@@ -77,7 +77,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center py-8 text-gray-400">
+                    <td colspan="5" class="module-table-empty">
                         No se encontraron registros
                     </td>
                 </tr>

@@ -11,6 +11,8 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
+    /* Neutros sin tinte. zinc (Flux) y gray (tus vistas) usan la MISMA escala,
+       así las clases gray-* de tus Blade dejan de verse azuladas sin tocarlas. */
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
     --color-zinc-200: #e5e5e5;
@@ -23,115 +25,269 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e5e5e5;
+    --color-gray-300: #d4d4d4;
+    --color-gray-400: #a3a3a3;
+    --color-gray-500: #737373;
+    --color-gray-600: #525252;
+    --color-gray-700: #404040;
+    --color-gray-800: #262626;
+    --color-gray-900: #171717;
+    --color-gray-950: #0a0a0a;
+
+    /* Marca (light): orange-700 + texto blanco ≈ 5.2:1 */
+    --color-accent: var(--color-orange-700);
+    --color-accent-content: var(--color-orange-700);
     --color-accent-foreground: var(--color-white);
+
+    /* Superficies: úsalas como bg-surface-page, bg-surface-card, bg-surface-nested */
+    --color-surface-page: var(--color-zinc-100);
+    --color-surface-card: var(--color-white);
+    --color-surface-nested: var(--color-zinc-50);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
+        /* Marca (dark): tono más claro, texto oscuro encima */
+        --color-accent: var(--color-orange-500);
+        --color-accent-content: var(--color-orange-400);
+        --color-accent-foreground: var(--color-zinc-950);
+
+        /* Elevación: página (más oscura) < tarjeta < elementos internos */
+        --color-surface-page: var(--color-zinc-950);
+        --color-surface-card: var(--color-zinc-900);
+        --color-surface-nested: var(--color-zinc-950);
     }
+}
+
+/* ---------- Tokens propios ---------- */
+:root {
+    color-scheme: light;
+    --border-default: var(--color-zinc-200);
+
+    /* Sidebar naranja (orange-700): overlays NEGROS para no perder contraste con texto blanco */
+    --nav-fg: #fff;
+    --nav-hover: rgb(0 0 0 / 0.10);
+    --nav-active: rgb(0 0 0 / 0.20);
+    --nav-active-fg: #fff;
+    --avatar-bg: var(--color-orange-900);
+}
+
+.dark {
+    color-scheme: dark; /* reemplaza el filter: invert() del date picker, scrollbars y controles nativos */
+    --border-default: var(--color-zinc-800);
+
+    /* Sidebar zinc-900: el naranja queda solo como indicador del ítem activo */
+    --nav-fg: var(--color-zinc-300);
+    --nav-hover: rgb(255 255 255 / 0.06);
+    --nav-active: color-mix(in oklab, var(--color-orange-500) 18%, transparent);
+    --nav-active-fg: var(--color-orange-300);
+    --avatar-bg: var(--color-orange-800);
 }
 
 @layer base {
-
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+        border-color: var(--border-default);
     }
 }
 
+/* ---------- Formularios ---------- */
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }
 
 [data-flux-label] {
-    @apply  !mb-0 !leading-tight;
+    @apply mb-0! leading-tight!;
 }
 
 [data-flux-select-native] {
-    background-color: #fff;
-    border-color: #d1d5db;
+    @apply bg-white border-zinc-300 dark:bg-zinc-900 dark:border-zinc-700;
 }
 
-[data-flux-select-native]:focus,
+/* Un solo estilo de foco para inputs, textareas y selects.
+   outline (no box-shadow) para que se vea en modo de alto contraste de Windows. */
+:is(input, textarea, select)[data-flux-control]:focus-visible,
 [data-flux-select-native]:focus-visible {
-    border-color: #ff8904;
-    outline: none;
-    box-shadow: 0 0 0 2px #ff8904 !important;
+    outline: 2px solid var(--color-accent-content);
+    outline-offset: 2px;
+    border-color: var(--color-accent-content);
 }
 
-[data-flux-select-native]:active {
-    border-color: #ff8904;
+/* ---------- Navegación (acotada al sidebar) ---------- */
+/* Requiere class="app-sidebar" en <flux:sidebar> (ya incluido en sidebar.blade.php) */
+.app-sidebar [data-flux-navlist-item] {
+    color: var(--nav-fg);
 }
 
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+.app-sidebar [data-flux-navlist-item]:hover {
+    background-color: var(--nav-hover);
 }
 
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
-
-nav [data-flux-navlist-item] {
-    color: white;
-}
-
-nav [data-flux-navlist-item]:hover {
-    background-color: rgb(161, 44, 1);
-}
-
-nav [data-flux-navlist-item][data-current="data-current"] {
-    background-color: rgb(161, 44, 1);
+.app-sidebar [data-flux-navlist-item][data-current] {
+    background-color: var(--nav-active);
+    color: var(--nav-active-fg);
     border: none;
 }
 
-button[data-flux-profile] span {
-    color: white;
-}
-
-button[data-flux-profile] svg {
-    color: white !important;
+.app-sidebar button[data-flux-profile] span,
+.app-sidebar button[data-flux-profile] svg {
+    color: var(--nav-fg);
 }
 
 [data-slot="avatar"] {
-    background-color:  rgb(161, 44, 1) !important;
+    background-color: var(--avatar-bg);
+    color: #fff;
 }
 
-.dark input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.5);
-}
-
+/* ---------- Componentes ---------- */
 @layer components {
     .module-card {
-        @apply rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800;
+        @apply rounded-2xl border border-zinc-200 bg-surface-card p-4 shadow-sm transition
+               hover:shadow-md motion-reduce:transition-none
+               dark:border-zinc-800 dark:shadow-none dark:hover:border-zinc-700;
     }
 
     .module-card-lg {
-        @apply rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800;
-    }
-
-    .module-card-label {
-        @apply text-sm font-medium text-gray-600 dark:text-gray-400;
-    }
-
-    .module-card-sublabel {
-        @apply text-xs text-gray-500 dark:text-gray-400;
-    }
-
-    .module-form-label {
-        @apply mb-1 block text-sm font-medium text-gray-600 dark:text-gray-400;
+        @apply rounded-2xl border border-zinc-200 bg-surface-card p-6 shadow-sm
+               dark:border-zinc-800 dark:shadow-none;
     }
 
     .module-card-nested {
-        @apply rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-900/40;
+        @apply rounded-lg border border-zinc-200 bg-surface-nested p-3
+               dark:border-zinc-800;
+    }
+
+    .module-page-title {
+        @apply text-xl font-semibold text-zinc-900 dark:text-white;
+    }
+
+    .module-card-title {
+        @apply text-lg font-semibold text-zinc-900 dark:text-white;
+    }
+
+    .module-card-label {
+        @apply text-sm font-medium text-zinc-600 dark:text-zinc-400;
+    }
+
+    .module-card-sublabel {
+        @apply text-xs text-zinc-500 dark:text-zinc-400;
+    }
+
+    .module-form-label {
+        @apply mb-1 block text-sm font-medium text-zinc-600 dark:text-zinc-400;
+    }
+
+    .module-table-tr {
+        @apply transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50;
+    }
+
+    .module-table-td {
+        @apply px-6 py-4 text-zinc-600 dark:text-white;
+    }
+
+    .module-table-td-index {
+        @apply px-6 py-4 text-zinc-500 dark:text-zinc-400;
+    }
+
+    .module-table-td-primary {
+        @apply px-6 py-4 font-medium text-zinc-800 dark:text-white;
+    }
+
+    .module-table-td-actions {
+        @apply px-6 py-4 flex justify-end gap-2;
+    }
+
+    .module-table-empty {
+        @apply text-center py-8 text-zinc-400 dark:text-zinc-400;
+    }
+
+    .module-icon-btn {
+        @apply p-2 rounded-lg text-zinc-500 transition
+               dark:text-zinc-300 dark:hover:bg-zinc-800;
+    }
+
+    .module-icon-btn-blue {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-blue-100 hover:text-blue-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-blue-400;
+    }
+
+    .module-icon-btn-green {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-green-100 hover:text-green-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-green-400;
+    }
+
+    .module-icon-btn-red {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-red-100 hover:text-red-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-red-400;
+    }
+
+    .module-icon-btn-orange {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-orange-100 hover:text-orange-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-orange-400;
+    }
+
+    .module-icon-btn-yellow {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-yellow-100 hover:text-yellow-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-yellow-400;
+    }
+
+    .module-icon-btn-purple {
+        @apply p-2 rounded-lg text-zinc-500 transition hover:bg-purple-100 hover:text-purple-600
+               dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-purple-400;
+    }
+
+    .module-alert-success {
+        @apply rounded relative border px-4 py-3 my-4
+               border-green-400 bg-green-100 text-green-700
+               dark:border-green-800 dark:bg-green-950/40 dark:text-green-300;
+    }
+
+    .module-muted {
+        @apply text-zinc-500 dark:text-zinc-400;
+    }
+
+    .module-body-text {
+        @apply text-zinc-600 dark:text-zinc-300;
+    }
+
+    .module-report-table {
+        @apply w-full border-collapse text-left text-sm text-zinc-600 dark:text-white;
+    }
+
+    .module-report-table thead {
+        @apply bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500
+               dark:bg-zinc-950/50 dark:text-zinc-300;
+    }
+
+    .module-report-table thead th {
+        @apply p-4 text-left font-medium;
+    }
+
+    .module-report-table tbody tr {
+        @apply border-t border-zinc-100 transition-colors hover:bg-zinc-50
+               dark:border-zinc-800 dark:hover:bg-zinc-800/50;
+    }
+
+    .module-report-table tbody td {
+        @apply p-4 dark:text-white;
+    }
+
+    .module-input-native {
+        @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700
+               placeholder:text-zinc-400
+               focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400
+               dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500;
+    }
+
+    .module-status-badge-green {
+        @apply rounded-lg bg-green-100 px-2 py-1 text-xs text-green-700
+               dark:bg-green-950/50 dark:text-green-300;
+    }
+
+    .module-status-badge-red {
+        @apply rounded-lg bg-red-100 px-2 py-1 text-xs text-red-700
+               dark:bg-red-950/50 dark:text-red-300;
     }
 }

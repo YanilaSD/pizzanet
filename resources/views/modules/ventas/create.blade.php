@@ -3,18 +3,18 @@
 
         <div class="lg:col-span-3">
             <div class="flex flex-col">
-                <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
+                <h1 class="module-page-title sm:text-2xl">
                     Gestión de Ventas
                 </h1>
 
-                <p class="mt-1 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                <p class="module-body-text mt-1 text-sm sm:text-base">
                     Registra y gestiona todas las ventas de la pizzería con promociones
                 </p>
             </div>
         </div>
 
         <div class="lg:col-span-1">
-            <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-4 text-sm">
+            <div class="module-card-nested text-sm dark:text-white">
                 <p>
                     <span class="font-medium">Usuario:</span>
                     {{ auth()->user()->name }}
@@ -91,14 +91,14 @@
         <div class="my-4">
            <x-module-card-lg class="!p-0">
                 <div class="overflow-x-auto">
-                    <table class="min-w-[800px] w-full text-left text-sm text-gray-600 dark:text-gray-300">
-                        <thead class="bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-900/40 dark:text-gray-400">
+                    <table class="module-report-table min-w-[800px]">
+                        <thead>
                             <tr>
-                                <th class="px-6 py-3">Nombre</th>
-                                <th class="px-6 py-3">CI</th>
-                                <th class="px-6 py-3">Celular</th>
-                                <th class="px-6 py-3">Puntos acumulados</th>
-                                <th class="px-6 py-3">Estado canje</th>
+                                <th>Nombre</th>
+                                <th>CI</th>
+                                <th>Celular</th>
+                                <th>Puntos acumulados</th>
+                                <th>Estado canje</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,16 +110,16 @@
                                 $puntosRequeridos = (int) ($canje?->puntos ?? 0);
                                 $puedeCanjer = ! $clienteModel?->esAnonimo() && $disponible['bloques'] >= 1;
                             @endphp
-                            <tr class="group hover:bg-orange-50/40 transition-all duration-200 dark:hover:bg-orange-950/20">
-                                <td class="px-6 py-4 font-medium text-gray-900">{{ $cliente['nombre'] }}</td>
-                                <td class="px-6 py-4">{{ $cliente['ci'] }}</td>
-                                <td class="px-6 py-4">{{ $cliente['celular'] }}</td>
-                                <td class="px-6 py-4">
+                            <tr class="module-table-tr">
+                                <td class="module-table-td-primary !px-4">{{ $cliente['nombre'] }}</td>
+                                <td class="module-table-td !px-4">{{ $cliente['ci'] }}</td>
+                                <td class="module-table-td !px-4">{{ $cliente['celular'] }}</td>
+                                <td class="module-table-td !px-4">
                                     <span class="font-semibold">{{ $saldo }}</span> pts
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="module-table-td !px-4">
                                     @if($clienteModel?->esAnonimo())
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                    <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
                                         No aplica
                                     </span>
                                     @else
@@ -128,7 +128,7 @@
                                                 Puede canjear Bs {{ number_format($disponible['descuento'], 2) }} ({{ $disponible['puntos'] }} pts)
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                            <span class="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
                                                 Necesita {{ max($puntosRequeridos - $saldo, 0) }} pts más
                                             </span>
                                         @endif

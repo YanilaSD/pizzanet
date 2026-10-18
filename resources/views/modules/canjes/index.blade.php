@@ -40,24 +40,24 @@
 
         <x-slot name="body">
             @forelse ($canjes as $canje)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                    <td class="px-6 py-4 text-gray-500">
+                <tr class="module-table-tr">
+                    <td class="module-table-td-index">
                         {{ $loop->iteration }}
                     </td>
 
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                    <td class="module-table-td-primary">
                         {{ $canje->nombre }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                    <td class="module-table-td">
                         {{ $canje->descripcion }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                    <td class="module-table-td">
                         {{ $canje->puntos }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                    <td class="module-table-td">
                         Bs {{ number_format($canje->descuento, 2) }}
                     </td>
 
@@ -67,21 +67,21 @@
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4 flex justify-end gap-2">
+                    <td class="module-table-td-actions">
                         <a href="{{ route('canjes.edit', $canje) }}"
-                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                           class="module-icon-btn-blue">
                             <flux:icon name="pencil-square" />
                         </a>
 
                         <a href="{{ route('canjes.toggle', $canje->id) }}"
-                           class="p-2 rounded-lg {{ $canje->estado == 1 ? 'hover:bg-red-100 text-gray-500 hover:text-red-600 transition' : 'hover:bg-green-100 text-gray-500 hover:text-green-600 transition' }} ">
+                           class="{{ $canje->estado == 1 ? 'module-icon-btn-red' : 'module-icon-btn-green' }}">
                             <flux:icon name="{{ $canje->estado == 1 ? 'no-symbol' : 'check-circle' }}" />
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center py-8 text-gray-400">
+                    <td colspan="7" class="module-table-empty">
                         No se encontraron canjes activos.
                     </td>
                 </tr>

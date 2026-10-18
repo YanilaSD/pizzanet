@@ -7,7 +7,7 @@
     />
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
+        <div class="module-alert-success" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
@@ -26,12 +26,12 @@
 
         <x-slot name="body">
             @forelse ($tipo_pagos as $tipo_pago)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                    <td class="px-6 py-4 text-gray-500">
+                <tr class="module-table-tr">
+                    <td class="module-table-td-index">
                         {{ $loop->index + 1 }}
                     </td>
 
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                    <td class="module-table-td-primary">
                         {{ $tipo_pago->nombre }}
                     </td>
 
@@ -41,26 +41,26 @@
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4 flex justify-end gap-2">
+                    <td class="module-table-td-actions">
                         <a href="{{ route('tipo_pagos.edit', $tipo_pago) }}"
-                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                           class="module-icon-btn-blue">
                             <flux:icon name="pencil-square" />
                         </a>
                             
                          <a href="{{ route('tipo_pagos.destroy', $tipo_pago) }}"
-                               class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                               class="module-icon-btn-red">
                                 <flux:icon name="trash" />
                          </a>
 
                         <a href="{{ route('tipo_pagos.toggle', $tipo_pago) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                           class="module-icon-btn-red">
                             <flux:icon name="{{ $tipo_pago->activo == '0' ? 'check-circle' : 'no-symbol' }}" />
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="text-center py-8 text-gray-400">
+                    <td colspan="4" class="module-table-empty">
                         No hay tipos de pago registrados en el sistema.
                     </td>
                 </tr>

@@ -2,10 +2,10 @@
 
     <div class="p-6">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+            <h1 class="module-page-title text-2xl">
                 Reporte de Productos
             </h1>
-            <p class="text-gray-600 dark:text-gray-400">
+            <p class="module-body-text">
                 Consulta y analiza los productos del sistema.
             </p>
         </div>
@@ -33,7 +33,7 @@
                     name="nombre"
                     placeholder="Buscar por nombre..."
                     value="{{ request('nombre') }}"
-                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    class="module-input-native"
                 >
             </div>
 
@@ -85,9 +85,9 @@
         </div>
         <x-module-card-lg class="overflow-hidden !p-0">
 
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr class="text-left text-gray-600">
+            <table class="module-report-table">
+                <thead>
+                    <tr>
                         <th class="p-4">Nombre</th>
                         <th class="p-4">Categoría</th>
                         <th class="p-4">Inventario</th>
@@ -97,17 +97,17 @@
 
                 <tbody>
                     @forelse($productos as $producto)
-                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400 group">
+                        <tr class="group">
                             <td class="p-4">{{ $producto->nombre }}</td>
                             <td class="p-4">{{ $producto->categoria->nombre ?? '-' }}</td>
                             <td class="p-4">{{ $producto->inventario?->cantidad ?? 0 }}</td>
                             <td class="p-4">
                                 @if($producto->estado == 1)
-                                    <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-lg">
+                                    <span class="module-status-badge-green">
                                         Activo
                                     </span>
                                 @else
-                                    <span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-lg">
+                                    <span class="module-status-badge-red">
                                         Inactivo
                                     </span>
                                 @endif
@@ -116,7 +116,7 @@
                     @empty
                         <tr>
                             <td colspan="4"
-                                class="p-6 text-center text-gray-500">
+                                class="module-table-empty p-6">
                                 No existen productos para mostrar.
                             </td>
                         </tr>
