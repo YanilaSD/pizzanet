@@ -7,7 +7,7 @@
     />
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
+        <div class="module-alert-success" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
@@ -33,14 +33,14 @@
 
         <x-slot name="body">
             @forelse ($festividades as $festividad)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                    <td class="px-6 py-4 text-gray-500">
+                <tr class="module-table-tr">
+                    <td class="module-table-td-index">
                         {{ $loop->iteration }}
                     </td>
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                    <td class="module-table-td-primary">
                         {{ $festividad->nombre }}
                     </td>
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                    <td class="module-table-td">
                         {{ $festividad->descripcion }}
                     </td>
                     <td class="px-6 py-4">
@@ -48,20 +48,23 @@
                             {{ $festividad->estado == '1' ? 'Activo' : 'Inactivo' }}
                         </flux:badge>
                     </td>
-                    <td class="px-6 py-4 flex justify-end gap-2">
+                    <td class="module-table-td-actions">
                         <a href="{{ route('festividades.edit', $festividad) }}"
-                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                           class="module-icon-btn-blue">
                             <flux:icon name="pencil-square" />
                         </a>
                         <a href="{{ route('festividades.destroy', $festividad->id) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                           data-confirm=""
+                           data-confirm-title="¿Eliminar la festividad {{ $festividad->nombre }}?"
+                           data-confirm-variant="danger"
+                           class="module-icon-btn-red">
                             <flux:icon name="trash" />
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center py-8 text-gray-400">
+                    <td colspan="5" class="module-table-empty">
                         No se encontraron festividades registradas.
                     </td>
                 </tr>

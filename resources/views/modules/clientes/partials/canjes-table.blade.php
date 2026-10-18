@@ -14,28 +14,28 @@
 
     <x-slot name="body">
         @forelse ($canjes as $canje)
-            <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                <td class="px-6 py-4 text-gray-500">
+            <tr class="module-table-tr">
+                <td class="module-table-td-index">
                     {{ $loop->iteration }}
                 </td>
 
-                <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                <td class="module-table-td whitespace-nowrap">
                     {{ optional($canje->fecha)->format('d/m/Y') }}
                 </td>
 
-                <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                <td class="module-table-td-primary">
                     {{ $canje->descuento->nombre ?? 'N/D' }}
                 </td>
 
-                <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                <td class="module-table-td">
                     {{ $canje->puntos }}
                 </td>
 
-                <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                <td class="module-table-td">
                     Bs {{ number_format($canje->montoDescuento(), 2) }}
                 </td>
 
-                <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                <td class="module-table-td">
                     {{ $canje->venta_id ? '#' . $canje->venta_id : 'N/A' }}
                 </td>
 
@@ -47,7 +47,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="7" class="text-center py-8 text-gray-400">
+                <td colspan="7" class="module-table-empty">
                     Este cliente no tiene canjes registrados.
                 </td>
             </tr>

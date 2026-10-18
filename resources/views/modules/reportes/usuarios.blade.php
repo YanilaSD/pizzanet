@@ -2,10 +2,10 @@
 
     <div class="p-6">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+            <h1 class="module-page-title text-2xl">
                 Reporte de Usuarios
             </h1>
-            <p class="text-gray-600 dark:text-gray-400">
+            <p class="module-body-text">
                 Consulta y analiza los usuarios del sistema.
             </p>
         </div>
@@ -77,9 +77,9 @@
 
         <x-module-card-lg class="overflow-hidden !p-0">
 
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50">
-                    <tr class="text-left text-gray-600">
+            <table class="module-report-table">
+                <thead>
+                    <tr>
                         <th class="p-4">#</th>
                         <th class="p-4">Nombre</th>
                         <th class="p-4">Email</th>
@@ -90,7 +90,7 @@
 
                 <tbody>
                     @forelse($usuarios as $u)
-                        <tr class="border-t hover:bg-gray-50 dark:text-gray-400">
+                        <tr>
                             <td class="p-4">#{{ $u->id }}</td>
 
                             <td class="p-4">
@@ -107,11 +107,11 @@
 
                             <td class="p-4">
                                 @if($u->estado == 1)
-                                    <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-lg">
+                                    <span class="module-status-badge-green">
                                         Activo
                                     </span>
                                 @else
-                                    <span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-lg">
+                                    <span class="module-status-badge-red">
                                         Inactivo
                                     </span>
                                 @endif
@@ -121,7 +121,7 @@
                     @empty
                         <tr>
                             <td colspan="5"
-                                class="p-6 text-center text-gray-500">
+                                class="module-table-empty p-6">
                                 No existen usuarios para mostrar.
                             </td>
                         </tr>

@@ -1,7 +1,16 @@
-<x-module-card-lg class="flex items-center justify-between">
+@props([
+    'title',
+    'description' => null,
+    'buttonText' => null,
+    'buttonLink' => null,
+    'buttonTextSecondary' => null,
+    'buttonLinkSecondary' => null,
+])
+
+<x-module-card-lg class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
     <div class="space-y-1">
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
+        <h1 class="module-page-title">
             {{ $title }}
         </h1>
 
@@ -12,23 +21,26 @@
         @endif
     </div>
 
-    @if($buttonText && $buttonLink)
-        <flux:button 
-            variant="primary" 
-            color="orange"
-            icon="plus"
-            href="{{ $buttonLink }}"
-            class="rounded-xl px-5 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
-        >
-            {{ $buttonText }}
-        </flux:button>
-    @endif
+    @if(($buttonText && $buttonLink) || ($buttonTextSecondary && $buttonLinkSecondary))
+        <div class="flex flex-wrap items-center gap-2">
+            {{-- Acción secundaria: outline. Una sola acción primaria por vista. --}}
+            @if($buttonTextSecondary && $buttonLinkSecondary)
+                <flux:button variant="outline" :href="$buttonLinkSecondary">
+                    {{ $buttonTextSecondary }}
+                </flux:button>
+            @endif
 
-    @if($buttonTextSecondary && $buttonLinkSecondary)
-        <a href="{{ $buttonLinkSecondary }}">
-            <flux:button variant="primary" color="gray">
-                {{ $buttonTextSecondary }}
-            </flux:button>
-        </a>
+            {{-- Light: accent orange-700. Dark: .module-header-primary (estilo sidebar) --}}
+            @if($buttonText && $buttonLink)
+                <flux:button
+                    variant="primary"
+                    icon="plus"
+                    :href="$buttonLink"
+                    class="module-header-primary"
+                >
+                    {{ $buttonText }}
+                </flux:button>
+            @endif
+        </div>
     @endif
 </x-module-card-lg>

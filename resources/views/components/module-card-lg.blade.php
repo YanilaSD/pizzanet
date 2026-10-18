@@ -4,7 +4,7 @@
 ])
 <div {{ $attributes->class(['module-card-lg']) }}>
     @if($title)
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 class="module-card-title">
             {{ $title }}
         </h2>
     @endif
@@ -16,7 +16,7 @@
     @endif
 
     @if($title || $description)
-        <p class="border-b border-gray-200 dark:border-gray-700 my-2 mb-4" />
+        <p class="border-b border-zinc-200 dark:border-zinc-800 my-2 mb-4" />
     @endif
 
     {{ $slot }}

@@ -123,12 +123,12 @@ $groups = collect($groups)
 @endphp
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-[#dfdbdb] dark:bg-[#3b1f1f]">
-        <flux:sidebar sticky stashable class="border-e border-[#d4a373] bg-orange-600 dark:border-[#a0522d] dark:bg-[#4e342e]">
+    <body class="min-h-screen bg-surface-page">
+        <flux:sidebar sticky stashable class="app-sidebar border-e border-orange-800 bg-orange-700 dark:border-zinc-800 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
@@ -139,7 +139,7 @@ $groups = collect($groups)
                 @foreach($groups as $group => $links)
                     <flux:navlist.group :heading="$group" class="grid">
                         @foreach($links as $link)
-                            <flux:navlist.item class="rounded-lg text-white hover:bg-zinc-100 dark:hover:bg-zinc-800" :icon="$link['icon']" :href="$link['route']" :current="$link['current']" wire:navigate>{{$link['name'] }}</flux:navlist.item>
+                            <flux:navlist.item class="rounded-lg" :icon="$link['icon']" :href="$link['route']" :current="$link['current']" wire:navigate>{{$link['name'] }}</flux:navlist.item>
                         @endforeach
                     </flux:navlist.group>
                 @endforeach
@@ -147,17 +147,7 @@ $groups = collect($groups)
 
             <flux:spacer />
 
-           <!--   <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
-                -->
-            <!-- Desktop User Menu -->
+            {{-- Desktop User Menu --}}
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
                 <flux:profile
                     :name="auth()->user()->name"
@@ -172,7 +162,7 @@ $groups = collect($groups)
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
                                     <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-[#ffccbc] text-black dark:bg-[#8d6e63] dark:text-white"
+                                        class="flex h-full w-full items-center justify-center rounded-lg bg-orange-100 text-orange-900 dark:bg-orange-900/50 dark:text-orange-200"
                                     >
                                         {{ auth()->user()->initials() }}
                                     </span>
@@ -204,7 +194,7 @@ $groups = collect($groups)
             </flux:dropdown>
         </flux:sidebar>
 
-        <!-- Mobile User Menu -->
+        {{-- Mobile User Menu --}}
         <flux:header class="lg:hidden">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
@@ -222,7 +212,7 @@ $groups = collect($groups)
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
                                     <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-[#ffccbc] text-black dark:bg-[#8d6e63] dark:text-white"
+                                        class="flex h-full w-full items-center justify-center rounded-lg bg-orange-100 text-orange-900 dark:bg-orange-900/50 dark:text-orange-200"
                                     >
                                         {{ auth()->user()->initials() }}
                                     </span>

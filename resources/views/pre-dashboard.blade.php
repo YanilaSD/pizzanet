@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
+    <body class="min-h-screen bg-surface-page">
 
-        <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-orange-50 to-yellow-50">
+        <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-orange-50 to-yellow-50 dark:from-zinc-950 dark:to-zinc-900">
 
             <!-- Logo -->
             <div class="flex flex-col items-center space-y-4">
@@ -14,9 +14,9 @@
                 </div>
 
                 <div class="text-center">
-                    <h1 class="text-3xl font-bold text-gray-800">Pizzería Yuneth SRL</h1>
-                    <p class="text-gray-500 text-lg">Sistema de Gestión y Fidelización</p>
-                    <p class="text-gray-400 text-sm">Cotoca, Bolivia</p>
+                    <h1 class="text-3xl font-bold text-zinc-800 dark:text-white">Pizzería Yuneth SRL</h1>
+                    <p class="text-lg text-zinc-500 dark:text-zinc-300">Sistema de Gestión y Fidelización</p>
+                    <p class="text-sm text-zinc-400 dark:text-zinc-400">Cotoca, Bolivia</p>
                 </div>
             </div>
 

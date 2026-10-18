@@ -42,32 +42,32 @@
 
         <x-slot name="body">
             @forelse ($promociones as $promocion)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                    <td class="px-6 py-4 text-gray-500">
+                <tr class="module-table-tr">
+                    <td class="module-table-td-index">
                         {{ $loop->iteration }}
                     </td>
 
-                    <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                    <td class="module-table-td-primary">
                         {{ $promocion->nombre }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         {{ $promocion->festividad->nombre }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         {{ rtrim(rtrim(number_format($promocion->descuento, 2), '0'), '.') }}%
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap text-xs">
+                    <td class="module-table-td whitespace-nowrap text-xs">
                         {{ \Carbon\Carbon::parse($promocion->fecha_inicio)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($promocion->fecha_fin)->format('d/m/Y') }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         Bs {{ number_format($promocion->compra_minima, 2) }}
                     </td>
 
-                    <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         {{ $promocion->limite_uso }}
                     </td>
 
@@ -77,21 +77,24 @@
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4 flex justify-end gap-2">
+                    <td class="module-table-td-actions">
                         <a href="{{ route('promociones.edit', $promocion->id) }}"
-                           class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                           class="module-icon-btn-blue">
                             <flux:icon name="pencil-square" />
                         </a>
 
                         <a href="{{ route('promociones.destroy', $promocion) }}"
-                           class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                           data-confirm=""
+                           data-confirm-title="¿Eliminar la promoción {{ $promocion->nombre }}?"
+                           data-confirm-variant="danger"
+                           class="module-icon-btn-red">
                             <flux:icon name="trash" />
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center py-8 text-gray-400">
+                    <td colspan="10" class="module-table-empty">
                         No se encontraron promociones registradas.
                     </td>
                 </tr>

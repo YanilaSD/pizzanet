@@ -167,17 +167,17 @@
     <div class="totales">
         <table>
             <tr>
-                <td>Total de Registros</td>
-                <td class="text-right">{{ $inactivos }}</td>
-            </tr>
-
-            <tr>
                 <td>Activos</td>
                 <td class="text-right">{{ $activos }}</td>
             </tr>
 
+            <tr>
+                <td>Inactivos</td>
+                <td class="text-right">{{ $inactivos }}</td>
+            </tr>
+
             <tr class="total-final">
-            <td>Total de Registros</td>
+                <td>Total de Registros</td>
                 <td class="text-right">{{ $total }}</td>
             </tr>
         </table>

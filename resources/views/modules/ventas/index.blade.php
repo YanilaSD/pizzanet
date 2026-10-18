@@ -126,46 +126,39 @@
 
         <x-slot name="body">
             @forelse ($ventas as $venta)
-                <tr class="group hover:bg-orange-50/40 transition-all duration-200">
+                <tr class="module-table-tr group">
 
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="font-semibold text-gray-900">
+                    <td class="module-table-td whitespace-nowrap">
+                        <span class="font-semibold text-zinc-900 dark:text-white">
                             #{{ $venta->id }}
                         </span>
-                        <p>
-                            <div>
-                            <p class="font-medium text-gray-800 text-xs">
+                        <div class="mt-1">
+                            <p class="text-xs font-medium text-zinc-800 dark:text-white">
                                 {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}
                             </p>
-
-                            <p class="text-xs text-gray-700">
+                            <p class="text-xs text-zinc-700 dark:text-zinc-300">
                                 {{ \Carbon\Carbon::parse($venta->fecha)->format('H:i') }}
                             </p>
                         </div>
+                    </td>
+
+                    <td class="module-table-td">
+                        <p class="text-xs font-medium uppercase text-zinc-800 dark:text-white">
+                            {{ $venta->cliente->nombre ?? 'SIN NOMBRE' }}
                         </p>
                     </td>
 
-                    <td class="px-6 py-4">
-                        <div>
-                            <p class="font-medium text-gray-800 text-xs uppercase">
-                                {{ $venta->cliente->nombre ?? 'SIN NOMBRE' }}
-                            </p>
-                        </div>
+                    <td class="module-table-td">
+                        Bs {{ number_format($venta->total, 2) }}
                     </td>
 
-                    <td class="px-6 py-4">
-                        <span>
-                            Bs {{ number_format($venta->total, 2) }}
-                        </span>
-                    </td>
-
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         <flux:badge color="sky">
                             {{ $venta->tipoPago->nombre ?? 'N/D' }}
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="module-table-td whitespace-nowrap">
                         <flux:badge
                             color="{{ $venta->estado == '1' ? 'green' : 'yellow' }}"
                         >
@@ -173,12 +166,12 @@
                         </flux:badge>
                     </td>
 
-                    <td class="px-6 py-4">
-                        <div class="flex justify-end gap-2 opacity-70 group-hover:opacity-100 transition">
+                    <td class="module-table-td-actions opacity-70 transition group-hover:opacity-100">
+                        <div class="flex justify-end gap-2">
 
                             <a
                                 href="{{ route('ventas.show', $venta) }}"
-                                class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition"
+                                class="module-icon-btn-blue"
                                 title="Ver"
                             >
                                 <flux:icon name="eye" />
@@ -187,14 +180,16 @@
                             <form
                                 action="{{ route('ventas.destroy', $venta) }}"
                                 method="POST"
-                                onsubmit="return confirm('¿Eliminar la venta #{{ $venta->id }}? Esta acción no se puede deshacer.')"
+                                data-confirm=""
+                                data-confirm-title="¿Desea dar de baja a la venta #{{ $venta->id }}?"
+                                data-confirm-variant="danger"
                             >
                                 @csrf
                                 @method('POST')
 
                                 <button
                                     type="submit"
-                                    class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition"
+                                    class="module-icon-btn-red"
                                     title="Eliminar"
                                 >
                                     <flux:icon name="x-circle" />
@@ -207,7 +202,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="py-10 text-center text-gray-400">
+                    <td colspan="7" class="module-table-empty py-10">
                         No se han registrado ventas aún.
                     </td>
                 </tr>

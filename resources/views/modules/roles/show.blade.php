@@ -12,20 +12,20 @@
     <x-module-card-lg class="space-y-4">
         <div>
             <h2 class="module-form-label text-lg">Nombre</h2>
-            <p class="text-gray-900 dark:text-gray-300">{{ $rol->nombre }}</p>
+            <p class="text-zinc-900 dark:text-white">{{ $rol->nombre }}</p>
         </div>
 
         <div>
             <h2 class="module-form-label text-lg">Descripción</h2>
-            <p class="text-gray-900 dark:text-gray-300">{{ $rol->descripcion ?? 'Sin descripción' }}</p>
+            <p class="text-zinc-900 dark:text-white">{{ $rol->descripcion ?? 'Sin descripción' }}</p>
         </div>
 
         <div>
             <h2 class="module-form-label text-lg mb-2">Privilegios asignados</h2>
             @if($rol->privilegios->isEmpty())
-                <p class="text-gray-500 dark:text-gray-400">No hay privilegios asignados a este rol.</p>
+                <p class="module-muted">No hay privilegios asignados a este rol.</p>
             @else
-                <ul class="list-disc list-inside text-gray-900 dark:text-gray-300">
+                <ul class="list-inside list-disc text-zinc-900 dark:text-white">
                     @foreach ($rol->privilegios as $privilegio)
                         <li>{{ $privilegio->nombre }}</li>
                     @endforeach

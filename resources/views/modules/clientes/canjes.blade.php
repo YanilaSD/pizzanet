@@ -8,7 +8,7 @@
 
     <x-module-card class="mt-4 mb-6">
         <p class="module-card-label">Cliente</p>
-        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+        <p class="module-card-title">
             {{ $cliente->nombre }}
         </p>
         <p class="module-card-sublabel mt-1">

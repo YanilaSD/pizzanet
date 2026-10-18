@@ -15,66 +15,79 @@ class ReporteController extends Controller
     {
         return view('modules.reportes.index');
     }
+
     public function ventas(Request $request)
     {
-        $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
-
-        if ($request->filled('desde') && $request->filled('hasta')) {
-            $query->whereBetween('created_at', [$request->desde, $request->hasta]);
-        }
-
-        if ($request->filled('tipo_pago_id')) {
-            $query->where('tipo_pago_id', $request->tipo_pago_id);
-        }
-
-        if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
-        }
-
-        $ventas = $query->orderBy('created_at', 'desc')->get();
-        $total = $ventas->sum('total');
-        $descuentos = $ventas->sum('descuento');
+        $ventas = $this->ventasFiltradas($request);
+        ['total' => $total, 'descuentos' => $descuentos] = $this->ventasTotales($ventas);
 
         $tipoPagos = TipoPago::where('estado', 1)->orderBy('nombre')->get();
 
-        return view('modules.reportes.ventas', compact('ventas','total','descuentos','tipoPagos'));
+        return view('modules.reportes.ventas', compact('ventas', 'total', 'descuentos', 'tipoPagos'));
     }
 
-    
     public function ventasPDF(Request $request)
     {
-        $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
+        $ventas = $this->ventasFiltradas($request);
+        ['total' => $total, 'descuentos' => $descuentos] = $this->ventasTotales($ventas);
 
-        if ($request->filled('desde') && $request->filled('hasta')) {
-            $desde = \Carbon\Carbon::parse($request->desde)->startOfDay();
-            $hasta = \Carbon\Carbon::parse($request->hasta)->endOfDay();
-
-            $query->whereBetween('created_at', [$desde, $hasta]);
-        }
-
+        $tipoPagoEtiqueta = 'Todos';
         if ($request->filled('tipo_pago_id')) {
-            $query->where('tipo_pago_id', $request->tipo_pago_id);
+            $tipoPagoEtiqueta = TipoPago::find($request->tipo_pago_id)?->nombre ?? 'Todos';
         }
-
-        if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
-        }
-
-        $ventas = $query->orderBy('created_at', 'desc')->get();
-
-        $total = $ventas->where('estado', 1)->sum('total');
-        $descuentos = $ventas->where('estado', 1)->sum('descuento');
 
         $data = [
             'ventas' => $ventas,
             'total' => $total,
             'descuentos' => $descuentos,
             'fecha' => now()->format('d/m/Y'),
+            'filtroDesde' => $request->input('desde'),
+            'filtroHasta' => $request->input('hasta'),
+            'filtroTipoPago' => $tipoPagoEtiqueta,
+            'filtroEstado' => $request->input('estado'),
         ];
 
         $pdf = PDF::loadView('modules.reportes.pdf.ventas', $data);
 
         return $pdf->download('reporte-ventas.pdf');
+    }
+
+    private function ventasFiltradas(Request $request)
+    {
+        $query = Venta::with(['cliente', 'tipoPago', 'promocion']);
+
+        $desde = $request->input('desde', now()->format('Y-m-d'));
+        $hasta = $request->input('hasta', now()->format('Y-m-d'));
+
+        if ($desde && $hasta) {
+            $query->whereBetween('created_at', [
+                \Carbon\Carbon::parse($desde)->startOfDay(),
+                \Carbon\Carbon::parse($hasta)->endOfDay(),
+            ]);
+        }
+
+        if ($request->filled('tipo_pago_id')) {
+            $query->where('tipo_pago_id', $request->tipo_pago_id);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        return $query->orderBy('created_at', 'desc')->get();
+    }
+
+    /**
+     * Totales solo de ventas completadas (estado activo).
+     */
+    private function ventasTotales($ventas): array
+    {
+        $completadas = $ventas->where('estado', 1);
+
+        return [
+            'total' => $completadas->sum('total'),
+            'descuentos' => $completadas->sum('descuento'),
+        ];
     }
 
     public function usuarios(Request $request)
@@ -127,7 +140,7 @@ class ReporteController extends Controller
     }
     public function productos(Request $request)
 {
-    $query = Producto::with('categoria');
+    $query = Producto::with(['categoria', 'inventario']);
 
     // Filtros
     if ($request->filled('estado')) {
@@ -140,14 +153,6 @@ class ReporteController extends Controller
 
     if ($request->filled('nombre')) {
         $query->where('nombre', 'like', '%' . $request->nombre . '%');
-    }
-
-    if ($request->filled('precio_min')) {
-        $query->where('precio', '>=', $request->precio_min);
-    }
-
-    if ($request->filled('precio_max')) {
-        $query->where('precio', '<=', $request->precio_max);
     }
 
     $productos = $query->orderBy('created_at', 'desc')->get();
@@ -167,7 +172,7 @@ class ReporteController extends Controller
 
 public function productosPDF(Request $request)
 {
-    $query = Producto::with('categoria');
+    $query = Producto::with(['categoria', 'inventario']);
 
     // mismos filtros
     if ($request->filled('estado')) {
@@ -180,14 +185,6 @@ public function productosPDF(Request $request)
 
     if ($request->filled('nombre')) {
         $query->where('nombre', 'like', '%' . $request->nombre . '%');
-    }
-
-    if ($request->filled('precio_min')) {
-        $query->where('precio', '>=', $request->precio_min);
-    }
-
-    if ($request->filled('precio_max')) {
-        $query->where('precio', '<=', $request->precio_max);
     }
 
     $productos = $query->orderBy('created_at', 'desc')->get();

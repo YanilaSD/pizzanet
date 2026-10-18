@@ -7,7 +7,7 @@
     />
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4" role="alert">
+        <div class="module-alert-success" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
@@ -55,27 +55,27 @@
 
             <x-slot name="body">
                 @forelse ($productos as $producto)
-                    <tr class="group hover:bg-orange-50/40 transition-all duration-200">
-                        <td class="px-6 py-4 text-gray-500">
+                    <tr class="module-table-tr">
+                        <td class="module-table-td-index">
                             {{ $loop->iteration }}
                         </td>
                         <td class="px-6 py-4">
                             @if($producto->imagen)
                                 <img src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen de {{ $producto->nombre }}" class="w-16 h-16 object-cover rounded-md">
                             @else
-                                <span class="text-gray-400">No disponible</span>
+                                <span class="module-muted">No disponible</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 font-medium text-gray-800 group-hover:text-gray-900 transition">
+                        <td class="module-table-td-primary">
                             {{ $producto->nombre }}
                         </td>
-                        <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        <td class="module-table-td">
                             {{ $producto->categoria->nombre }}
                         </td>
-                        <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        <td class="module-table-td">
                             Bs {{ number_format($producto->precio, 2) }}
                         </td>
-                        <td class="px-6 py-4 text-gray-600 group-hover:text-gray-800 transition">
+                        <td class="module-table-td">
                             {{ $producto->inventario?->cantidad ?? 0 }}
                         </td>
                         <td class="px-6 py-4">
@@ -83,29 +83,32 @@
                                 {{ $producto->inventario?->cantidad > '0' ? 'Disponible' : 'Agotado' }}
                             </flux:badge>
                         </td>
-                        <td class="px-6 py-4 flex justify-end gap-2">
+                        <td class="module-table-td-actions">
                             <button
                                 type="button"
-                                class="p-2 rounded-lg hover:bg-orange-100 text-gray-500 hover:text-orange-600 transition"
+                                class="module-icon-btn-orange"
                                 x-on:click="abrirInventario({{ $producto->id }}, @js($producto->nombre), {{ $producto->inventario?->cantidad ?? 0 }})"
                             >
                                 <flux:icon name="clipboard-document-list" />
                             </button>
 
                             <a href="{{ route('productos.edit', $producto->id) }}"
-                               class="p-2 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition">
+                               class="module-icon-btn-blue">
                                 <flux:icon name="pencil-square" />
                             </a>
 
                              <a href="{{ route('productos.destroy', $producto) }}"
-                                   class="p-2 rounded-lg hover:bg-red-100 text-gray-500 hover:text-red-600 transition">
+                                   data-confirm=""
+                                   data-confirm-title="¿Eliminar el producto {{ $producto->nombre }}?"
+                                   data-confirm-variant="danger"
+                                   class="module-icon-btn-red">
                                     <flux:icon name="trash" />
                                 </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-8 text-gray-400">
+                        <td colspan="8" class="module-table-empty">
                             No se encontraron productos registrados.
                         </td>
                     </tr>
