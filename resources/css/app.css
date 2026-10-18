@@ -177,9 +177,13 @@
     border: 1px solid var(--settings-nav-active-border);
 }
 
-/* Selector de tema (Appearance): hover legible en light */
+/* Selector de tema (Appearance): mismo contraste que el nav de settings */
 .settings-appearance ui-radio[data-flux-radio-segmented] {
-    color: var(--color-zinc-700);
+    color: var(--settings-nav-fg);
+}
+
+.settings-appearance ui-radio[data-flux-radio-segmented][data-checked] {
+    color: var(--settings-nav-active-fg);
 }
 
 .settings-appearance ui-radio[data-flux-radio-segmented]:hover:not([data-checked]) {
