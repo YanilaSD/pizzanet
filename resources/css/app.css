@@ -138,6 +138,60 @@
     border: none;
 }
 
+/* ---------- Settings (nav en contenido claro) ---------- */
+:root {
+    --settings-nav-fg: var(--color-zinc-700);
+    --settings-nav-hover-bg: color-mix(in oklab, var(--color-orange-500) 14%, var(--color-white));
+    --settings-nav-hover-fg: var(--color-orange-800);
+    --settings-nav-active-bg: var(--color-orange-700);
+    --settings-nav-active-fg: var(--color-white);
+}
+
+.dark {
+    --settings-nav-fg: var(--color-zinc-300);
+    --settings-nav-hover-bg: var(--nav-hover);
+    --settings-nav-hover-fg: var(--color-zinc-100);
+    --settings-nav-active-bg: var(--module-cta-bg);
+    --settings-nav-active-fg: var(--module-cta-fg);
+    --settings-nav-active-border: var(--module-cta-border);
+}
+
+.settings-nav [data-flux-navlist-item] {
+    color: var(--settings-nav-fg);
+    border-radius: 0.5rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.settings-nav [data-flux-navlist-item]:hover:not([data-current]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
+.settings-nav [data-flux-navlist-item][data-current] {
+    background-color: var(--settings-nav-active-bg);
+    color: var(--settings-nav-active-fg);
+    border: none;
+}
+
+.dark .settings-nav [data-flux-navlist-item][data-current] {
+    border: 1px solid var(--settings-nav-active-border);
+}
+
+/* Selector de tema (Appearance): hover legible en light */
+.settings-appearance ui-radio[data-flux-radio-segmented] {
+    color: var(--color-zinc-700);
+}
+
+.settings-appearance ui-radio[data-flux-radio-segmented]:hover:not([data-checked]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
+.dark .settings-appearance ui-radio[data-flux-radio-segmented]:hover:not([data-checked]) {
+    background-color: var(--settings-nav-hover-bg);
+    color: var(--settings-nav-hover-fg);
+}
+
 .app-sidebar button[data-flux-profile] span,
 .app-sidebar button[data-flux-profile] svg {
     color: var(--nav-fg);

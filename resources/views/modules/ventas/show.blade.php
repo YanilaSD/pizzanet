@@ -156,22 +156,22 @@
 </div>
     </x-module-card>
 
-    {{-- BOTONES --}}
-    <div class="flex flex-wrap gap-2 mt-4 no-print">
+    {{-- BOTONES (misma anchura que el recibo; estilos alineados con card-header) --}}
+    <div class="mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-2 no-print">
         <flux:button
             type="button"
             variant="primary"
             color="orange"
+            icon="printer"
             onclick="imprimirRecibo()"
-            class="px-4 py-2 rounded-lg"
+            class="module-header-primary"
         >
-            🖨️ Imprimir ticket
+            Imprimir ticket
         </flux:button>
 
         <flux:button
-            variant="primary"
+            variant="outline"
             href="{{ route('ventas.index') }}"
-            class="px-4 py-2 rounded-lg"
         >
             Volver
         </flux:button>
