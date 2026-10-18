@@ -20,14 +20,11 @@
     >
 
         <x-slot name="actions">
-            <form method="GET" action="{{ route('privilegios.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar privilegio"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('privilegios.index')"
+                placeholder="Buscar privilegio"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">

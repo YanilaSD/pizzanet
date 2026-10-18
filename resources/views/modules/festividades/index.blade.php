@@ -18,9 +18,11 @@
         description="Listado de festividades registradas"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('festividades.index') }}">
-                <flux:input name="search" icon="magnifying-glass" placeholder="Buscar festividad" value="{{ request('search') }}" />
-            </form>
+            <x-module-search-form
+                :action="route('festividades.index')"
+                placeholder="Buscar festividad"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">

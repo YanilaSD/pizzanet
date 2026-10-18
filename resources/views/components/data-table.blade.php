@@ -4,8 +4,8 @@
 ])
 
 <x-module-card-lg class="mt-8 overflow-hidden p-0">
-    <div class="flex flex-col gap-4 border-b border-zinc-200 p-6 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+    <div class="flex flex-col gap-4 border-b border-zinc-200 p-6 dark:border-zinc-800 lg:flex-row lg:items-start lg:justify-between">
+        <div class="min-w-0 shrink">
             @if($title)
                 <h2 class="module-card-title">
                     {{ $title }}
@@ -20,17 +20,17 @@
         </div>
 
         @isset($actions)
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="w-full min-w-0 lg:max-w-md lg:shrink-0 xl:max-w-lg">
                 {{ $actions }}
             </div>
         @endisset
     </div>
 
-    <div class="overflow-x-auto">
+    <div class="module-table-scroll">
         {{-- border-collapse: con border-separate los bordes de <tr> (divide-y) no se dibujan --}}
         <table class="w-full border-collapse text-left text-sm text-zinc-600 dark:text-white">
-            <thead class="bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-950/50 dark:text-zinc-300">
-                <tr class="[&>th]:px-6 [&>th]:py-3 [&>th]:font-medium">
+            <thead class="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-300">
+                <tr class="[&>th]:sticky [&>th]:top-0 [&>th]:z-10 [&>th]:bg-zinc-50 [&>th]:px-6 [&>th]:py-3 [&>th]:font-medium dark:[&>th]:bg-zinc-950">
                     {{ $head }}
                 </tr>
             </thead>

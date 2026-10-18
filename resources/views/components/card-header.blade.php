@@ -7,9 +7,9 @@
     'buttonLinkSecondary' => null,
 ])
 
-<x-module-card-lg class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<x-module-card-lg class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-    <div class="space-y-1">
+    <div class="min-w-0 space-y-1">
         <h1 class="module-page-title">
             {{ $title }}
         </h1>
@@ -22,10 +22,10 @@
     </div>
 
     @if(($buttonText && $buttonLink) || ($buttonTextSecondary && $buttonLinkSecondary))
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch lg:w-auto lg:justify-end">
             {{-- Acción secundaria: outline. Una sola acción primaria por vista. --}}
             @if($buttonTextSecondary && $buttonLinkSecondary)
-                <flux:button variant="outline" :href="$buttonLinkSecondary">
+                <flux:button variant="outline" :href="$buttonLinkSecondary" class="w-full justify-center sm:w-auto">
                     {{ $buttonTextSecondary }}
                 </flux:button>
             @endif
@@ -36,7 +36,7 @@
                     variant="primary"
                     icon="plus"
                     :href="$buttonLink"
-                    class="module-header-primary"
+                    class="module-header-primary w-full justify-center sm:w-auto"
                 >
                     {{ $buttonText }}
                 </flux:button>

@@ -59,7 +59,7 @@
                 </flux:select>
             </div>
 
-            <div class="flex items-end gap-2">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-end md:col-span-5">
 
                 <button 
                     type="submit"
@@ -109,6 +109,7 @@
 
         <x-module-card-lg class="overflow-hidden !p-0">
 
+            <div class="module-table-scroll">
             <table class="module-report-table">
                 <thead>
                     <tr>
@@ -176,6 +177,7 @@
                 </tbody>
 
             </table>
+            </div>
 </x-module-card-lg>
 
     </div>

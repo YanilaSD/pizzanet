@@ -332,6 +332,14 @@
         @apply text-zinc-600 dark:text-zinc-300;
     }
 
+    .module-table-scroll {
+        @apply max-h-[min(70vh,42rem)] overflow-x-auto overflow-y-auto;
+    }
+
+    .module-index-search {
+        @apply flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:items-stretch;
+    }
+
     .module-report-table {
         @apply w-full border-collapse text-left text-sm text-zinc-600 dark:text-white;
     }
@@ -342,7 +350,8 @@
     }
 
     .module-report-table thead th {
-        @apply p-4 text-left font-medium;
+        @apply sticky top-0 z-10 bg-zinc-50 p-4 text-left font-medium
+               dark:bg-zinc-950;
     }
 
     .module-report-table tbody tr {

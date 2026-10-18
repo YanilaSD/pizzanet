@@ -37,9 +37,11 @@
             description="Listado de productos registrados"
         >
             <x-slot name="actions">
-                <form method="GET" action="{{ route('productos.index') }}">
-                    <flux:input name="search" icon="magnifying-glass" placeholder="Buscar producto" value="{{ request('search') }}" />
-                </form>
+                <x-module-search-form
+                    :action="route('productos.index')"
+                    placeholder="Buscar producto"
+                    :value="request('search')"
+                />
             </x-slot>
 
             <x-slot name="head">

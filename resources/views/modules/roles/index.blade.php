@@ -19,14 +19,11 @@
         description="Listado de los roles registrados"
     >
         <x-slot name="actions">
-            <form method="GET" action="{{ route('roles.index') }}">
-                <flux:input
-                    name="search"
-                    icon="magnifying-glass"
-                    placeholder="Buscar rol"
-                    value="{{ request('search') }}"
-                />
-            </form>
+            <x-module-search-form
+                :action="route('roles.index')"
+                placeholder="Buscar rol"
+                :value="request('search')"
+            />
         </x-slot>
 
         <x-slot name="head">
