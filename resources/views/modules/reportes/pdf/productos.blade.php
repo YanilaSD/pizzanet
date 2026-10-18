@@ -165,17 +165,6 @@
                 </td>
             </tr>
 
-            <tr>
-                <td>
-                    <strong>Precio mínimo:</strong>
-                    {{ request('precio_min') ? 'Bs ' . number_format(request('precio_min'), 2) : 'Todos' }}
-                </td>
-
-                <td>
-                    <strong>Precio máximo:</strong>
-                    {{ request('precio_max') ? 'Bs ' . number_format(request('precio_max'), 2) : 'Todos' }}
-                </td>
-            </tr>
         </table>
     </div>
 
@@ -185,7 +174,7 @@
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
-                <th class="text-right">Precio</th>
+                <th class="text-right">Inventario</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -197,7 +186,7 @@
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->categoria->nombre ?? '-' }}</td>
                     <td class="text-right">
-                        Bs {{ number_format($producto->precio, 2) }}
+                        {{ $producto->inventario?->cantidad ?? 0 }}
                     </td>
                     <td>
                         @if($producto->estado)

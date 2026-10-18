@@ -11,7 +11,7 @@
         </div>
 
         <form method="GET"
-              class="module-card-lg mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+              class="module-card-lg mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
 
             <div>
                 <label class="module-form-label">Estado</label>
@@ -37,29 +37,7 @@
                 >
             </div>
 
-            <div>
-                <label class="module-form-label">Precio mínimo</label>
-                <input
-                    type="number"
-                    name="precio_min"
-                    placeholder="0.00"
-                    value="{{ request('precio_min') }}"
-                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                >
-            </div>
-
-            <div>
-                <label class="module-form-label">Precio máximo</label>
-                <input
-                    type="number"
-                    name="precio_max"
-                    placeholder="0.00"
-                    value="{{ request('precio_max') }}"
-                    class="w-full border placeholder:text-gray-400 border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                >
-            </div>
-
-            <div class="md:col-span-4 flex justify-end gap-2">
+            <div class="md:col-span-2 flex justify-end gap-2">
 
                 <button
                     type="submit"
@@ -112,7 +90,7 @@
                     <tr class="text-left text-gray-600">
                         <th class="p-4">Nombre</th>
                         <th class="p-4">Categoría</th>
-                        <th class="p-4">Precio</th>
+                        <th class="p-4">Inventario</th>
                         <th class="p-4">Estado</th>
                     </tr>
                 </thead>
@@ -122,7 +100,7 @@
                         <tr class="border-t hover:bg-gray-50 dark:text-gray-400 group">
                             <td class="p-4">{{ $producto->nombre }}</td>
                             <td class="p-4">{{ $producto->categoria->nombre ?? '-' }}</td>
-                            <td class="p-4">Bs {{ number_format($producto->precio, 2) }}</td>
+                            <td class="p-4">{{ $producto->inventario?->cantidad ?? 0 }}</td>
                             <td class="p-4">
                                 @if($producto->estado == 1)
                                     <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-lg">

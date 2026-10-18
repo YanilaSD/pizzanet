@@ -140,7 +140,7 @@ class ReporteController extends Controller
     }
     public function productos(Request $request)
 {
-    $query = Producto::with('categoria');
+    $query = Producto::with(['categoria', 'inventario']);
 
     // Filtros
     if ($request->filled('estado')) {
@@ -153,14 +153,6 @@ class ReporteController extends Controller
 
     if ($request->filled('nombre')) {
         $query->where('nombre', 'like', '%' . $request->nombre . '%');
-    }
-
-    if ($request->filled('precio_min')) {
-        $query->where('precio', '>=', $request->precio_min);
-    }
-
-    if ($request->filled('precio_max')) {
-        $query->where('precio', '<=', $request->precio_max);
     }
 
     $productos = $query->orderBy('created_at', 'desc')->get();
@@ -180,7 +172,7 @@ class ReporteController extends Controller
 
 public function productosPDF(Request $request)
 {
-    $query = Producto::with('categoria');
+    $query = Producto::with(['categoria', 'inventario']);
 
     // mismos filtros
     if ($request->filled('estado')) {
@@ -193,14 +185,6 @@ public function productosPDF(Request $request)
 
     if ($request->filled('nombre')) {
         $query->where('nombre', 'like', '%' . $request->nombre . '%');
-    }
-
-    if ($request->filled('precio_min')) {
-        $query->where('precio', '>=', $request->precio_min);
-    }
-
-    if ($request->filled('precio_max')) {
-        $query->where('precio', '<=', $request->precio_max);
     }
 
     $productos = $query->orderBy('created_at', 'desc')->get();
