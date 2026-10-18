@@ -197,6 +197,19 @@
     color: var(--nav-fg);
 }
 
+.app-sidebar button[data-flux-sidebar-toggle] {
+    color: var(--nav-fg) !important;
+}
+
+.app-sidebar button[data-flux-sidebar-toggle]:hover {
+    background-color: var(--nav-hover) !important;
+    color: var(--nav-fg) !important;
+}
+
+.app-sidebar button[data-flux-sidebar-toggle] svg {
+    color: var(--nav-fg) !important;
+}
+
 [data-slot="avatar"] {
     background-color: var(--avatar-bg);
     color: #fff;
