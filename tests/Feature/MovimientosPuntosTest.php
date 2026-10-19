@@ -131,6 +131,7 @@ test('el portal del cliente lista los mismos movimientos', function () {
         ->assertSee('Puntos disponibles')
         ->assertSee('Este mes')
         ->assertSee('Historial de movimientos')
+        ->assertSee('Cada Bs 10 = 1 pt')
         ->assertSee('Ganado')
         ->assertSee('+6');
 });

@@ -1,13 +1,13 @@
-<div class="space-y-2">
-    <button
-        type="button"
-        id="activar-notificaciones"
-        class="w-full rounded-lg bg-orange-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-orange-600 disabled:cursor-default disabled:opacity-70"
-    >
-        Activar notificaciones
-    </button>
-    <p id="notificaciones-estado" class="text-sm text-zinc-600 dark:text-zinc-300"></p>
-</div>
+<button
+    type="button"
+    id="activar-notificaciones"
+    class="inline-flex h-10 w-10 items-center justify-center rounded-full text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-800"
+    title="Activar notificaciones"
+    aria-label="Activar notificaciones"
+>
+    <x-flux::icon name="bell" class="h-5 w-5" />
+</button>
+<p id="notificaciones-estado" class="sr-only"></p>
 <script>
     (function () {
         var button = document.getElementById('activar-notificaciones');
@@ -16,8 +16,15 @@
         var subscribeUrl = @json(route('cliente.suscripcion'));
         var token = document.querySelector('meta[name="csrf-token"]');
 
+        if (!button) {
+            return;
+        }
+
         function setStatus(message) {
-            status.textContent = message;
+            if (status) {
+                status.textContent = message;
+            }
+            button.title = message || 'Activar notificaciones';
         }
 
         function urlBase64ToUint8Array(base64String) {
@@ -34,8 +41,11 @@
         }
 
         function markActive() {
-            button.disabled = true;
-            button.textContent = 'Notificaciones activas';
+            button.dataset.active = 'true';
+            button.classList.remove('text-zinc-400');
+            button.classList.add('text-orange-500', 'bg-orange-50', 'dark:text-orange-400', 'dark:bg-orange-950');
+            button.setAttribute('aria-label', 'Notificaciones activas');
+            button.title = 'Notificaciones activas';
         }
 
         if ('serviceWorker' in navigator && 'PushManager' in window) {
@@ -49,6 +59,10 @@
         }
 
         button.addEventListener('click', function () {
+            if (button.dataset.active === 'true') {
+                return;
+            }
+
             if (!publicKey) {
                 setStatus('Las notificaciones no están configuradas.');
                 return;

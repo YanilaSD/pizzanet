@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CanjePunto;
 use App\Models\Cliente;
 use App\Models\Producto;
 use App\Models\Promocion;
@@ -93,18 +94,27 @@ class DashboardController extends Controller
         $promociones = Promocion::with('festividad')
             ->where('estado', Promocion::ESTADO_ACTIVO)
             ->orderByDesc('created_at')
-            ->paginate(10, ['*'], 'promociones_page');
+            ->get();
 
-        $productos = Producto::with('categoria')
+        $productos = Producto::with(['categoria', 'inventario'])
             ->where('estado', 1)
-            ->orderByDesc('created_at')
-            ->paginate(10, ['*'], 'productos_page');
+            ->orderBy('nombre')
+            ->get();
 
+        $categorias = $productos
+            ->pluck('categoria')
+            ->filter()
+            ->unique('id')
+            ->values();
+
+        $canje = CanjePunto::where('estado', 1)->first();
         $movimientos = $cliente->movimientosPuntos(10, 'movimientos_page');
 
         return compact(
             'productos',
+            'categorias',
             'promociones',
+            'canje',
             'cliente',
             'totalVentas',
             'comprasRealizadas',
