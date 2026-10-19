@@ -79,8 +79,8 @@
                             @else
                                 <a href="{{ route('clientes.canjes', $cliente) }}"
                                     class="module-icon-btn-green"
-                                    title="Ver historial de canjes"
-                                    aria-label="Ver historial de canjes">
+                                    title="Ver historial de movimientos"
+                                    aria-label="Ver historial de movimientos">
                                     <flux:icon name="document-text" />
                                 </a>
 

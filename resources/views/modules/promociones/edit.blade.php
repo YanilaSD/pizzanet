@@ -25,7 +25,7 @@
                     <flux:input
                         id="nombre"
                         name="nombre"
-                        placeholder="Nombre de la promoción"
+                        placeholder="Ej: Promo descuento 10%"
                         value="{{ old('nombre', $promocion->nombre) }}"
                         required
                     />

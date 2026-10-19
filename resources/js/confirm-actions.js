@@ -5,7 +5,7 @@ const VARIANTS = {
     danger: {
         icon: 'warning',
         confirmButtonColor: '#dc2626',
-        confirmButtonText: 'Sí, dar de baja',
+        confirmButtonText: 'Sí',
     },
     warning: {
         icon: 'warning',

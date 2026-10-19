@@ -2,51 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Venta;
+use App\Models\CanjePunto;
 use App\Models\Cliente;
-use App\Models\HistorialCanje;
 use App\Models\Producto;
 use App\Models\Promocion;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    // Totales
     public function index()
     {
         return view('dashboard');
     }
 
-    public function predashboard()
+    public function portal()
     {
-        return view('pre-dashboard');
+        $cliente = $this->clientePortal();
+
+        if (! $cliente) {
+            return view('modules.public.portal');
+        }
+
+        return view('modules.public.verificar', $this->datosPortal($cliente));
     }
 
     public function client(Request $request)
     {
-        // ================================
-        // VALIDACIÓN
-        // ================================
         $request->validate([
-            'ci' => 'required|string|max:20'
+            'ci' => 'required|string|max:20',
         ], [
             'ci.required' => 'El número de CI es obligatorio.',
             'ci.string' => 'El CI debe ser un texto válido.',
             'ci.max' => 'El CI no puede exceder 20 caracteres.',
         ]);
 
-        // ================================
-        // BUSCAR CLIENTE POR CI
-        // ================================
         $cliente = Cliente::where('ci', $request->ci)->first();
-        if (!$cliente) {
-            return back()->withErrors(['ci' => 'No existe un cliente registrado con ese número de CI.']);
+
+        if (! $cliente) {
+            return back()
+                ->withErrors(['ci' => 'No existe un cliente registrado con ese número de CI.'])
+                ->withInput();
         }
-            
-        // ================================
-        // ESTADÍSTICAS DEL CLIENTE
-        // ================================
+
+        session(['portal_cliente_id' => $cliente->id]);
+
+        return redirect()->route('cliente.portal');
+    }
+
+    public function salirPortal()
+    {
+        session()->forget('portal_cliente_id');
+
+        return redirect()->route('cliente.portal');
+    }
+
+    private function clientePortal(): ?Cliente
+    {
+        $clienteId = session('portal_cliente_id');
+
+        if (! $clienteId) {
+            return null;
+        }
+
+        $cliente = Cliente::find($clienteId);
+
+        if (! $cliente) {
+            session()->forget('portal_cliente_id');
+
+            return null;
+        }
+
+        return $cliente;
+    }
+
+    private function datosPortal(Cliente $cliente): array
+    {
         $mesActual = Carbon::now()->month;
         $anioActual = Carbon::now()->year;
 
@@ -60,35 +91,34 @@ class DashboardController extends Controller
             ->whereMonth('created_at', $mesActual)
             ->count();
 
-        // ================================
-        // LISTAS DE PRODUCTOS Y PROMOS
-        // ================================
-        // $promociones = Promocion::where('estado', 1)
-        //     ->orderBy('created_at', 'desc')
-        //     ->paginate(10);
+        $promociones = Promocion::with('festividad')
+            ->where('estado', Promocion::ESTADO_ACTIVO)
+            ->orderByDesc('created_at')
+            ->get();
 
-        // $productos = Producto::where('estado', 1)
-        //     ->orderBy('created_at', 'desc')
-        //     ->paginate(10);
+        $productos = Producto::with(['categoria', 'inventario'])
+            ->where('estado', 1)
+            ->orderBy('nombre')
+            ->get();
 
-        // $canjes = HistorialCanje::with(['descuento', 'venta'])
-        //     ->where('cliente_id', $cliente->id)
-        //     ->orderByDesc('fecha')
-        //     ->orderByDesc('id')
-        //     ->paginate(10)
-        //     ->withQueryString();
+        $categorias = $productos
+            ->pluck('categoria')
+            ->filter()
+            ->unique('id')
+            ->values();
 
-        // ================================
-        // RESPUESTA
-        // ================================
-        return view('modules.public.verificar', compact(
+        $canje = CanjePunto::where('estado', 1)->first();
+        $movimientos = $cliente->movimientosPuntos(10, 'movimientos_page');
+
+        return compact(
             'productos',
+            'categorias',
             'promociones',
+            'canje',
             'cliente',
             'totalVentas',
             'comprasRealizadas',
-            'canjes'
-        ));
+            'movimientos'
+        );
     }
-
 }

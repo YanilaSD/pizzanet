@@ -143,4 +143,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             </flux:button>
         </div>
     </form>
+
+    <p class="text-center text-sm text-zinc-300">
+        ¿Eres cliente?
+        <flux:link :href="route('cliente.portal')" class="text-orange-400" wire:navigate>Ir al portal de clientes</flux:link>
+    </p>
 </div>

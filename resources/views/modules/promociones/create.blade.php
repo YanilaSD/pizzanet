@@ -22,7 +22,7 @@
                     <flux:input
                         id="nombre"
                         name="nombre"
-                        placeholder="Ej: Promo 2x1"
+                        placeholder="Ej: Promo descuento 10%"
                         value="{{ old('nombre') }}"
                         required
                     />

@@ -181,7 +181,7 @@
                                 action="{{ route('ventas.destroy', $venta) }}"
                                 method="POST"
                                 data-confirm=""
-                                data-confirm-title="¿Desea dar de baja a la venta #{{ $venta->id }}?"
+                                data-confirm-title="¿Desea anular la venta #{{ $venta->id }}?"
                                 data-confirm-variant="danger"
                             >
                                 @csrf

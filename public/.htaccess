@@ -5,6 +5,8 @@
 
     RewriteEngine On
 
+    AddType application/manifest+json .webmanifest
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
