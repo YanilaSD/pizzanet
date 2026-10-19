@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         @include('partials.head')
+        @include('partials.pwa')
     </head>
     <body class="min-h-screen bg-[#dfdbdb] dark:bg-[#3b1f1f]">
 
@@ -10,8 +11,14 @@
                     <div class="col-span-2">
                         <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-4">Bienvenido: {{ $cliente->nombre ?? 'Invitado' }}</h1>
                     </div>
-                    <div class="col-span-1">
-                        <flux:button href="{{ route('pre-dashboard') }}" color="red" type="button" variant="outline" class="w-full">Cerrar Sesión</flux:button>
+                    <div class="col-span-1 space-y-3">
+                        @unless ($cliente->esAnonimo())
+                            @include('partials.cliente-push')
+                        @endunless
+                        <form method="POST" action="{{ route('cliente.portal.salir') }}">
+                            @csrf
+                            <flux:button color="red" type="submit" variant="outline" class="w-full">Cerrar Sesión</flux:button>
+                        </form>
                     </div>
 
                     <x-module-card-lg class="md:col-span-2">

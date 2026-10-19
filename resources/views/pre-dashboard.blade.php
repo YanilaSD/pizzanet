@@ -72,7 +72,7 @@
                                 <flux:text class="mt-2">Ingresa tus datos.</flux:text>
                             </div>
 
-                            <flux:input label="CI del Ciente" name="ci" type="number" placeholder="Ingresa el ci del cliente" />
+                            <flux:input label="CI del Ciente" name="ci" type="number" placeholder="Ingresa el ci del cliente" value="{{ old('ci') }}" />
 
                             <div class="flex">
                                 <flux:spacer />

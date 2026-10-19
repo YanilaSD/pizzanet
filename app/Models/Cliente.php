@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class Cliente extends Model
 {
+    use HasPushSubscriptions, Notifiable;
+
     protected $fillable = [
         'nombre',
         'ci',

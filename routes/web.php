@@ -18,13 +18,17 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\CanjePuntoController;
 use App\Http\Controllers\HistorialController;
+use App\Http\Controllers\PushSubscriptionController;
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
 Route::get('/', [DashboardController::class, 'predashboard'])->name('pre-dashboard');
+Route::get('/cliente', [DashboardController::class, 'portal'])->name('cliente.portal');
 Route::post('/cliente', [DashboardController::class, 'client'])->name('clientes.search');
+Route::post('/cliente/salir', [DashboardController::class, 'salirPortal'])->name('cliente.portal.salir');
+Route::post('/cliente/suscripcion', [PushSubscriptionController::class, 'store'])->name('cliente.suscripcion');
 // Todas las vistas se mostraran cuando se inicie sesion
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

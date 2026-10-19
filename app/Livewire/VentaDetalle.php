@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Mail\SaleDone;
 use App\Models\CanjePunto;
+use App\Notifications\VentaRegistradaPush;
 use App\Models\Cliente;
 use App\Models\DetalleVenta;
 use App\Models\HistorialCanje;
@@ -13,6 +14,7 @@ use App\Models\TipoPago;
 use App\Models\Venta;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -397,6 +399,18 @@ class VentaDetalle extends Component
 
         if ($cliente && ! empty($cliente->correo) && config('app.send_mail')) {
             Mail::to($cliente->correo)->send(new SaleDone($venta));
+        }
+
+        if ($cliente && ! $cliente->esAnonimo() && $cliente->pushSubscriptions()->exists()) {
+            try {
+                $cliente->notify(new VentaRegistradaPush($venta));
+            } catch (\Throwable $e) {
+                Log::warning('No se pudo enviar la notificación push de la venta.', [
+                    'venta_id' => $venta->id,
+                    'cliente_id' => $cliente->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         Session::forget(['productos_venta', 'cliente']);
