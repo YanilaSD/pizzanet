@@ -16,11 +16,6 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    public function predashboard()
-    {
-        return view('pre-dashboard');
-    }
-
     public function portal()
     {
         $cliente = $this->clientePortal();

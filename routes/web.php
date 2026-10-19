@@ -24,7 +24,11 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/', [DashboardController::class, 'predashboard'])->name('pre-dashboard');
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
+})->name('home');
 Route::get('/cliente', [DashboardController::class, 'portal'])->name('cliente.portal');
 Route::post('/cliente', [DashboardController::class, 'client'])->name('clientes.search');
 Route::post('/cliente/salir', [DashboardController::class, 'salirPortal'])->name('cliente.portal.salir');
