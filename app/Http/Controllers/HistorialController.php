@@ -11,14 +11,9 @@ class HistorialController extends Controller
 {
     public function index(Cliente $cliente)
     {
-        $canjes = HistorialCanje::with(['descuento', 'venta'])
-            ->where('cliente_id', $cliente->id)
-            ->orderByDesc('fecha')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->withQueryString();
+        $movimientos = $cliente->movimientosPuntos();
 
-        return view('modules.clientes.canjes', compact('cliente', 'canjes'));
+        return view('modules.clientes.canjes', compact('cliente', 'movimientos'));
     }
 
     public function canjear(Request $request, Cliente $cliente)

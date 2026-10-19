@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Models\HistorialCanje;
 use App\Models\Producto;
 use App\Models\Promocion;
 use Carbon\Carbon;
@@ -101,12 +100,7 @@ class DashboardController extends Controller
             ->orderByDesc('created_at')
             ->paginate(10, ['*'], 'productos_page');
 
-        $canjes = HistorialCanje::with(['descuento', 'venta'])
-            ->where('cliente_id', $cliente->id)
-            ->orderByDesc('fecha')
-            ->orderByDesc('id')
-            ->paginate(10)
-            ->withQueryString();
+        $movimientos = $cliente->movimientosPuntos(10, 'movimientos_page');
 
         return compact(
             'productos',
@@ -114,7 +108,7 @@ class DashboardController extends Controller
             'cliente',
             'totalVentas',
             'comprasRealizadas',
-            'canjes'
+            'movimientos'
         );
     }
 }

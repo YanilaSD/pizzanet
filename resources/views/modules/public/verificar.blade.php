@@ -21,32 +21,23 @@
                         </form>
                     </div>
 
-                    <x-module-card-lg class="md:col-span-2">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="module-card-label">Nivel Bronce</p>
-                                <p class="mt-1 text-4xl font-bold text-orange-600 dark:text-orange-500">{{ $cliente->puntos ?? 0 }}</p>
-                                <p class="module-card-sublabel mt-1">Puntos disponibles</p>
-                                <p class="module-card-sublabel mt-2">Te faltan {{ 500 - ($cliente->puntos ?? 0) }} puntos para canjear una pizza</p>
-                            </div>
-                            <x-flux::icon name="star" class="w-12 h-12 text-orange-500 opacity-90" />
+                    <x-module-card class="flex items-center justify-between gap-4 md:col-span-2">
+                        <div class="min-w-0">
+                            <p class="module-card-label">Nivel Bronce · Puntos disponibles</p>
+                            <p class="mt-0.5 text-2xl font-bold leading-none text-orange-600 dark:text-orange-500">{{ $cliente->saldo_puntos }}</p>
+                            <p class="module-card-sublabel mt-1">Te faltan {{ max(500 - $cliente->saldo_puntos, 0) }} puntos para canjear una pizza</p>
                         </div>
+                        <x-flux::icon name="star" class="h-8 w-8 shrink-0 text-orange-500 opacity-90" />
+                    </x-module-card>
 
-                        <div class="mt-6 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                            <div class="h-2.5 rounded-full bg-orange-500" style="width: 50%"></div>
+                    <x-module-card class="flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <p class="module-card-label">Este mes</p>
+                            <p class="mt-0.5 text-lg font-semibold leading-none text-zinc-900 dark:text-white">Bs. {{ number_format($totalVentas, 2) }}</p>
+                            <p class="module-card-sublabel mt-1">{{ $comprasRealizadas }} {{ (int) $comprasRealizadas === 1 ? 'compra' : 'compras' }}</p>
                         </div>
-                    </x-module-card-lg>
-
-                    <x-module-card-lg>
-                        <h3 class="module-card-label flex items-center space-x-2 text-base font-semibold text-gray-900 dark:text-white">
-                            <x-flux::icon name="chart-bar" class="w-5 h-5 text-green-500" />
-                            <span>Mis Estadísticas</span>
-                        </h3>
-                        <ul class="mt-4 space-y-2">
-                            <li class="module-card-label">Total Gastado: <span class="font-semibold text-gray-900 dark:text-white">Bs. {{ number_format($totalVentas, 2) }}</span></li>
-                            <li class="module-card-label">Compras Realizadas: <span class="font-semibold text-gray-900 dark:text-white">{{ $comprasRealizadas }}</span></li>
-                        </ul>
-                    </x-module-card-lg>
+                        <x-flux::icon name="chart-bar" class="h-6 w-6 shrink-0 text-green-500" />
+                    </x-module-card>
                 </div>
 
                 <x-module-card-lg class="mx-auto mt-10 max-w-7xl">
@@ -111,10 +102,10 @@
                 <div class="mx-auto mt-12 max-w-7xl">
                     <h3 class="module-card-label mb-4 flex items-center space-x-2 text-base font-semibold text-gray-900 dark:text-white">
                         <x-flux::icon name="clock" class="w-5 h-5 text-green-500" />
-                        <span>Historial de Canjes</span>
+                        <span>Historial de movimientos</span>
                     </h3>
 
-                    @include('modules.clientes.partials.canjes-table', ['canjes' => $canjes])
+                    @include('modules.clientes.partials.movimientos-table', ['movimientos' => $movimientos])
                 </div>
 
             </div>
