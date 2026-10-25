@@ -54,7 +54,7 @@ class UsuarioController extends Controller
         $usuario = User::create([
             'name' => Str::upper($request->nombre),
             'email' => Str::lower($request->email),
-            'password' => Hash::make(12345678),
+            'password' => Hash::make(User::DEFAULT_PASSWORD),
             'estado' => 1,
         ]);
 
@@ -124,10 +124,10 @@ class UsuarioController extends Controller
     public function reset_pwd(string $id)
     {
         $usuario = User::findOrFail($id);
-        $usuario->password = Hash::make(12345678);
+        $usuario->password = Hash::make(User::DEFAULT_PASSWORD);
         $usuario->update();
 
-        return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente. Su nueva contraseña es: 12345678.');
+        return redirect()->route('usuarios.index')->with('success', 'Password reseteado correctamente. Su nueva contraseña es: '.User::DEFAULT_PASSWORD.'.');
     }
 
     public function reset_f2a(string $id)

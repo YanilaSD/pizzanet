@@ -91,4 +91,34 @@ function bindConfirmActions() {
 
 bindConfirmActions();
 
+function promptDefaultPasswordUpdate() {
+    const el = document.getElementById('default-password-alert');
+
+    if (!el || el.dataset.prompted === '1') {
+        return;
+    }
+
+    el.dataset.prompted = '1';
+
+    Swal.fire({
+        title: el.dataset.title ?? 'Actualiza tu contraseña',
+        text: el.dataset.text ?? 'Estás usando la contraseña por defecto. Debes actualizarla para proteger tu cuenta.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ea580c',
+        cancelButtonColor: '#737373',
+        confirmButtonText: el.dataset.confirmText ?? 'Actualizar contraseña',
+        cancelButtonText: el.dataset.cancelText ?? 'Cancelar',
+        reverseButtons: true,
+        allowOutsideClick: false,
+    }).then((result) => {
+        if (result.isConfirmed && el.dataset.updateUrl) {
+            window.location.assign(el.dataset.updateUrl);
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', promptDefaultPasswordUpdate);
+document.addEventListener('livewire:navigated', promptDefaultPasswordUpdate);
+
 export { Swal };

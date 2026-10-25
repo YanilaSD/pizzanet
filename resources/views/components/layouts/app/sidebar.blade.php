@@ -107,18 +107,27 @@
     ];
 
    
-$groups = collect($groups)
-    ->map(function ($links) use ($user) {
-        return collect($links)
-            ->filter(function ($link) use ($user) {
-                return $link['privilege'] === null
-                    || $user->hasPrivilegeSlug($link['privilege']);
-            })
-            ->values()
-            ->all();
-    })
-    ->filter(fn ($links) => !empty($links))
-    ->all();
+    $groups = collect($groups)
+        ->map(function ($links) use ($user) {
+            return collect($links)
+                ->filter(function ($link) use ($user) {
+                    return $link['privilege'] === null
+                        || $user->hasPrivilegeSlug($link['privilege']);
+                })
+                ->values()
+                ->all();
+        })
+        ->filter(fn ($links) => !empty($links))
+        ->all();
+
+    $showDefaultPasswordAlert = $user
+        && ! request()->routeIs('password.edit')
+        && ! session('default_password_alert_shown')
+        && $user->hasDefaultPassword();
+
+    if ($showDefaultPasswordAlert) {
+        session()->put('default_password_alert_shown', true);
+    }
 
 @endphp
 
@@ -245,6 +254,18 @@ $groups = collect($groups)
         </flux:header>
 
         {{ $slot }}
+
+        @if ($showDefaultPasswordAlert)
+            <div
+                id="default-password-alert"
+                hidden
+                data-update-url="{{ route('password.edit') }}"
+                data-title="Actualiza tu contraseña"
+                data-text="Estás usando la contraseña por defecto. Debes actualizarla para proteger tu cuenta."
+                data-confirm-text="Actualizar contraseña"
+                data-cancel-text="Cancelar"
+            ></div>
+        @endif
 
         @fluxScripts
     </body>

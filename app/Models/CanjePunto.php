@@ -20,6 +20,11 @@ class CanjePunto extends Model
         'estado' => 'integer',
     ];
 
+    public function historialCanjes()
+    {
+        return $this->hasMany(HistorialCanje::class);
+    }
+
     /**
      * Bloques completos que alcanza el saldo.
      * 100 pts = Bs 10 y 234 pts permiten 2 bloques: 200 pts = Bs 20.
