@@ -44,4 +44,9 @@ class Venta extends Model
     {
         return $this->hasMany(DetalleVenta::class);
     }
+
+    public function historialCanjes()
+    {
+        return $this->hasMany(HistorialCanje::class);
+    }
 }
