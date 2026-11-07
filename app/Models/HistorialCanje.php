@@ -40,6 +40,40 @@ class HistorialCanje extends Model
         return $this->belongsTo(Venta::class);
     }
 
+    public function esReversion(): bool
+    {
+        return (int) $this->puntos < 0;
+    }
+
+    public function registrarReversionPorBaja(): self
+    {
+        if ($this->esReversion()) {
+            return $this;
+        }
+
+        $puntosRevertidos = -abs((int) $this->puntos);
+
+        $existente = static::query()
+            ->where('cliente_id', $this->cliente_id)
+            ->where('canje_punto_id', $this->canje_punto_id)
+            ->where('venta_id', $this->venta_id)
+            ->where('puntos', $puntosRevertidos)
+            ->first();
+
+        if ($existente) {
+            return $existente;
+        }
+
+        return static::create([
+            'cliente_id' => $this->cliente_id,
+            'canje_punto_id' => $this->canje_punto_id,
+            'venta_id' => $this->venta_id,
+            'puntos' => $puntosRevertidos,
+            'fecha' => now()->toDateString(),
+            'estado' => 1,
+        ]);
+    }
+
     public function montoDescuento(): float
     {
         if ($this->venta_id && $this->venta) {

@@ -34,8 +34,9 @@ class Cliente extends Model
 
     public function getSaldoPuntosAttribute(): int
     {
-        $ganados  = $this->ventas()->where('estado', 1)->sum('puntos');
-        $canjeados = $this->historialCanjes()->sum('puntos');
+        $ganados = $this->ventas()->where('estado', 1)->sum('puntos');
+        $canjeados = $this->historialCanjes()->where('estado', 1)->sum('puntos');
+
         return $ganados - $canjeados;
     }
 
@@ -44,18 +45,23 @@ class Cliente extends Model
         $texto = DB::getDriverName() === 'sqlite' ? 'TEXT' : 'CHAR(255)';
 
         $ganados = DB::table('ventas')
-            ->selectRaw("ventas.id as origen_id, ventas.created_at as fecha, ventas.puntos as puntos, 'ganado' as tipo, ventas.id as venta_id, CAST('' AS {$texto}) as detalle, 1 as estado")
+            ->selectRaw("ventas.id as origen_id, ventas.created_at as fecha, ventas.puntos as puntos, 'ganado' as tipo, ventas.id as venta_id, CAST('' AS {$texto}) as detalle, ventas.estado as estado, CAST('venta' AS {$texto}) as origen")
             ->where('ventas.cliente_id', $this->id)
-            ->where('ventas.estado', 1)
             ->where('ventas.puntos', '>', 0);
 
         $canjeados = DB::table('historial_canjes')
             ->leftJoin('canje_puntos', 'canje_puntos.id', '=', 'historial_canjes.canje_punto_id')
-            ->selectRaw("historial_canjes.id as origen_id, historial_canjes.created_at as fecha, historial_canjes.puntos as puntos, 'canjeado' as tipo, historial_canjes.venta_id as venta_id, CAST(COALESCE(canje_puntos.nombre, '') AS {$texto}) as detalle, historial_canjes.estado as estado")
+            ->selectRaw("historial_canjes.id as origen_id, historial_canjes.created_at as fecha, ABS(historial_canjes.puntos) as puntos, CASE WHEN historial_canjes.puntos < 0 THEN 'revertido' ELSE 'canjeado' END as tipo, historial_canjes.venta_id as venta_id, CAST(COALESCE(canje_puntos.nombre, '') AS {$texto}) as detalle, historial_canjes.estado as estado, CAST('canje' AS {$texto}) as origen")
             ->where('historial_canjes.cliente_id', $this->id);
 
+        $reversoGanados = DB::table('ventas')
+            ->selectRaw("ventas.id as origen_id, ventas.updated_at as fecha, ventas.puntos as puntos, 'revertido' as tipo, ventas.id as venta_id, CAST('' AS {$texto}) as detalle, 0 as estado, CAST('venta' AS {$texto}) as origen")
+            ->where('ventas.cliente_id', $this->id)
+            ->where('ventas.estado', 0)
+            ->where('ventas.puntos', '>', 0);
+
         return DB::query()
-            ->fromSub($ganados->unionAll($canjeados), 'movimientos')
+            ->fromSub($ganados->unionAll($canjeados)->unionAll($reversoGanados), 'movimientos')
             ->orderByDesc('fecha')
             ->orderByDesc('origen_id')
             ->paginate($perPage, ['*'], $pageName)

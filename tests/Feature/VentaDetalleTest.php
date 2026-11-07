@@ -485,3 +485,56 @@ test('no muestra tipos de pago ni promociones inactivas', function () {
         ->assertSee($promoActiva->nombre)
         ->assertDontSee($promoInactiva->nombre);
 });
+
+test('al anular una venta restaura el stock y no lo duplica si se anula de nuevo', function () {
+    $user = User::factory()->withoutTwoFactor()->create();
+    $producto = crearProductoConStock(4, 40);
+    $otroProducto = crearProductoConStock(2, 30);
+    $tipoPago = crearTipoPago();
+    $anonimo = Cliente::firstOrCreate(
+        ['ci' => config('app.ci_anonimo')],
+        [
+            'nombre' => 'Sin nombre',
+            'celular' => config('app.ci_anonimo'),
+            'correo' => null,
+            'estado' => 1,
+        ]
+    );
+
+    session(['cliente' => $anonimo->toArray()]);
+
+    $this->actingAs($user);
+
+    Livewire::test(VentaDetalle::class, [
+        'productos' => array_merge(payloadProductos($producto), payloadProductos($otroProducto)),
+    ])
+        ->set('producto_id', $producto->id)
+        ->set('cantidad', 1)
+        ->call('agregarProducto')
+        ->set('producto_id', $otroProducto->id)
+        ->set('cantidad', 2)
+        ->call('agregarProducto')
+        ->set('tipo_pago_id', $tipoPago->id)
+        ->call('confirmarVenta')
+        ->assertHasNoErrors();
+
+    expect((int) $producto->inventario()->first()->cantidad)->toBe(3)
+        ->and((int) $otroProducto->inventario()->first()->cantidad)->toBe(0);
+
+    $venta = Venta::orderByDesc('id')->first();
+
+    $this->withoutMiddleware(\App\Http\Middleware\CheckPrivilege::class);
+
+    $this->post(route('ventas.destroy', $venta))
+        ->assertRedirect(route('ventas.index'))
+        ->assertSessionHas('ventas', "Se dio de baja la venta #{$venta->id}. Se restauró el stock.");
+
+    expect((int) $venta->fresh()->estado)->toBe(0)
+        ->and((int) $producto->inventario()->first()->cantidad)->toBe(4)
+        ->and((int) $otroProducto->inventario()->first()->cantidad)->toBe(2);
+
+    $venta->anular();
+
+    expect((int) $producto->inventario()->first()->cantidad)->toBe(4)
+        ->and((int) $otroProducto->inventario()->first()->cantidad)->toBe(2);
+});
