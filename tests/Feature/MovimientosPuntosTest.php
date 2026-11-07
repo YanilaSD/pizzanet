@@ -27,8 +27,6 @@ test('el historial mezcla puntos ganados y canjeados del mas reciente al mas ant
     $ventaAntigua = crearVentaDePuntos($cliente, 4);
     $ventaNueva = crearVentaDePuntos($cliente, 9);
     crearVentaDePuntos($cliente, 0);
-    $cancelada = crearVentaDePuntos($cliente, 20);
-    $cancelada->update(['estado' => 0]);
     crearVentaDePuntos($otro, 15);
 
     Venta::whereKey($ventaAntigua->id)->update(['created_at' => now()->subDays(3)]);
@@ -134,6 +132,121 @@ test('el portal del cliente lista los mismos movimientos', function () {
         ->assertSee('Cada Bs 10 = 1 pt')
         ->assertSee('Ganado')
         ->assertSee('+6');
+});
+
+test('al dar de baja una venta revierte el canje y los puntos ganados', function () {
+    $cliente = Cliente::create([
+        'nombre' => 'Baja Puntos',
+        'ci' => '1112223',
+        'celular' => '70000005',
+        'correo' => 'baja@example.com',
+        'estado' => 1,
+    ]);
+
+    $ventaPrevia = crearVentaDePuntos($cliente, 150);
+    $venta = crearVentaDePuntos($cliente, 8);
+    $regla = CanjePunto::create([
+        'nombre' => 'Canje fidelidad',
+        'descripcion' => '100 puntos por Bs 10',
+        'puntos' => 100,
+        'descuento' => 10,
+        'estado' => 1,
+    ]);
+
+    $canje = HistorialCanje::create([
+        'cliente_id' => $cliente->id,
+        'canje_punto_id' => $regla->id,
+        'venta_id' => $venta->id,
+        'puntos' => 100,
+        'fecha' => now()->toDateString(),
+        'estado' => 1,
+    ]);
+
+    expect($cliente->fresh()->saldo_puntos)->toBe(150 + 8 - 100);
+
+    $this->withoutMiddleware(\App\Http\Middleware\CheckPrivilege::class);
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('ventas.destroy', $venta))
+        ->assertRedirect(route('ventas.index'))
+        ->assertSessionHas('ventas', "Se dio de baja la venta #{$venta->id}. Se revirtieron los puntos.");
+
+    expect((int) $venta->fresh()->estado)->toBe(0)
+        ->and((int) $canje->fresh()->estado)->toBe(1)
+        ->and((int) $canje->fresh()->puntos)->toBe(100)
+        ->and($cliente->fresh()->saldo_puntos)->toBe(150)
+        ->and((int) $ventaPrevia->fresh()->estado)->toBe(1);
+
+    $reversionCanje = HistorialCanje::query()
+        ->where('venta_id', $venta->id)
+        ->where('puntos', '<', 0)
+        ->first();
+
+    expect($reversionCanje)->not->toBeNull()
+        ->and((int) $reversionCanje->puntos)->toBe(-100)
+        ->and((int) $reversionCanje->canje_punto_id)->toBe((int) $canje->canje_punto_id)
+        ->and($reversionCanje->id)->not->toBe($canje->id);
+
+    $venta->fresh()->anular();
+
+    expect(HistorialCanje::query()->where('venta_id', $venta->id)->count())->toBe(2);
+
+    $movimientos = $cliente->fresh()->movimientosPuntos();
+    $revertidos = $movimientos->where('tipo', 'revertido');
+
+    expect($movimientos->total())->toBe(5)
+        ->and($movimientos->pluck('tipo')->all())->toContain('canjeado', 'ganado', 'revertido')
+        ->and($revertidos)->toHaveCount(2)
+        ->and($revertidos->pluck('origen')->all())->toEqualCanonicalizing(['canje', 'venta'])
+        ->and($revertidos->pluck('puntos')->map(fn ($puntos) => (int) $puntos)->all())->toEqualCanonicalizing([100, 8])
+        ->and($revertidos->every(fn ($movimiento) => (int) $movimiento->venta_id === $venta->id))->toBeTrue();
+});
+
+test('la vista del historial muestra la reversión por baja de venta', function () {
+    $this->withoutMiddleware(\App\Http\Middleware\CheckPrivilege::class);
+
+    $cliente = Cliente::create([
+        'nombre' => 'Vista Baja',
+        'ci' => '4445556',
+        'celular' => '70000006',
+        'correo' => 'vistabaja@example.com',
+        'estado' => 1,
+    ]);
+
+    $venta = crearVentaDePuntos($cliente, 12);
+    $regla = CanjePunto::create([
+        'nombre' => 'Pizza por puntos',
+        'descripcion' => 'Canje de prueba',
+        'puntos' => 50,
+        'descuento' => 10,
+        'estado' => 1,
+    ]);
+
+    HistorialCanje::create([
+        'cliente_id' => $cliente->id,
+        'canje_punto_id' => $regla->id,
+        'venta_id' => $venta->id,
+        'puntos' => 50,
+        'fecha' => now()->toDateString(),
+        'estado' => 1,
+    ]);
+
+    $venta->anular();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('clientes.canjes', $cliente))
+        ->assertOk()
+        ->assertSee('Revertido')
+        ->assertSee('Canjeado')
+        ->assertSee('Ganado')
+        ->assertSee('Baja de venta')
+        ->assertSee('#'.$venta->id)
+        ->assertSee('puntos ganados')
+        ->assertSee('Pizza por puntos')
+        ->assertSee('+50')
+        ->assertSee('-50')
+        ->assertSee('+12')
+        ->assertSee('-12');
 });
 
 function crearVentaDePuntos(Cliente $cliente, int $puntos): Venta

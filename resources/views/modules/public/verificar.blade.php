@@ -360,7 +360,7 @@
 
             <section id="movimientos" class="mt-12 scroll-mt-24">
                 <h2 class="mb-1 text-xl font-bold text-zinc-900 dark:text-white">Historial de movimientos</h2>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Puntos ganados por compras y canjes aplicados en caja.</p>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400">Puntos ganados por compras, canjes aplicados en caja y reversiones por baja de venta.</p>
                 @include('modules.clientes.partials.movimientos-table', ['movimientos' => $movimientos])
             </section>
         </main>

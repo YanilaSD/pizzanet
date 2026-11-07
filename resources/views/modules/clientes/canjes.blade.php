@@ -13,7 +13,7 @@
         <x-module-card class="flex items-center justify-between gap-3">
             <div class="min-w-0">
                 <h1 class="text-base font-semibold text-zinc-900 dark:text-white">Historial de movimientos</h1>
-                <p class="module-card-sublabel">Puntos ganados y canjeados</p>
+                <p class="module-card-sublabel">Puntos ganados, canjeados y revertidos</p>
             </div>
             <flux:button variant="outline" size="sm" :href="route('clientes.index')" class="shrink-0">
                 Volver

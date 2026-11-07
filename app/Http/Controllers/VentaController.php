@@ -109,13 +109,40 @@ class VentaController extends Controller
 
     public function destroy(Venta $venta)
     {
-        $venta->estado = 0;
-        $venta->save();
+        if ($venta->estaAnulada()) {
+            session()->flash(
+                'ventas',
+                "La venta #{$venta->id} ya estaba dada de baja."
+            );
 
-        session()->flash(
-            'ventas',
-            "Se dio de baja la venta #{$venta->id}."
-        );
+            return redirect()->route('ventas.index');
+        }
+
+        $teniaCanje = $venta->historialCanjes()
+            ->where('estado', 1)
+            ->where('puntos', '>', 0)
+            ->exists();
+        $teniaPuntosGanados = (int) $venta->puntos > 0;
+        $teniaDetalle = $venta->detalleVentas()->exists();
+
+        $venta->anular();
+
+        $mensaje = "Se dio de baja la venta #{$venta->id}.";
+        $extras = [];
+
+        if ($teniaDetalle) {
+            $extras[] = 'se restauró el stock';
+        }
+
+        if ($teniaCanje || $teniaPuntosGanados) {
+            $extras[] = 'se revirtieron los puntos';
+        }
+
+        if ($extras) {
+            $mensaje .= ' '.ucfirst(implode(' y ', $extras)).'.';
+        }
+
+        session()->flash('ventas', $mensaje);
 
         return redirect()->route('ventas.index');
     }

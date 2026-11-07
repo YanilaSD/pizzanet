@@ -27,4 +27,14 @@ class Inventario extends Model
         $this->cantidad -= $cantidad;
         $this->save();
     }
+
+    public function incrementarCantidad(int $cantidad): void
+    {
+        if ($cantidad < 0) {
+            throw new \Exception('La cantidad a restaurar no puede ser negativa.');
+        }
+
+        $this->cantidad += $cantidad;
+        $this->save();
+    }
 }

@@ -1,6 +1,6 @@
 <x-data-table
     title="Movimientos de puntos"
-    description="Registro de puntos ganados por compras y puntos canjeados"
+    description="Registro de puntos ganados, canjeados y revertidos"
 >
     <x-slot name="head">
         <th>#</th>
@@ -12,6 +12,10 @@
 
     <x-slot name="body">
         @forelse ($movimientos as $movimiento)
+            @php
+                $esRevertidoCanje = $movimiento->tipo === 'revertido' && ($movimiento->origen ?? '') === 'canje';
+                $positivo = $movimiento->tipo === 'ganado' || $esRevertidoCanje;
+            @endphp
             <tr class="module-table-tr">
                 <td class="module-table-td-index">
                     {{ $movimientos->firstItem() + $loop->index }}
@@ -24,17 +28,29 @@
                 <td class="px-6 py-4">
                     @if ($movimiento->tipo === 'ganado')
                         <flux:badge color="green">Ganado</flux:badge>
+                    @elseif ($movimiento->tipo === 'revertido')
+                        <flux:badge color="red">Revertido</flux:badge>
                     @else
                         <flux:badge color="orange">Canjeado</flux:badge>
-                        @if ((int) $movimiento->estado !== 1)
-                            <flux:badge color="zinc">Inactivo</flux:badge>
-                        @endif
                     @endif
                 </td>
 
                 <td class="module-table-td">
                     @if ($movimiento->tipo === 'ganado')
                         Venta #{{ $movimiento->venta_id }}
+                    @elseif ($movimiento->tipo === 'revertido')
+                        Baja de venta
+                        @if ($movimiento->venta_id)
+                            #{{ $movimiento->venta_id }}
+                        @endif
+                        @if ($esRevertidoCanje)
+                            · canje
+                            @if ($movimiento->detalle !== '')
+                                {{ $movimiento->detalle }}
+                            @endif
+                        @else
+                            · puntos ganados
+                        @endif
                     @else
                         {{ $movimiento->detalle !== '' ? $movimiento->detalle : 'Canje' }}
                         @if ($movimiento->venta_id)
@@ -43,8 +59,8 @@
                     @endif
                 </td>
 
-                <td class="module-table-td font-medium {{ $movimiento->tipo === 'ganado' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                    {{ $movimiento->tipo === 'ganado' ? '+' : '-' }}{{ $movimiento->puntos }}
+                <td class="module-table-td font-medium {{ $positivo ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                    {{ $positivo ? '+' : '-' }}{{ $movimiento->puntos }}
                 </td>
             </tr>
         @empty
